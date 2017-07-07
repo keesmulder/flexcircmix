@@ -109,4 +109,45 @@ dinvbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 }
 
 
+weight_fun_rinvbat <- function(x, lam) {
+
+  wr <- ((1 - 0.5 * (1 + lam) * cos(s_lam_inv(x, -lam))) /
+       (1 - 0.5 * (1 - lam) * cos(s_lam_inv(x, -lam))))
+
+  if (lam > 0) {
+    ((3 - lam) / (3 + lam)) * wr
+  } else {
+    ((1 + lam) / (1 - lam)) * wr
+  }
+}
+
+
+#' @describeIn dinvbat
+rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
+
+  th_out <- numeric(n)
+
+  for (i in 1:n) {
+
+    # Rejection sampler
+    accepted <- FALSE
+    while (!accepted) {
+
+      th_can <- force_neg_pi_pi(circular:::RvonmisesRad(1, mu, kp))
+      u <- runif(1, 0, 1)
+
+      # The weight function alters the von Mises candidate to include peakedness set by the lambda
+      w_lam <- weight_fun_rinvbat(th_can, lam)
+
+      if (u < w_lam) {
+        accepted <- TRUE
+
+        th_out[i] <- t_lam(th_can, -lam)
+      }
+    }
+
+  }
+
+  th_out
+}
 
