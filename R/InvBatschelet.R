@@ -34,6 +34,7 @@ s_lam <- function(x, lam) {
   x - 0.5 * (1 + lam) * sin(x)
 }
 
+#' @describeIn s_lam
 s_lam_inv <- function(x, lam) {
   # Compute the root to obtain the inverse.
   uniroot(function(y) s_lam(y, lam) - x, lower = -pi, upper = pi)$root
@@ -67,6 +68,14 @@ t_lam <- Vectorize(function(x, lam) {
     x - sin(x)
   }
 })
+
+#' @describeIn t_lam
+t_lam_inv <- function(x, lam) {
+  t_lam(x, -lam)
+}
+
+
+
 
 
 #' Kernel of the von-Mises based symmetric inverse Batschelet distribution
@@ -105,6 +114,10 @@ dinvbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 #' curve(dinvbat(x, lam = -.8), -pi, pi)
 #'
 dinvbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
+  if (kp < 0) return(NA)
+  if (lam <= -1) return(NA)
+  if (lam > 1) return(NA)
+
   if (log) {
     dinvbatkern(x, mu = mu, kp = kp, lam = lam, log = TRUE) - log(K_kplam(kp = kp, lam = lam))
   } else {
@@ -134,6 +147,8 @@ weight_fun_rinvbat <- function(x, lam) {
 
 #' @describeIn dinvbat
 rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
+
+  if (lam > 1 || lam <= -1 || kp < 0) stop("Parameter out of bounds.")
 
   th_out <- numeric(n)
 

@@ -18,14 +18,14 @@
 #' likinvbat(x, mu = 0, kp = 1, lam = 0.1, log = TRUE)
 #'
 #' # likfuninvbat returns a function.
-#' lfib <- likfuninvbat(x)
-#' lfib(mu = 0, kp = 1, lam = 0.1, log = TRUE)
+#' llfib <- likfuninvbat(x)
+#' llfib(mu = 0, kp = 1, lam = 0.1)
 #'
 likfuninvbat <- function(x, log = TRUE) {
   if (log) {
     function(mu, kp, lam) sum(dinvbat(x, mu, kp, lam, log = TRUE))
   } else {
-    exp(function(mu, kp, lam) sum(dinvbat(x, mu, kp, lam, log = TRUE)))
+    function(mu, kp, lam) exp(sum(dinvbat(x, mu, kp, lam, log = FALSE)))
   }
 }
 
@@ -34,7 +34,7 @@ likinvbat <- function(x, mu, kp, lam, log = TRUE) {
   if (log) {
     sum(dinvbat(x, mu, kp, lam, log = TRUE))
   } else {
-    exp(sum(dinvbat(x, mu, kp, lam, log = TRUE)))
+    exp(sum(dinvbat(x, mu, kp, lam, log = FALSE)))
   }
 }
 

@@ -7,6 +7,7 @@ Maintainer: Kees Mulder <keestimmulder@gmail.com>
 Description: Package for fitting mixtures of flexible circular distributions, in particular the inverse Batschelet distribution. 
 License: GPL-3
 Encoding: UTF-8
-Imports: circular
+Imports: circular, ggplot2
 LazyData: true
 RoxygenNote: 6.0.1
+Suggests: testthat
