@@ -105,10 +105,20 @@ dinvbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 #' curve(dinvbat(x, lam = -.8), -pi, pi)
 #'
 dinvbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
-  dinvbatkern(x, mu = mu, kp = kp, lam = lam, log = log) / K_kplam(kp = kp, lam = lam)
+  if (log) {
+    dinvbatkern(x, mu = mu, kp = kp, lam = lam, log = TRUE) - log(K_kplam(kp = kp, lam = lam))
+  } else {
+    dinvbatkern(x, mu = mu, kp = kp, lam = lam, log = FALSE) / K_kplam(kp = kp, lam = lam)
+  }
 }
 
 
+#' Compute the weight function of the inverse Batschelet random generation function
+#'
+#' @inheritParams dinvbat
+#'
+#' @return Numeric.
+#'
 weight_fun_rinvbat <- function(x, lam) {
 
   wr <- ((1 - 0.5 * (1 + lam) * cos(s_lam_inv(x, -lam))) /
