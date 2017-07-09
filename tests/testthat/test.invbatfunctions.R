@@ -30,13 +30,25 @@ test_that("Random generation works", {
 
 test_that("Optimization is sensible", {
 
+  set.seed(10)
   x <- rinvbat(10, mu = 2, kp = 2, lam = .3)
+
   mlpars <- maxlikinvbat(x)
+  mlpars_fixed_mu  <- maxlikinvbat(x, fixed_mu = 3)
+  mlpars_fixed_kp  <- maxlikinvbat(x, fixed_kp = 3)
+  mlpars_fixed_lam <- maxlikinvbat(x, fixed_lam = -.3)
 
   expect_true(length(mlpars) == 3)
-
   expect_true(all(!is.na(mlpars)))
 
+  expect_true(length(mlpars_fixed_mu) == 3)
+  expect_true(all(!is.na(mlpars_fixed_mu)))
+
+  expect_true(length(mlpars_fixed_kp) == 3)
+  expect_true(all(!is.na(mlpars_fixed_kp)))
+
+  expect_true(length(mlpars_fixed_lam) == 3)
+  expect_true(all(!is.na(mlpars_fixed_lam)))
 })
 
 
