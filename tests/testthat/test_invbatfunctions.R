@@ -2,7 +2,6 @@ library(flexcircmix)
 
 context("Inverse Batschelet functions")
 
-
 test_that("Distribution is computed correctly", {
   expect_true(abs(s_lam(s_lam_inv(1, .3), .3) - 1) < .0001 )
   expect_true(abs(t_lam(t_lam_inv(1, .3), .3) - 1) < .0001 )

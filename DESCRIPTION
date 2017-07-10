@@ -4,7 +4,7 @@ Title: Fitting Mixtures Of Flexible Circular Distributions
 Version: 0.1.0
 Author: Kees Mulder
 Maintainer: Kees Mulder <keestimmulder@gmail.com>
-Description: Package for fitting mixtures of flexible circular distributions, in particular the inverse Batschelet distribution. 
+Description: An R package to fit mixtures of flexible circular distributions, in particular with symmetric inverse batschelet distributions, which allow for peaked distributions.
 License: GPL-3
 Encoding: UTF-8
 Imports: circular, ggplot2
