@@ -9,7 +9,8 @@
 #'
 K_kplam <- function(kp, lam) {
     (1 + lam) / (1 - lam) - (2 * lam / (1 - lam)) *
-      integrate(function(x) dvm(x - 0.5 * (1 - lam) * sin(x), 0, kp), -pi, pi)$value
+      integrate(function(x) dvmkern(x - 0.5 * (1 - lam) * sin(x), 0, kp), -pi, pi)$value /
+      (2 * pi * besselI(nu = 0, x = kp))
 }
 
 #' Set an angle to have its bounds in (-pi, pi)
