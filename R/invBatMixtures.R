@@ -34,56 +34,70 @@ dinvbatmix <- function(x, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
 
 
 fitinvbatmix <- function(x, n_comp  = 4,
-                         fixed_mus  = rep(NA, n_comp),
-                         fixed_kps  = rep(NA, n_comp),
-                         fixed_lams = rep(NA, n_comp),
-                         n_its = 10) {
+                         init_pmat  = matrix(NA, n_comp, 4),
+                         fixed_pmat = matrix(NA, n_comp, 4),
+                         n_its = 10,
+                         verbose = FALSE) {
 
   n <- length(x)
 
-  cur_mus  <- seq(0, 2*pi, length.out = n_comp + 1)[-1]
-  cur_kps  <- rep(5, n_comp)
-  cur_lams <- rep(0, n_comp)
-  cur_alphs <- rep(1/n_comp, n_comp)
+  # Set initial values if the initial parameter matrix is not given for that parameter (has NAs).
+  if (any(is.na(init_pmat[, 1]))) init_pmat[, 1] <- seq(0, 2*pi, length.out = n_comp + 1)[-1]
+  if (any(is.na(init_pmat[, 2]))) init_pmat[, 2] <- rep(5, n_comp)
+  if (any(is.na(init_pmat[, 3]))) init_pmat[, 3] <- rep(0, n_comp)
+  if (any(is.na(init_pmat[, 4]))) init_pmat[, 4] <- rep(1/n_comp, n_comp)
 
-  # initialize W matrix
+  # The current parameter matrix.
+  pmat_cur <- init_pmat
+  colnames(pmat_cur) <- c("mu", "kp", "lam", "alph")
+
+  # initialize W matrix.
   W <- matrix(1/n_comp, nrow = n, ncol = n_comp)
 
-  ll_cur <- sum(dinvbatmix(x, cur_mus, cur_kps, cur_lams, cur_alphs, log = TRUE))
+  # Accumulate the log likelihoods
+  lls    <- numeric(n_its)
+  lls[1] <- sum(dinvbatmix(x, pmat_cur[, 'mu'], pmat_cur[, 'kp'], pmat_cur[, 'lam'], log = TRUE))
 
+  if (verbose) cat("Starting log-likelihood: ", lls[1], "\n")
 
-  for (i in 1:n_its) {
+  for (i in 2:n_its) {
 
-    print(i)
+    if (verbose) cat("\n Iteration: ", i, ", component: ")
 
     # E-step
     W <- t(sapply(x, function(xi) {
-      sapply(1:n_comp, function(k) cur_alphs[k] * dinvbat(xi, cur_mus[k], cur_kps[k], cur_lams[k]))
+      sapply(1:n_comp, function(k) {
+        pmat_cur[k, 'alph'] * dinvbat(xi,
+                                      pmat_cur[k, 'mu'],
+                                      pmat_cur[k, 'kp'],
+                                      pmat_cur[k, 'lam'])
+      })
       }))
     W <- W / rowSums(W)
 
     # M-step
 
     # Update alphas, the component weights
-    cur_alphs <- colSums(W) / n
+    pmat_cur[, 'alph'] <- colSums(W) / n
 
     # Update the component parameters
     for (ci in 1:n_comp) {
 
-      params <- maxlikinvbat(x, W[, ci],
-                             fixed_mu  = fixed_mus[ci],
-                             fixed_kp  = fixed_kps[ci],
-                             fixed_lam = fixed_lams[ci])
+      if (verbose) cat(" (", ci,") ")
 
-      cur_mus[ci] <- params["mu"]
-      cur_kps[ci] <- params["kp"]
-      cur_lams[ci] <- params["lam"]
+      pmat_cur[ci, 1:3] <- maxlikinvbat(x,
+                                     weights = pmat_cur[ci, 'alph'] * W[, ci],
+                                     fixed_mu  = fixed_pmat[ci, 1],
+                                     fixed_kp  = fixed_pmat[ci, 2],
+                                     fixed_lam = fixed_pmat[ci, 3])
     }
+
+    lls[i] <- sum(dinvbatmix(x, pmat_cur[, 'mu'], pmat_cur[, 'kp'], pmat_cur[, 'lam'], log = TRUE))
+
+    if (verbose) cat(", log-likelihood: ", lls[i])
 
   }
 
-  prs <- cbind(mu = cur_mus, kps = cur_kps, lams = cur_lams, alphs = cur_alphs)
-
+  pmat_cur
 }
-
 
