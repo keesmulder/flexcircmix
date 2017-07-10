@@ -25,13 +25,12 @@ test_that("Random generation works", {
 
 
 test_that("EM Algorithm works", {
-  dat <- rinvbatmix(20, mus = c(-1, 1), kps = c(8, 10), lams = c(-.3, .3), alphs = c(.4, .6))
+  dat <- rinvbatmix(80, mus = c(-1, 1), kps = c(8, 10), lams = c(-.3, .3), alphs = c(.4, .6))
 
   pmat <- fitinvbatmix(dat, n_comp = 2, verbose = FALSE)
 
   expect_true(is.matrix(pmat))
   expect_true(all(!is.na(pmat)))
-
 
 })
 

@@ -36,6 +36,29 @@ dinvbatmix <- function(x, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
   }
 }
 
+
+#' @describeIn dinvbatmix A version that takes a parameter matrix as input.
+dinvbatmix_pmat <- function(x,
+                            pmat = cbind(mu  = c(-pi/2, 0, pi/2), kp = c(8, 8, 8),
+                                         lam = c(-.5, 0, .5),     alph = c(.3, .4, .3)),
+                            log = FALSE) {
+
+  # Compute the probability per component for each datapoint.
+  pkimat <- sapply(1:length(mus), function(i) pmat[i, 4] * dinvbat(x, pmat[i, 1], pmat[i, 2], pmat[i, 3]))
+
+  # If length(x) == 1, a vector is return, which must be made into a matrix.
+  if (!is.matrix(pkimat)) pkimat <- t(pkimat)
+
+  if (log) {
+    log(rowSums(pkimat))
+  } else {
+    rowSums(pkimat)
+  }
+}
+
+
+
+
 #' @describeIn dinvbatmix Random variate generation.
 rinvbatmix <- function(n, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
                        lams = c(-.5, 0, .5), alphs = c(.3, .4, .3)) {

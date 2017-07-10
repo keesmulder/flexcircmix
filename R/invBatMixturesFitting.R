@@ -25,6 +25,9 @@ fitinvbatmix <- function(x, n_comp  = 4,
                          max_its = 50,
                          verbose = FALSE) {
 
+  # Force x to be in range -pi, pi.
+  x <- force_neg_pi_pi(x)
+
   n <- length(x)
 
   # Set initial values if the initial parameter matrix is not given for that parameter (has NAs).
@@ -42,7 +45,8 @@ fitinvbatmix <- function(x, n_comp  = 4,
 
   # Accumulate the log likelihoods
   lls    <- numeric(max_its)
-  lls[1] <- sum(dinvbatmix(x, pmat_cur[, 'mu'], pmat_cur[, 'kp'], pmat_cur[, 'lam'], log = TRUE))
+  lls[1] <- sum(dinvbatmix_pmat(x, pmat = pmat_cur, log = TRUE))
+
 
   if (verbose) cat("Starting log-likelihood: ", lls[1], "\n")
 
@@ -78,13 +82,12 @@ fitinvbatmix <- function(x, n_comp  = 4,
                                         fixed_lam = fixed_pmat[ci, 3])
     }
 
-    lls[i] <- sum(dinvbatmix(x, pmat_cur[, 'mu'], pmat_cur[, 'kp'], pmat_cur[, 'lam'], log = TRUE))
+    lls[i] <- sum(dinvbatmix_pmat(x, pmat = pmat_cur, log = TRUE))
 
     if (verbose) cat(", log-likelihood: ", lls[i])
 
     # Finish if the ll is not increasing anymore.
     if (abs(lls[i] - lls[i - 1]) < ll_tol) break
-
   }
 
   pmat_cur
