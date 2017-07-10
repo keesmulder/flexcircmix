@@ -3,16 +3,25 @@
 #' @param x An set of angles in radians.
 #' @param fixed_mu If NA, the \code{mu} will be estimated as the mean direction. Else, \code{mu}
 #'   will be fixed at \code{fixed_mu}.
+#' @param fixed_kp If NA, kp will be estimated. Else, a numeric giving the fixed value of kp.
+#' @param fixed_lam  If NA, lam will be estimated. Else, a numeric giving the fixed value of lam.
+#' @param weights A vector of length \code{length(x)}, which gives importace weights to be used for x.
 #'
 #' @return The maximum likelihood estimates for the \code{mu}, \code{kp}, and \code{lam}.
 #'
-maxlikinvbat <- function(x, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA) {
+maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA) {
 
-  llfib <- likfuninvbat(x, log = TRUE)
+  # Default weights if not supplied.
+  if (missing(weights)) {
+    llfib <- likfuninvbat(x, log = TRUE)
+    weights <- rep(1, length(x))
+  } else {
+    llfib <- likfuninvbat(x, weights = weights, log = TRUE)
+  }
 
   # Maximum likelihood estimate for the mean
   if (is.na(fixed_mu)) {
-    mu_hat <- atan2(sum(sin(x)), sum(cos(x)))
+    mu_hat <- atan2(sum(weights*sin(x)), sum(weights*cos(x)))
   } else {
     mu_hat <- fixed_mu
   }

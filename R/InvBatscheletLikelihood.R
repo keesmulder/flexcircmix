@@ -1,6 +1,7 @@
 #' Obtain the likelihood of an inverse Batschelet distribution
 #'
 #' @param x An set of angles in radians.
+#' @param weights A vector of length \code{length(x)}, which gives importace weights to be used for x.
 #' @param log If \code{TRUE} (the default), the log-likelihood is used.
 #' @param mu A mean direction, in radians.
 #' @param kp Numeric, \eqn{> 0,}the concentration parameter.
@@ -21,20 +22,20 @@
 #' llfib <- likfuninvbat(x)
 #' llfib(mu = 0, kp = 1, lam = 0.1)
 #'
-likfuninvbat <- function(x, log = TRUE) {
+likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
-    function(mu, kp, lam) sum(dinvbat(x, mu, kp, lam, log = TRUE))
+    function(mu, kp, lam) sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
   } else {
-    function(mu, kp, lam) exp(sum(dinvbat(x, mu, kp, lam, log = FALSE)))
+    function(mu, kp, lam) exp(sum(weights * dinvbat(x, mu, kp, lam, log = FALSE)))
   }
 }
 
 #' @describeIn likfuninvbat
-likinvbat <- function(x, mu, kp, lam, log = TRUE) {
+likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
-    sum(dinvbat(x, mu, kp, lam, log = TRUE))
+    sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
   } else {
-    exp(sum(dinvbat(x, mu, kp, lam, log = FALSE)))
+    exp(sum(weights * dinvbat(x, mu, kp, lam, log = FALSE)))
   }
 }
 
