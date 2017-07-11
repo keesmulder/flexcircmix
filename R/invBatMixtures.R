@@ -44,7 +44,7 @@ dinvbatmix_pmat <- function(x,
                             log = FALSE) {
 
   # Compute the probability per component for each datapoint.
-  pkimat <- sapply(1:length(mus), function(i) pmat[i, 4] * dinvbat(x, pmat[i, 1], pmat[i, 2], pmat[i, 3]))
+  pkimat <- sapply(1:nrow(pmat), function(i) pmat[i, 4] * dinvbat(x, pmat[i, 1], pmat[i, 2], pmat[i, 3]))
 
   # If length(x) == 1, a vector is return, which must be made into a matrix.
   if (!is.matrix(pkimat)) pkimat <- t(pkimat)
