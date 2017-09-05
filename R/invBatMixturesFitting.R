@@ -23,7 +23,8 @@ fitinvbatmix <- function(x, n_comp  = 4,
                          fixed_pmat = matrix(NA, n_comp, 4),
                          ll_tol = 1,
                          max_its = 50,
-                         verbose = FALSE) {
+                         verbose = FALSE,
+                         optimization_its = 5) {
 
   # Force x to be in range -pi, pi.
   x <- force_neg_pi_pi(x)
@@ -79,7 +80,8 @@ fitinvbatmix <- function(x, n_comp  = 4,
                                         weights = pmat_cur[ci, 'alph'] * W[, ci],
                                         fixed_mu  = fixed_pmat[ci, 1],
                                         fixed_kp  = fixed_pmat[ci, 2],
-                                        fixed_lam = fixed_pmat[ci, 3])
+                                        fixed_lam = fixed_pmat[ci, 3],
+                                        max_its = optimization_its)
     }
 
     lls[i] <- sum(dinvbatmix_pmat(x, pmat = pmat_cur, log = TRUE))

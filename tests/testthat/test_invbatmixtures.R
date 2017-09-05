@@ -34,3 +34,17 @@ test_that("EM Algorithm works", {
 
 })
 
+
+
+test_that("EM Algorithm is fast", {
+  dat <- rinvbatmix(800, mus = c(-1, 1), kps = c(8, 10), lams = c(-.3, .3), alphs = c(.4, .6))
+
+  pmat <- fitinvbatmix(dat, n_comp = 2, verbose = TRUE, ll_tol = .01)
+
+  expect_true(is.matrix(pmat))
+  expect_true(all(!is.na(pmat)))
+
+})
+
+
+

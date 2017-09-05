@@ -9,7 +9,8 @@
 #'
 #' @return The maximum likelihood estimates for the \code{mu}, \code{kp}, and \code{lam}.
 #'
-maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA) {
+maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA,
+                         max_its = 1) {
 
   # Default weights if not supplied.
   if (missing(weights)) {
@@ -36,8 +37,8 @@ maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = N
 
   } else if (!is.na(fixed_lam)) {
 
-    kp_hat <- optim(fn = function(kp) -llfib(mu = mu_hat, kp = kp, lam = fixed_lam),
-                    par = 1, lower = 0, upper = Inf, method = "L-BFGS-B")$par[1]
+    kp_hat <- optimize(f = function(kp) llfib(mu = mu_hat, kp = kp, lam = fixed_lam),
+                       lower = 0, upper = Inf, maximum = TRUE)$maximum
 
     return(c(mu = mu_hat, kp = kp_hat, lam = fixed_lam))
 
@@ -46,7 +47,8 @@ maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = N
 
     # Find maximum likelihood estimates for the both parameters.
     om <- optim(fn = function(params) -llfib(mu = mu_hat, kp = params[1], lam = params[2]),
-                method = "Nelder-Mead", control = list(trace = 0), par = c(1, 0))
+                method = "Nelder-Mead", control = list(trace = 0, maxit = max_its),
+                par = c(1, 0))
 
     return(c(mu = mu_hat, kp = om$par[1], lam = om$par[2]))
   }
