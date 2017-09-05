@@ -41,6 +41,16 @@ s_lam_inv <- function(x, lam) {
   uniroot(function(y) s_lam(y, lam) - x, lower = -pi, upper = pi)$root
 }
 
+# Vectorized version of the inversion of s_lam
+#' @describeIn s_lam
+s_lam_inv_vec <-  Vectorize(s_lam_inv)
+
+# The original transformation by Batschelet 1981
+# Note that this version does not include peaked distributions.
+tau_lam <- function(x, lam) x + lam * sin(x)
+
+
+
 #' Inverse Batschelet function
 #'
 #' Function used to generate different shapes for the inverse Batschelet distribution.
@@ -69,6 +79,8 @@ t_lam <- Vectorize(function(x, lam) {
     x - sin(x)
   }
 })
+
+
 
 #' @describeIn t_lam
 t_lam_inv <- function(x, lam) {
