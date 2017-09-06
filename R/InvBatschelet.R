@@ -45,14 +45,6 @@ s_lam_inv <- function(x, lam) {
 #' @describeIn s_lam
 s_lam_inv_vec <-  Vectorize(s_lam_inv)
 
-# The original transformation by Batschelet 1981
-# Note that this version does not include peaked distributions.
-tau_lam <- function(x, lam) x + lam * sin(x)
-
-
-# New power transformations
-tpow_lam     <- function(x, lam) sign(x) * pi * (abs(x) / pi)^exp(lam)
-tpow_lam_inv <- function(x, lam) sign(x) * pi * (abs(x) / pi)^exp(-lam)
 
 
 #' Inverse Batschelet function
@@ -102,17 +94,6 @@ dinvbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 }
 
 
-#' Kernel of the von-Mises based symmetric power Batschelet distribution
-#'
-#' @return The unnormalized density value of the power Batschelet distribution.
-#'
-dpowbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
-  dvm(tpow_lam(x - mu, lam), mu = 0, kp = kp, log = log)
-}
-
-
-
-
 
 #' The von-Mises based symmetric inverse Batschelet distribution
 #'
@@ -149,19 +130,6 @@ dinvbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
     dinvbatkern(x, mu = mu, kp = kp, lam = lam, log = FALSE) / K_kplam(kp = kp, lam = lam)
   }
 }
-
-dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
-  if (kp < 0) return(NA)
-  if (lam <= -1) return(NA)
-  if (lam > 1) return(NA)
-
-  if (log) {
-    dinvbatkern(x, mu = mu, kp = kp, lam = lam, log = TRUE) - log(K_kplam(kp = kp, lam = lam))
-  } else {
-    dinvbatkern(x, mu = mu, kp = kp, lam = lam, log = FALSE) / K_kplam(kp = kp, lam = lam)
-  }
-}
-
 
 
 #' Compute the weight function of the inverse Batschelet random generation function

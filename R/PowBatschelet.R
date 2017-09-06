@@ -4,8 +4,18 @@
 tau_lam <- function(x, lam) x + lam * sin(x)
 
 # New power transformations
-tpow_lam     <- function(x, lam) sign(x) * pi * (abs(x) / pi)^exp(lam)
-tpow_lam_inv <- function(x, lam) sign(x) * pi * (abs(x) / pi)^exp(-lam)
+tpow_lam     <- function(x, lam) sign(x) * pi * (abs(x) / pi)^lam
+tpow_lam_inv <- function(x, lam) sign(x) * pi * (abs(x) / pi)^(1/lam)
+
+# Derivatives of the power function
+tpow_lam_inv_d <- function(x, lam) {
+   pi^(1 + lam) * sign(x) * x * abs(x)^(- 2 - 1 / lam)
+}
+# Derivatives of the power function
+tpow_lam_inv_d <- function(x, lam) {
+  eml <- exp(-lam)
+  x * pi^(1 - eml) * eml * sign(x) * abs(x)^(eml - 2)
+}
 
 
 #' Kernel of the von-Mises based symmetric power Batschelet distribution
@@ -39,21 +49,21 @@ powbat_nc <- function(kp, lam) {
 #' @export
 #'
 #' @examples
-#' dinvbat(3)
+#' dpowbat(3)
 #'
 #' # Peaked distribution
-#' curve(dinvbat(x, lam = .8), -pi, pi)
+#' curve(dpowbat(x, lam = -.8), -pi, pi)
 #'
 #' # Flat-topped distribution
-#' curve(dinvbat(x, lam = -.8), -pi, pi)
+#' curve(dpowbat(x, lam = .8), -pi, pi)
 #'
 dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
   if (kp < 0) return(NA)
 
   if (log) {
-    dpowbatkern(x, mu = mu, kp = kp, lam = lam, log = TRUE) /
+    dpowbatkern(x, mu = mu, kp = kp, lam = lam, log = TRUE)  - log(powbat_nc(kp, lam))
   } else {
-    dpowbatkern(x, mu = mu, kp = kp, lam = lam, log = FALSE)
+    dpowbatkern(x, mu = mu, kp = kp, lam = lam, log = FALSE) / powbat_nc(kp, lam)
   }
 }
 
