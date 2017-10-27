@@ -68,3 +68,39 @@ dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 }
 
 
+
+#' Obtain the likelihood of a power Batschelet distribution
+#'
+#' @param x An set of angles in radians.
+#' @param weights A vector of length \code{length(x)}, which gives importace weights to be used for x.
+#' @param log If \code{TRUE} (the default), the log-likelihood is used.
+#' @param mu A mean direction, in radians.
+#' @param kp Numeric, \eqn{> 0,}the concentration parameter.
+#' @param lam The shape parameter (peakedness), -1 < \code{lam} < 1.
+#'
+#' @return \code{likpowbat} returns a value, the likelihood given the data and parameters.
+#'   \code{likfunpowbat} returns a function of mu, kp and lam, which can be evaluated later for a
+#'   given set of parameters.
+#' @export
+#'
+#' @examples
+#'
+#'
+likfunpowbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
+  if (log) {
+    function(mu, kp, lam) sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
+  } else {
+    function(mu, kp, lam) exp(sum(weights * dpowbat(x, mu, kp, lam, log = FALSE)))
+  }
+}
+
+#' @describeIn likfunpowbat
+likpowbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
+  if (log) {
+    sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
+  } else {
+    exp(sum(weights * dpowbat(x, mu, kp, lam, log = FALSE)))
+  }
+}
+
+
