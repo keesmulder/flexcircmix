@@ -10,7 +10,7 @@
 #' @return The maximum likelihood estimates for the \code{mu}, \code{kp}, and \code{lam}.
 #'
 maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA,
-                         max_its = 1) {
+                         max_its = 20) {
 
   # Default weights if not supplied.
   if (missing(weights)) {
@@ -47,7 +47,7 @@ maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = N
 
     # Find maximum likelihood estimates for the both parameters.
     om <- optim(fn = function(params) -llfib(mu = mu_hat, kp = params[1], lam = params[2]),
-                method = "Nelder-Mead", control = list(trace = 0, maxit = max_its),
+                method = "Nelder-Mead", control = list(trace = 0, maxit = 5*max_its),
                 par = c(1, 0))
 
     return(c(mu = mu_hat, kp = om$par[1], lam = om$par[2]))
