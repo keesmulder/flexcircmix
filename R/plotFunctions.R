@@ -1,4 +1,4 @@
-plot_invbatmixfit <- function(x, params, bins = 100, res = 400) {
+plot_batmixfit <- function(x, params, dbat_fun = dinvbat, bins = 100, res = 400) {
 
   # Initialize plot.
   p <- ggplot2::ggplot(data.frame(x)) +
@@ -18,8 +18,9 @@ plot_invbatmixfit <- function(x, params, bins = 100, res = 400) {
 
   # Add the mixture density.
   p <- p +
-    ggplot2::stat_function(fun = dinvbatmix_pmat,
-                           args = list(pmat = params), n = res,
+    ggplot2::stat_function(fun = dbatmix_pmat,
+                           args = list(pmat = params, dbat_fun = dbat_fun),
+                           n = res,
                            colour = rgb(.35, .35, .35, .8),
                            lwd = 1.2)
 
@@ -30,7 +31,7 @@ plot_invbatmixfit <- function(x, params, bins = 100, res = 400) {
   # Force evaluation of the functions parameters, because otherwise lazy evaluation will only cause
   # us to plot the last function.
   funlist <- lapply(1:n_comp, function(compi) {
-    function(x) params[compi, 'alph'] * dinvbat(x,
+    function(x) params[compi, 'alph'] * dbat_fun(x,
                                                 mu = params[compi, 'mu'],
                                                 kp = params[compi, 'kp'],
                                                 lam = params[compi, 'lam'])})
@@ -51,9 +52,9 @@ plot_invbatmixfit <- function(x, params, bins = 100, res = 400) {
 }
 
 
-plot_movMF_as_invbatmix <- function(x, m, bins = 100, res = 400) {
+plot_movMF_as_batmix <- function(x, m, bins = 100, res = 400) {
   pmat <- invbatmix_pmat_from_movMF(m)
-  plot_invbatmixfit(x, pmat, bins = bins, res = res)
+  plot_batmixfit(x, pmat, bins = bins, res = res)
 }
 
 

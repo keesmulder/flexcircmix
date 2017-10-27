@@ -17,15 +17,15 @@
 #' @return The maximum likelihood estimates for the \code{mu}, \code{kp}, and
 #'   \code{lam}.
 #'
-maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA,
+maxlikbat <- function(x, likfunbat_fun = likfuninvbat, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA,
                          max_its = 20, kp_max = 100) {
 
   # Default weights if not supplied.
   if (missing(weights)) {
-    llfib <- likfuninvbat(x, log = TRUE)
+    llfib <- likfunbat_fun(x, log = TRUE)
     weights <- rep(1, length(x))
   } else {
-    llfib <- likfuninvbat(x, weights = weights, log = TRUE)
+    llfib <- likfunbat_fun(x, weights = weights, log = TRUE)
   }
 
   # Maximum likelihood estimate for the mean

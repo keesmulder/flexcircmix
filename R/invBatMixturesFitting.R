@@ -1,4 +1,4 @@
-#' Fit mixtures of inverse Batschelet distributions.
+#' Fit mixtures of inverse or power Batschelet distributions.
 #'
 #' @param x A dataset of angles in radians.
 #' @param n_comp The number of components to be used in the mixture. This is fixed, so it can not be
@@ -18,13 +18,24 @@
 #' @examples
 #'
 #'
-fitinvbatmix <- function(x, n_comp  = 4,
+fitbatmix <- function(x, bat_type = "inverse",
+                         n_comp  = 4,
                          init_pmat  = matrix(NA, n_comp, 4),
                          fixed_pmat = matrix(NA, n_comp, 4),
                          ll_tol = 1,
                          max_its = 50,
                          verbose = FALSE,
                          optimization_its = 5) {
+
+  if (bat_type == "inverse") {
+    dbat_fun      <- dinvbat
+    likfunbat_fun <- likfuninvbat
+  } else if (bat_type == "power") {
+    dbat_fun      <- dpowbat
+    likfunbat_fun <- likfunpowbat
+  } else {
+    stop("Unknown Batschelet type.")
+  }
 
   # Force x to be in range -pi, pi.
   x <- force_neg_pi_pi(x)
@@ -46,7 +57,7 @@ fitinvbatmix <- function(x, n_comp  = 4,
 
   # Accumulate the log likelihoods
   lls    <- numeric(max_its)
-  lls[1] <- sum(dinvbatmix_pmat(x, pmat = pmat_cur, log = TRUE))
+  lls[1] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
 
 
   if (verbose) cat("Starting log-likelihood: ", lls[1], "\n")
@@ -58,7 +69,7 @@ fitinvbatmix <- function(x, n_comp  = 4,
     # E-step
     W <- t(sapply(x, function(xi) {
       sapply(1:n_comp, function(k) {
-        pmat_cur[k, 'alph'] * dinvbat(xi,
+        pmat_cur[k, 'alph'] * dbat_fun(xi,
                                       pmat_cur[k, 'mu'],
                                       pmat_cur[k, 'kp'],
                                       pmat_cur[k, 'lam'])
@@ -76,7 +87,7 @@ fitinvbatmix <- function(x, n_comp  = 4,
 
       if (verbose) cat(" (", ci,") ")
 
-      pmat_cur[ci, 1:3] <- maxlikinvbat(x,
+      pmat_cur[ci, 1:3] <- maxlikbat(x, likfunbat_fun = likfunbat_fun,
                                         weights = pmat_cur[ci, 'alph'] * W[, ci],
                                         fixed_mu  = fixed_pmat[ci, 1],
                                         fixed_kp  = fixed_pmat[ci, 2],
@@ -84,7 +95,7 @@ fitinvbatmix <- function(x, n_comp  = 4,
                                         max_its = optimization_its)
     }
 
-    lls[i] <- sum(dinvbatmix_pmat(x, pmat = pmat_cur, log = TRUE))
+    lls[i] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
 
     if (verbose) cat(", log-likelihood: ", lls[i])
 

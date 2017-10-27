@@ -27,16 +27,17 @@ curve(t_lam(x, 0), -pi, pi, asp = 1, add = TRUE)
 # curve(tpow_lam_d(x, -.01), -pi, pi, asp = 1)
 # curve(tpow_lam(x, -.01), -pi, pi, asp = 1, add = TRUE)
 
-
-th <- force_neg_pi_pi(circular:::RvonmisesRad(100000, 0, 1))
-
-th2 <- tpow_lam(th, lam = .2)
-
-plot(density(th))
-plot(density(th2))
+#
+# th <- force_neg_pi_pi(circular:::RvonmisesRad(100000, 0, 1))
+#
+# th2 <- tpow_lam(th, lam = .2)
+#
+#
+# plot(density(th))
+# lines(density(th2))
 curve(dpowbat(x, kp = 1, lam = .2), -pi, pi, add = TRUE, col = "goldenrod")
 curve(dpowbat(x, kp = 1, lam = 1), -pi, pi, add = TRUE, col = "goldenrod")
-curve(dpowbat(x, kp = 1, lam = 2), -pi, pi, add = TRUE, col = "goldenrod")
+curve(dpowbat(x, kp = 1, lam = -.2), -pi, pi, add = TRUE, col = "goldenrod")
 curve(dpowbat(x, kp = 1, lam = 0), -pi, pi, add = TRUE, col = "goldenrod")
 
 curve(dpowbat(x, kp = 1, lam = 1), -pi, pi, add = TRUE, col = "goldenrod")

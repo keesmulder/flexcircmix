@@ -1,6 +1,6 @@
 library(flexcircmix)
 
-context("Inverse Batschelet functions")
+context("Batschelet functions")
 
 test_that("Distribution is computed correctly", {
   expect_true(abs(s_lam(s_lam_inv(1, .3), .3) - 1) < .0001 )
@@ -32,10 +32,11 @@ test_that("Optimization is sensible", {
   set.seed(10)
   x <- rinvbat(20, mu = 2, kp = 2, lam = .3)
 
-  mlpars <- maxlikinvbat(x)
-  mlpars_fixed_mu  <- maxlikinvbat(x, fixed_mu = 3)
-  mlpars_fixed_kp  <- maxlikinvbat(x, fixed_kp = 3)
-  mlpars_fixed_lam <- maxlikinvbat(x, fixed_lam = -.3)
+  # Inverse Batschelet (default)
+  mlpars <- maxlikbat(x)
+  mlpars_fixed_mu  <- maxlikbat(x, fixed_mu = 3)
+  mlpars_fixed_kp  <- maxlikbat(x, fixed_kp = 3)
+  mlpars_fixed_lam <- maxlikbat(x, fixed_lam = -.3)
 
   expect_true(length(mlpars) == 3)
   expect_true(all(!is.na(mlpars)))
@@ -50,7 +51,7 @@ test_that("Optimization is sensible", {
   expect_true(all(!is.na(mlpars_fixed_lam)))
 
   # Test weights
-  mlw <- maxlikinvbat(x, weights = runif(length(x)))
+  mlw <- maxlikbat(x, weights = runif(length(x)))
   expect_true(length(mlw) == 3)
   expect_true(all(!is.na(mlw)))
 })
