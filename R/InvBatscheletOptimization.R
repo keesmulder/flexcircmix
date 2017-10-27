@@ -1,16 +1,24 @@
 #' Find maximum likelihood estimates for the inverse Batschelet distribution
 #'
 #' @param x An set of angles in radians.
-#' @param fixed_mu If NA, the \code{mu} will be estimated as the mean direction. Else, \code{mu}
-#'   will be fixed at \code{fixed_mu}.
-#' @param fixed_kp If NA, kp will be estimated. Else, a numeric giving the fixed value of kp.
-#' @param fixed_lam  If NA, lam will be estimated. Else, a numeric giving the fixed value of lam.
-#' @param weights A vector of length \code{length(x)}, which gives importace weights to be used for x.
+#' @param fixed_mu If NA, the \code{mu} will be estimated as the mean direction.
+#'   Else, \code{mu} will be fixed at \code{fixed_mu}.
+#' @param fixed_kp If NA, kp will be estimated. Else, a numeric giving the fixed
+#'   value of kp.
+#' @param fixed_lam  If NA, lam will be estimated. Else, a numeric giving the
+#'   fixed value of lam.
+#' @param weights A vector of length \code{length(x)}, which gives importace
+#'   weights to be used for x.
+#' @param max_its Used only if neither \code{fixed_kp} nor \code{fixed_lam} is
+#'   provided. The maximum number of iterations for the Nelder-Mead optimization.
+#' @param kp_max Used only if \code{fixed_lam} is provided. The maximum value
+#'   for kappa to search for.
 #'
-#' @return The maximum likelihood estimates for the \code{mu}, \code{kp}, and \code{lam}.
+#' @return The maximum likelihood estimates for the \code{mu}, \code{kp}, and
+#'   \code{lam}.
 #'
 maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = NA,
-                         max_its = 20) {
+                         max_its = 20, kp_max = 100) {
 
   # Default weights if not supplied.
   if (missing(weights)) {
@@ -38,7 +46,7 @@ maxlikinvbat <- function(x, weights, fixed_mu = NA, fixed_kp = NA, fixed_lam = N
   } else if (!is.na(fixed_lam)) {
 
     kp_hat <- optimize(f = function(kp) llfib(mu = mu_hat, kp = kp, lam = fixed_lam),
-                       lower = 0, upper = Inf, maximum = TRUE)$maximum
+                       lower = 0, upper = kp_max, maximum = TRUE)$maximum
 
     return(c(mu = mu_hat, kp = kp_hat, lam = fixed_lam))
 
