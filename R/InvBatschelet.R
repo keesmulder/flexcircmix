@@ -8,9 +8,9 @@
 #' @return Numeric.
 #'
 K_kplam <- function(kp, lam) {
-    (1 + lam) / (1 - lam) - (2 * lam / (1 - lam)) *
-      integrate(function(x) dvmkern(x - 0.5 * (1 - lam) * sin(x), 0, kp), -pi, pi)$value /
-      (2 * pi * besselI(nu = 0, x = kp))
+  (1 + lam) / (1 - lam) - (2 * lam / (1 - lam)) *
+    integrate(function(x) dvmkern(x - 0.5 * (1 - lam) * sin(x), 0, kp), -pi, pi)$value /
+    (2 * pi * besselI(nu = 0, x = kp))
 }
 
 #' Set an angle to have its bounds in (-pi, pi)
@@ -141,7 +141,7 @@ dinvbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 weight_fun_rinvbat <- function(x, lam) {
 
   wr <- ((1 - 0.5 * (1 + lam) * cos(s_lam_inv(x, -lam))) /
-       (1 - 0.5 * (1 - lam) * cos(s_lam_inv(x, -lam))))
+           (1 - 0.5 * (1 - lam) * cos(s_lam_inv(x, -lam))))
 
   if (lam > 0) {
     ((3 - lam) / (3 + lam)) * wr
@@ -181,4 +181,50 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 
   th_out
 }
+
+
+
+
+#' Obtain the likelihood of an inverse Batschelet distribution
+#'
+#' @param x An set of angles in radians.
+#' @param weights A vector of length \code{length(x)}, which gives importace weights to be used for x.
+#' @param log If \code{TRUE} (the default), the log-likelihood is used.
+#' @param mu A mean direction, in radians.
+#' @param kp Numeric, \eqn{> 0,}the concentration parameter.
+#' @param lam The shape parameter (peakedness), -1 < \code{lam} < 1.
+#'
+#' @return \code{likinvbat} returns a value, the likelihood given the data and parameters.
+#'   \code{likfuninvbat} returns a function of mu, kp and lam, which can be evaluated later for a
+#'   given set of parameters.
+#' @export
+#'
+#' @examples
+#' x <- rinvbat(5)
+#'
+#' # Find the likelihood
+#' likinvbat(x, mu = 0, kp = 1, lam = 0.1, log = TRUE)
+#'
+#' # likfuninvbat returns a function.
+#' llfib <- likfuninvbat(x)
+#' llfib(mu = 0, kp = 1, lam = 0.1)
+#'
+likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
+  if (log) {
+    function(mu, kp, lam) sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
+  } else {
+    function(mu, kp, lam) exp(sum(weights * dinvbat(x, mu, kp, lam, log = FALSE)))
+  }
+}
+
+#' @describeIn likfuninvbat
+likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
+  if (log) {
+    sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
+  } else {
+    exp(sum(weights * dinvbat(x, mu, kp, lam, log = FALSE)))
+  }
+}
+
+
 
