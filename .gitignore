@@ -77,3 +77,4 @@ $RECYCLE.BIN/
 .Rproj.user
 fit2July11.RData
 fitJuly11.RData
+tests/testthat/Rplots.pdf
