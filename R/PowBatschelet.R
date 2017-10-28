@@ -82,7 +82,7 @@ powbat_nc <- function(kp, lam) {
 #' curve(dpowbat(x, lam = .8), -pi, pi)
 #'
 dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
-  if (kp < 0) return(NA)
+  if (kp < 0 || lam < -1 || lam > 1) return(NA)
 
   if (log) {
     dpowbatkern(x, mu = mu, kp = kp, lam = lam, log = TRUE)  - log(powbat_nc(kp, lam))
