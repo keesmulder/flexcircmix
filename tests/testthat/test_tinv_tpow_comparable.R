@@ -33,7 +33,10 @@ test_that("tpow_lam is comparable to tinv_lam", {
   expect_true(t_diff(-1, -lam_min_neg) < t_diff(-1, -lam_min_neg + .001))
   expect_true(t_diff(-1, -lam_min_neg) < t_diff(-1, -lam_min_neg - .001))
 
-  t_diff_curve(1, lam_min)
+  t_diff_curve(1/3, mean_lam_min/3)
+  t_diff_curve(1, mean_lam_min)
 })
+
+
 
 

@@ -12,7 +12,7 @@ logit <- function(p) log(p) - log(1 - p)   # [0, 1] -> R
 tpow_lam     <- function(x, lam) {
 
   # Reparametrize from (-1, 1) to a power for the power batschelet function.
-  pwr <- (1 + lam) / (1 - lam)
+  pwr <- (1 - 0.4052284*lam) / (1 + 0.4052284*lam)
 
   sign(x) * pi * (abs(x) / pi)^pwr
 }
@@ -20,7 +20,7 @@ tpow_lam     <- function(x, lam) {
 tpow_lam_inv <- function(x, lam) {
 
   # Reparametrize from (-1, 1) to a power for the power batschelet function.
-  pwr <- (1 - lam) / (1 + lam)
+  pwr <- (1 + 0.4052284*lam) / (1 - 0.4052284*lam)
 
   sign(x) * pi * (abs(x) / pi)^pwr
 }
@@ -32,7 +32,7 @@ tpow_lam_inv <- function(x, lam) {
 # Derivatives of the power function with respect to x.
 tpow_lam_inv_d <- function(x, lam) {
 
-  pwr <- (1 - lam) / (1 + lam)
+  pwr <- (1 - lam/2) / (1 + lam/2)
   pi^(1 + pwr) * sign(x) * x * abs(x)^(- 2 - 1 / pwr)
 }
 # Derivatives of the power function
