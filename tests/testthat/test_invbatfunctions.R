@@ -1,6 +1,6 @@
 library(flexcircmix)
 
-context("Batschelet functions")
+context("Inverse Batschelet functions")
 
 test_that("Distribution is computed correctly", {
   expect_true(abs(s_lam(s_lam_inv(1, .3), .3) - 1) < .0001 )
@@ -55,5 +55,16 @@ test_that("Optimization is sensible", {
   expect_true(length(mlw) == 3)
   expect_true(all(!is.na(mlw)))
 })
+
+context("Power Batschelet Functions")
+
+test_that("Distribution is computed correctly", {
+  expect_true(abs(tpow_lam(tpow_lam_inv(1, .3), .3) - 1) < .0001 )
+
+  expect_equal(dpowbat(3, mu = 2, kp = -1, lam = .2), NA)
+  expect_equal(dpowbat(3, mu = 2, kp = 1, lam = 1.2), NA)
+
+})
+
 
 
