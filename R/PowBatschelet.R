@@ -11,6 +11,8 @@ logit <- function(p) log(p) - log(1 - p)   # [0, 1] -> R
 # New power transformations
 tpow_lam     <- function(x, lam) {
 
+  x <- force_neg_pi_pi(x)
+
   # Reparametrize from (-1, 1) to a power for the power batschelet function.
   pwr <- (1 - 0.4052284*lam) / (1 + 0.4052284*lam)
 
@@ -18,6 +20,8 @@ tpow_lam     <- function(x, lam) {
 }
 
 tpow_lam_inv <- function(x, lam) {
+
+  x <- force_neg_pi_pi(x)
 
   # Reparametrize from (-1, 1) to a power for the power batschelet function.
   pwr <- (1 + 0.4052284*lam) / (1 - 0.4052284*lam)
