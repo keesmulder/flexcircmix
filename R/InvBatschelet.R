@@ -35,14 +35,20 @@ s_lam <- function(x, lam) {
   x - 0.5 * (1 + lam) * sin(x)
 }
 
+
+#' Inverse Batschelet inverse subfunction
+#'
 #' @describeIn s_lam
+#'
 s_lam_inv <- function(x, lam) {
   # Compute the root to obtain the inverse.
   uniroot(function(y) s_lam(y, lam) - x, lower = -pi, upper = pi)$root
 }
 
-# Vectorized version of the inversion of s_lam
+#' Vectorized version of the inversion of s_lam
+#'
 #' @describeIn s_lam
+#'
 s_lam_inv_vec <-  Vectorize(s_lam_inv)
 
 
@@ -78,7 +84,10 @@ t_lam <- Vectorize(function(x, lam) {
 
 
 
+#' Inverse Batschelet inverse function
+#'
 #' @describeIn t_lam
+#'
 t_lam_inv <- function(x, lam) t_lam(x, -lam)
 
 
@@ -107,7 +116,7 @@ dinvbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 #' @param lam The shape parameter (peakedness), -1 < \code{lam} < 1.
 #' @param log Logical; whether to return the log of the probability or not.
 #'
-#' @return
+#' @return Numeric, the probability or log-probability of angle x given the parameters.
 #' @export
 #'
 #' @examples
@@ -151,7 +160,10 @@ weight_fun_rinvbat <- function(x, lam) {
 }
 
 
+#' Random generation of inverse Batschelet distribution
+#'
 #' @describeIn dinvbat
+#'
 rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 
   if (lam > 1 || lam <= -1 || kp < 0) stop("Parameter out of bounds.")
@@ -217,7 +229,10 @@ likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   }
 }
 
-#' @describeIn likfuninvbat
+#' Likelihood function of inverse Batschelet.
+#'
+#'  @describeIn likfuninvbat
+#'
 likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))

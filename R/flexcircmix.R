@@ -1,3 +1,6 @@
-#' @importFrom circular RvonmisesRad
+#' Package 'flexcircmix'
+#'
+#' @name flexcircmix
+#'
 #' @docType package
 NULL

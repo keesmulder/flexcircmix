@@ -7,11 +7,17 @@
 #' @return The logarithm of the bessel funciton
 #'
 #' @examples
+#' log(besselI(10, 1))
+#' logBesselI(10, 1)
+#'
+#'
 logBesselI <- function(x, nu) {
   x + log(besselI(x, nu, expon.scaled = TRUE))
 }
 
 
+#' Kernel of the von Mises distribution.
+#'
 #' @describeIn dvm The kernel of the von Mises distribution.
 dvmkern <- function(x, mu = 0, kp = 1, log = FALSE) {
   logp <- kp * cos(x - mu)

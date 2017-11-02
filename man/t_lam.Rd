@@ -2,9 +2,12 @@
 % Please edit documentation in R/InvBatschelet.R
 \name{t_lam}
 \alias{t_lam}
+\alias{t_lam_inv}
 \title{Inverse Batschelet function}
 \usage{
 t_lam(x, lam)
+
+t_lam_inv(x, lam)
 }
 \arguments{
 \item{x}{An angle in radians.}
@@ -16,7 +19,14 @@ The transformed angle x.
 }
 \description{
 Function used to generate different shapes for the inverse Batschelet distribution.
+
+Inverse Batschelet inverse function
 }
+\section{Functions}{
+\itemize{
+\item \code{t_lam_inv}: 
+}}
+
 \examples{
 
 # Reproduce Figure 5 in Jones & Pewsey

@@ -16,5 +16,11 @@ logBesselI(x, nu)
 The logarithm of the bessel funciton
 }
 \description{
-Log of the Bessel function
+This can be more numerically stable than taking the log directly.
+}
+\examples{
+log(besselI(10, 1))
+logBesselI(10, 1)
+
+
 }

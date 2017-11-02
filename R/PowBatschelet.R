@@ -34,16 +34,16 @@ tpow_lam_inv <- function(x, lam) {
 
 ### THESE DERIVATIVES MUST BE CHECKED
 # Derivatives of the power function with respect to x.
-tpow_lam_inv_d <- function(x, lam) {
-
-  pwr <- (1 - lam/2) / (1 + lam/2)
-  pi^(1 + pwr) * sign(x) * x * abs(x)^(- 2 - 1 / pwr)
-}
-# Derivatives of the power function
-tpow_lam_inv_d <- function(x, lam) {
-  pwr <- (1 - lam) / (1 + lam)
-  x * pi^(1 - pwr) * pwr * sign(x) * abs(x)^(pwr - 2)
-}
+# tpow_lam_inv_d <- function(x, lam) {
+#
+#   pwr <- (1 - lam/2) / (1 + lam/2)
+#   pi^(1 + pwr) * sign(x) * x * abs(x)^(- 2 - 1 / pwr)
+# }
+# # Derivatives of the power function
+# tpow_lam_inv_d <- function(x, lam) {
+#   pwr <- (1 - lam) / (1 + lam)
+#   x * pi^(1 - pwr) * pwr * sign(x) * abs(x)^(pwr - 2)
+# }
 
 
 #' Kernel of the von-Mises based symmetric power Batschelet distribution
@@ -54,7 +54,7 @@ dpowbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
   dvm(tpow_lam(x - mu, lam), mu = 0, kp = kp, log = log)
 }
 
-
+# Compute the normalizing constant of the power Batschelet function.
 powbat_nc <- function(kp, lam) {
   integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi)$value
 }
@@ -73,16 +73,16 @@ powbat_nc <- function(kp, lam) {
 #' @param lam The shape parameter (peakedness), -Inf < \code{lam} < Inf
 #' @param log Logical; whether to return the log of the probability or not.
 #'
-#' @return
+#' @return Numeric; Either the probability or log-probability of angle x given the parameters.
 #' @export
 #'
 #' @examples
 #' dpowbat(3)
 #'
-#' # Peaked distribution
+#' # Flat-topped distribution
 #' curve(dpowbat(x, lam = -.8), -pi, pi)
 #'
-#' # Flat-topped distribution
+#' # Peaked distribution
 #' curve(dpowbat(x, lam = .8), -pi, pi)
 #'
 dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
@@ -122,7 +122,10 @@ likfunpowbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   }
 }
 
+#' Likelihood function of the power Batschelet function
+#'
 #' @describeIn likfunpowbat
+#'
 likpowbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))

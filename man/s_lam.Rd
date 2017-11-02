@@ -2,9 +2,15 @@
 % Please edit documentation in R/InvBatschelet.R
 \name{s_lam}
 \alias{s_lam}
+\alias{s_lam_inv}
+\alias{s_lam_inv_vec}
 \title{Inverse Batschelet subfunction}
 \usage{
 s_lam(x, lam)
+
+s_lam_inv(x, lam)
+
+s_lam_inv_vec(x, lam)
 }
 \arguments{
 \item{x}{An angle in radians.}
@@ -16,4 +22,15 @@ Numeric.
 }
 \description{
 Inverse Batschelet subfunction
+
+Inverse Batschelet inverse subfunction
+
+Vectorized version of the inversion of s_lam
 }
+\section{Functions}{
+\itemize{
+\item \code{s_lam_inv}: 
+
+\item \code{s_lam_inv_vec}: 
+}}
+
