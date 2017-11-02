@@ -16,6 +16,7 @@
 #' dbatmix(x)
 #'
 #' curve(dbatmix(x), -pi, pi)
+#' curve(dbatmix(x, dbatfun = dpowbat), -pi, pi)
 #'
 dbatmix <- function(x, dbat_fun = dinvbat,
                        mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
@@ -41,6 +42,7 @@ dbatmix <- function(x, dbat_fun = dinvbat,
 
 
 #' @describeIn dbatmix A version that takes a parameter matrix as input.
+#' @export
 dbatmix_pmat <- function(x, dbat_fun = dinvbat,
                             pmat = cbind(mu  = c(-pi/2, 0, pi/2), kp = c(8, 8, 8),
                                          lam = c(-.5, 0, .5),     alph = c(.3, .4, .3)),

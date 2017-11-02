@@ -18,6 +18,7 @@ K_kplam <- function(kp, lam) {
 #' This function is used to make sure that an angle is represented as being between -pi and pi.
 #'
 #' @param x Numeric, representing an angle.
+#' @export
 #'
 #' @return  Numeric, representing an angle, between -pi and pi.
 #'

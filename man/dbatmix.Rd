@@ -48,5 +48,6 @@ x <- rinvbat(10)
 dbatmix(x)
 
 curve(dbatmix(x), -pi, pi)
+curve(dbatmix(x, dbatfun = dpowbat), -pi, pi)
 
 }
