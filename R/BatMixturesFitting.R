@@ -68,7 +68,7 @@ fitbatmix <- function(x, bat_type = "inverse",
 
   for (i in 1:max_its) {
 
-    if (verbose) cat("\n Iteration: ", i, ", component: ")
+    if (verbose) cat(" Iteration: ", sprintf("%4s", i), ", E-step: ", sep = "")
 
     # E-step
     W <- t(sapply(x, function(xi) {
@@ -89,12 +89,14 @@ fitbatmix <- function(x, bat_type = "inverse",
       }
     }
 
+    if (verbose) cat(" Done. ---  M-step: component: ")
+
     # M-step
 
     # Update the component parameters
     for (ci in 1:n_comp) {
 
-      if (verbose) cat(" (", ci,") ")
+      if (verbose) cat(" (", ci,")", sep = "")
 
       pmat_cur[ci, 1:3] <- maxlikbat(x, likfunbat_fun = likfunbat_fun,
                                         weights = pmat_cur[ci, 'alph'] * W[, ci],
@@ -106,7 +108,7 @@ fitbatmix <- function(x, bat_type = "inverse",
 
     lls[i + 1] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
 
-    if (verbose) cat(", log-likelihood: ", lls[i + 1])
+    if (verbose) cat(", done. Log-likelihood: ", lls[i + 1], ".\n", sep = "")
 
     # Finish if the ll is not increasing anymore.
     if (abs(lls[i + 1] - lls[i]) < ll_tol) break
