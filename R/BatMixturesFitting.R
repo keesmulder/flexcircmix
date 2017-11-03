@@ -43,11 +43,14 @@ fitbatmix <- function(x, bat_type = "inverse",
 
   n <- length(x)
 
+  # A matrix with logicals for each initial value of the parameter matrix.
+  na_initpmat <- is.na(init_pmat)
+
   # Set initial values if the initial parameter matrix is not given for that parameter (has NAs).
-  if (any(is.na(init_pmat[, 1]))) init_pmat[, 1] <- seq(0, 2*pi, length.out = n_comp + 1)[-1]
-  if (any(is.na(init_pmat[, 2]))) init_pmat[, 2] <- rep(5, n_comp)
-  if (any(is.na(init_pmat[, 3]))) init_pmat[, 3] <- rep(0, n_comp)
-  if (any(is.na(init_pmat[, 4]))) init_pmat[, 4] <- rep(1/n_comp, n_comp)
+  if (any(na_initpmat[, 1])) init_pmat[, 1] <- seq(0, 2*pi, length.out = n_comp + 1)[-1]
+  if (any(na_initpmat[, 2])) init_pmat[, 2] <- rep(5, n_comp)
+  if (any(na_initpmat[, 3])) init_pmat[, 3] <- rep(0, n_comp)
+  if (any(na_initpmat[, 4])) init_pmat[, 4] <- rep(1/n_comp, n_comp)
 
   # The current parameter matrix.
   pmat_cur <- init_pmat
@@ -78,10 +81,15 @@ fitbatmix <- function(x, bat_type = "inverse",
     }))
     W <- W / rowSums(W)
 
-    # M-step
 
-    # Update alphas, the component weights
-    pmat_cur[, 'alph'] <- colSums(W) / n
+    # Update alphas, the component weights, if they are not fixed.
+    for (k in 1:n_comp) {
+      if (na_initpmat[k, 4]) {
+        pmat_cur[, 'alph'] <- colSums(W) / n
+      }
+    }
+
+    # M-step
 
     # Update the component parameters
     for (ci in 1:n_comp) {
