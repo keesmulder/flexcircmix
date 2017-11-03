@@ -7,7 +7,8 @@ Maintainer: Kees Mulder <keestimmulder@gmail.com>
 Description: An R package to fit mixtures of flexible circular distributions, in particular with symmetric inverse batschelet distributions, which allow for peaked distributions.
 License: GPL-3
 Encoding: UTF-8
-Imports: circular, ggplot2, RColorBrewer
+Imports: circular, ggplot2, RColorBrewer,
+    MCMCpack
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: testthat
