@@ -57,13 +57,13 @@ fitbatmix <- function(x, bat_type = "inverse",
   W <- matrix(1/n_comp, nrow = n, ncol = n_comp)
 
   # Accumulate the log likelihoods
-  lls    <- numeric(max_its)
+  lls    <- numeric(max_its + 1)
   lls[1] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
 
 
   if (verbose) cat("Starting log-likelihood: ", lls[1], "\n")
 
-  for (i in 2:max_its) {
+  for (i in 1:max_its) {
 
     if (verbose) cat("\n Iteration: ", i, ", component: ")
 
@@ -96,12 +96,12 @@ fitbatmix <- function(x, bat_type = "inverse",
                                         max_its = optimization_its)
     }
 
-    lls[i] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
+    lls[i + 1] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
 
-    if (verbose) cat(", log-likelihood: ", lls[i])
+    if (verbose) cat(", log-likelihood: ", lls[i + 1])
 
     # Finish if the ll is not increasing anymore.
-    if (abs(lls[i] - lls[i - 1]) < ll_tol) break
+    if (abs(lls[i + 1] - lls[i]) < ll_tol) break
   }
 
   pmat_cur
