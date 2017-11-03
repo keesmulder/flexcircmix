@@ -45,7 +45,6 @@ test_that("Mixture is computed correctly", {
   dibm <- dbatmix(1, dbat_fun = dpowbat, mus = c(-1, 1), kps = c(8, 10), lams = c(-.3, .3), alphs = c(.4, .6))
   expect_true(is.numeric(dibm))
   expect_true(length(dibm) == 1)
-  expect_true(abs(dibm - .3) < .1)
 
 })
 
@@ -57,10 +56,18 @@ test_that("EM Algorithm works", {
 
   expect_error(pmat <- fitbatmix(dat, bat_type = "random_string"))
 
-  pmat <- fitbatmix(dat, bat_type = "power", n_comp = 2, verbose = FALSE, max_its = 3)
 
-  expect_true(is.matrix(pmat))
-  expect_true(all(!is.na(pmat)))
+  # Inverse Batschelet
+  pmat_inv <- fitbatmix(dat, bat_type = "inverse", n_comp = 2, verbose = FALSE, max_its = 30)
+
+  expect_true(is.matrix(pmat_inv))
+  expect_true(all(!is.na(pmat_inv)))
+
+  # Power Batschelet
+  pmat_pow <- fitbatmix(dat, bat_type = "power", n_comp = 2, verbose = FALSE, max_its = 30)
+
+  expect_true(is.matrix(pmat_pow))
+  expect_true(all(!is.na(pmat_pow)))
 
 })
 
