@@ -161,10 +161,8 @@ weight_fun_rinvbat <- function(x, lam) {
 }
 
 
-#' Random generation of inverse Batschelet distribution
-#'
 #' @describeIn dinvbat
-#'
+#' @export
 rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 
   if (lam > 1 || lam <= -1 || kp < 0) stop("Parameter out of bounds.")

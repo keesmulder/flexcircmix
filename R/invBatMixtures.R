@@ -65,6 +65,7 @@ dbatmix_pmat <- function(x, dbat_fun = dinvbat,
 
 
 #' @describeIn dbatmix Random variate generation for Inverse Batschelet mixtures.
+#' @export
 rinvbatmix <- function(n, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
                        lams = c(-.5, 0, .5), alphs = c(.3, .4, .3)) {
 

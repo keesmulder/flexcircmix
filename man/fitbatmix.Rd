@@ -34,6 +34,6 @@ A parameter matrix of results.
 Fit mixtures of inverse or power Batschelet distributions.
 }
 \examples{
-
+rinvbatmix
 
 }

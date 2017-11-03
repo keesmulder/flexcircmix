@@ -16,7 +16,8 @@
 #' @export
 #'
 #' @examples
-#'
+#' dat <- rinvbatmix(100)
+#' fitbatmix(dat, n_comp = 3)
 #'
 fitbatmix <- function(x, bat_type = "inverse",
                          n_comp  = 4,
