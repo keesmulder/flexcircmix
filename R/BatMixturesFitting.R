@@ -43,8 +43,9 @@ fitbatmix <- function(x, bat_type = "inverse",
 
   n <- length(x)
 
-  # A matrix with logicals for each initial value of the parameter matrix.
-  na_initpmat <- is.na(init_pmat)
+  # Save matrices giving which elements of init_pmat and fixed_pmat were provided.
+  na_fixedpmat <- is.na(fixed_pmat)
+  na_initpmat  <- is.na(init_pmat)
 
   # Set initial values if the initial parameter matrix is not given for that parameter (has NAs).
   if (any(na_initpmat[, 1])) init_pmat[, 1] <- seq(0, 2*pi, length.out = n_comp + 1)[-1]
@@ -84,7 +85,7 @@ fitbatmix <- function(x, bat_type = "inverse",
 
     # Update alphas, the component weights, if they are not fixed.
     for (k in 1:n_comp) {
-      if (na_initpmat[k, 4]) {
+      if (na_fixedpmat[k, 4]) {
         pmat_cur[, 'alph'] <- colSums(W) / n
       }
     }
