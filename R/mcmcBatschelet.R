@@ -10,10 +10,14 @@ ll_lhs_invbat <- function(n, kp, lam) {
   -n * (logBesselI(kp, 0) + log(K_kplam(kp, lam)))
 }
 
+ll_lhs_powbat <- function(n, kp, lam) {
+  powbat_nc()
+}
+
 ll_invbat(x, mu, kp, lam) <- function()
 
 
-sample_mu_batmix <- function(x, mu_cur, kp, lam, tlam_fun) {
+sample_mu_batmix <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
 
   # Sample a candidate from the distribution of mu when we have a von Mises
   # distribution.
@@ -21,10 +25,19 @@ sample_mu_batmix <- function(x, mu_cur, kp, lam, tlam_fun) {
   S_j    <- sum(sin(x))
   R_j    <- sqrt(C_j^2 + S_j^2)
   mu_hat <- atan2(S_j, C_j)
-  mu_can <- suppressWarnings(as.numeric(circular:::RvonmisesRad(1, mu_hat, R_j * kp))) # This line should be replaced with rvmc
+  mu_can <- suppressWarnings(as.numeric(circular:::RvonmisesRad(1, mu_cur, R_j * kp))) # This line should be replaced with rvmc
 
   ll_can <- ll_rhs_bat(x, mu_can, kp, lam, tlam_fun)
   ll_cur <- ll_rhs_bat(x, mu_cur, kp, lam, tlam_fun)
+
+  # The proposal is von Mises and thus symmetric, so the transition probabilities of MH are omitted here.
+  mu_lograt <- ll_can + mu_logprior_fun(mu_can) - ll_cur - mu_logprior_fun(mu)
+
+  if (mu_lograt > log(runif(1))) {
+    return(mu_can)
+  } else {
+    return(mu_cur)
+  }
 }
 
 
@@ -35,7 +48,12 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   n_comp  = 4,
                                   bat_type = "inverse",
                                   init_pmat  = matrix(NA, n_comp, 4),
-                                  fixed_pmat = matrix(NA, n_comp, 4)) {
+                                  fixed_pmat = matrix(NA, n_comp, 4),
+                                  mu_logprior_fun   = function(mu)   -log(2*pi),
+                                  kp_logprior_fun   = function(kp)   1,
+                                  lam_logprior_fun  = function(lam)  -log(2),
+                                  alph_prior_param  = rep(1, n_comp)
+                                  ) {
 
   # Select Batschelet type
   if (bat_type == "inverse") {
@@ -93,7 +111,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
     # Sample weights alph
     dir_asum <- sapply(1:n_comp, function(j) sum(z_cur == j))
-    alph_cur <- ifelse(na_fixedpmat[, 4], MCMCpack::rdirichlet(1, dir_asum + 1), alph_cur)
+    alph_cur <- ifelse(na_fixedpmat[, 4], MCMCpack::rdirichlet(1, dir_asum + alph_prior_param), alph_cur)
 
     # After sampling the current group assignments, the parameters for each
     # component only can be sampled separately.
@@ -103,9 +121,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       x_j <- x[z_cur == j]
 
       # Sample mu
-      mu_cur    <- sample_mu_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun)
-
-
+      mu_cur    <- sample_mu_batmix(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
 
       # Sample kp
 

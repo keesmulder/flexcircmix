@@ -118,7 +118,7 @@ likfunpowbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     function(mu, kp, lam) sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
   } else {
-    function(mu, kp, lam) exp(sum(weights * dpowbat(x, mu, kp, lam, log = FALSE)))
+    function(mu, kp, lam) exp(sum(weights * dpowbat(x, mu, kp, lam, log = TRUE)))
   }
 }
 
@@ -130,7 +130,7 @@ likpowbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
   } else {
-    exp(sum(weights * dpowbat(x, mu, kp, lam, log = FALSE)))
+    exp(sum(weights * dpowbat(x, mu, kp, lam, log = TRUE)))
   }
 }
 
