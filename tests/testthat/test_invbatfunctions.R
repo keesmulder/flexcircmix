@@ -22,9 +22,25 @@ test_that("Random generation works", {
 
   expect_true(is.numeric(rinvbat(10, 0, 3, -.9)))
   expect_true(is.numeric(rinvbat(10, 0, 3, 1)))
+
+  skip("Initial checks to compare generated samples with pdf")
+
+  mu = 1; kp = 6; lam = .6
+  dat <- rinvbat(10000, mu, kp, lam)
+  curve(dinvbat(x, mu, kp, lam), -pi, pi, n = 2000)
+  hist(dat, breaks = 100, xlim = c(-pi, pi))
+
 })
 
+test_that("Likelihood functions work", {
+  dat <- rinvbat(10)
 
+  likfun <- likfuninvbat(dat, log = FALSE)
+
+  loglikfun <- likfuninvbat(dat, log = TRUE)
+
+  expect_equal(log(likfun(0, 1, 0)), loglikfun(0, 1, 0))
+})
 
 
 test_that("Optimization is sensible", {
