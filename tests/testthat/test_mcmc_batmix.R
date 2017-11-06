@@ -12,15 +12,16 @@ test_that("Proposals similar to full conditionals", {
 
   mu = 1; kp = 6; lam = .6
   dat   <- rinvbat(100, mu, kp, lam)
+
   mylik <- likfuninvbat(dat, log = FALSE)
 
-  mull <- Vectorize(function(x) ll_rhs_bat(dat, x,  kp, lam, t_lam))
-  kpll <- Vectorize(function(x) log(mylik(mu, x, lam)))
-  lmll <- Vectorize(function(x) ll_rhs_bat(dat, mu, kp, x, t_lam))
+  mull <- Vectorize(function(x) flexcircmix:::ll_rhs_bat(dat, x,  kp, lam, t_lam))
+  kpll <- Vectorize(function(x) mylik(mu, x, lam))
+  lmll <- Vectorize(function(x) mylik(mu, kp, x))
 
   curve(mull, -pi, pi)
-  curve(kpll, 0, 50)
-  curve(lmll, -pi, pi)
+  curve(kpll, 0, 10, n = 200)
+  curve(lmll, -1, 1)
 
 
 
