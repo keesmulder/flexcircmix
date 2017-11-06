@@ -175,13 +175,13 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
     accepted <- FALSE
     while (!accepted) {
 
-      th_can <- force_neg_pi_pi(circular:::RvonmisesRad(1, mu, kp))
+      th_can <- force_neg_pi_pi(circular:::RvonmisesRad(1, 0, kp))
       u <- runif(1, 0, 1)
 
       # The weight function alters the von Mises candidate to include peakedness set by the lambda
       w_lam <- weight_fun_rinvbat(th_can, lam)
 
-      if (u < w_lam) {
+      if (u <= w_lam) {
         accepted <- TRUE
 
         th_out[i] <- t_lam(th_can, -lam)
@@ -190,7 +190,7 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 
   }
 
-  th_out
+  force_neg_pi_pi(th_out + mu)
 }
 
 
