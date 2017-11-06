@@ -5,10 +5,12 @@ ll_rhs_bat <- function(x, mu, kp, lam, tlam_fun) {
 }
 
 
-# The left hand side of the log likelihood of a Batschelet-type distribution
-ll_lhs_bat <- function(x, mu, kp, lam, tlam_fun) {
-  kp * sum(cos(tlam_fun(x - mu, lam)))
+# The left hand side of the log likelihood of a inverse Batschelet distribution
+ll_lhs_invbat <- function(n, kp, lam) {
+  -n * (logBesselI(kp, 0) + log(K_kplam(kp, lam)))
 }
+
+ll_invbat(x, mu, kp, lam) <- function()
 
 
 sample_mu_batmix <- function(x, mu_cur, kp, lam, tlam_fun) {
@@ -19,7 +21,7 @@ sample_mu_batmix <- function(x, mu_cur, kp, lam, tlam_fun) {
   S_j    <- sum(sin(x))
   R_j    <- sqrt(C_j^2 + S_j^2)
   mu_hat <- atan2(S_j, C_j)
-  mu_can <- suppressWarnings(as.numeric(circular::rvonmises(1, mu_hat, R_j * kp))) # This line should be replaced with rvmc
+  mu_can <- suppressWarnings(as.numeric(circular:::RvonmisesRad(1, mu_hat, R_j * kp))) # This line should be replaced with rvmc
 
   ll_can <- ll_rhs_bat(x, mu_can, kp, lam, tlam_fun)
   ll_cur <- ll_rhs_bat(x, mu_cur, kp, lam, tlam_fun)
@@ -37,13 +39,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   # Select Batschelet type
   if (bat_type == "inverse") {
-    dbat_fun      <- dinvbat
-    likfunbat_fun <- likfuninvbat
-    tlam_fun      <- t_lam
+    dbat_fun <- dinvbat
+    llbat    <- likfuninvbat(x, log = TRUE)
+    tlam_fun <- t_lam
   } else if (bat_type == "power") {
-    dbat_fun      <- dpowbat
-    likfunbat_fun <- likfunpowbat
-    tlam_fun      <- tpow_lam
+    dbat_fun <- dpowbat
+    llbat    <- likfunpowbat(x, log = TRUE)
+    tlam_fun <- tpow_lam
   } else {
     stop("Unknown Batschelet type.")
   }
@@ -72,9 +74,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   # Initialize latent group labeling
   z_cur <- integer(n)
-
-  # initialize W matrix.
-  W <- matrix(alph_cur, nrow = n, ncol = n_comp, byrow = TRUE)
 
 
   for (i in 2:Q) {
