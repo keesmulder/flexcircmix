@@ -190,6 +190,7 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 
   }
 
+  # Introduce the mean and set sample space to -pi, pi.
   force_neg_pi_pi(th_out + mu)
 }
 
@@ -199,7 +200,7 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 #' Obtain the likelihood of an inverse Batschelet distribution
 #'
 #' @param x An set of angles in radians.
-#' @param weights A vector of length \code{length(x)}, which gives importace weights to be used for x.
+#' @param weights A vector of length \code{length(x)}, which gives importance weights to be used for x.
 #' @param log If \code{TRUE} (the default), the log-likelihood is used.
 #' @param mu A mean direction, in radians.
 #' @param kp Numeric, \eqn{> 0,}the concentration parameter.
@@ -224,19 +225,20 @@ likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     function(mu, kp, lam) sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
   } else {
-    function(mu, kp, lam) exp(sum(weights * dinvbat(x, mu, kp, lam, log = FALSE)))
+    function(mu, kp, lam) exp(sum(weights * dinvbat(x, mu, kp, lam, log = TRUE)))
   }
 }
 
 #' Likelihood function of inverse Batschelet.
 #'
 #'  @describeIn likfuninvbat
+#'  @export
 #'
 likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
   } else {
-    exp(sum(weights * dinvbat(x, mu, kp, lam, log = FALSE)))
+    exp(sum(weights * dinvbat(x, mu, kp, lam, log = TRUE)))
   }
 }
 
