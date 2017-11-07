@@ -8,7 +8,8 @@ Description: An R package to fit mixtures of flexible circular distributions, in
 License: GPL-3
 Encoding: UTF-8
 Imports: circular, ggplot2, RColorBrewer,
-    MCMCpack
+    MCMCpack,
+    coda
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: testthat
