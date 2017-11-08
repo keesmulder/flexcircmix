@@ -156,11 +156,16 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   # Initialize latent group labeling
   z_cur <- integer(n)
 
+  output_matrix <- matrix(NA, nrow = Q, ncol = n_comp*4)
+  colnames(output_matrix) <- c(paste0("mu_", 1:n_comp), paste0("kp_", 1:n_comp),
+                               paste0("lam_", 1:n_comp), paste0("alph_", 1:n_comp))
+
+
   Qbythin <- Q * thin + burnin
 
 
 
-  for (i in 2:Qbythin) {
+  for (i in 1:Qbythin) {
 
     ### Sample group assignments z
 
@@ -187,23 +192,30 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       x_j <- x[z_cur == j]
 
       # Sample mu
-      mu_cur[j]  <- sample_mu_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
+      if (!na_fixedpmat[j, 1]) {
+        mu_cur[j]  <- sample_mu_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
+      }
 
       # Sample kp
-      kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun)
+      if (!na_fixedpmat[j, 2]) {
+        kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun)
+      }
 
       # Sample lam
-      lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)
+      if (!na_fixedpmat[j, 3]) {
+        lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)
+      }
 
     }
 
     if (i %% thin == 0 && i>= burnin) {
-
+      isav <- (i-burnin)/thin
+      output_matrix[isav, ] <- c(mu_cur, kp_cur, lam_cur, alph_cur)
     }
 
   }
 
-
+  output_matrix
 }
 
 
