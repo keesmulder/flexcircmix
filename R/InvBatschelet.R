@@ -161,7 +161,7 @@ weight_fun_rinvbat <- function(x, lam) {
 }
 
 
-#' @describeIn dinvbat
+#' @describeIn dinvbat Random generation
 #' @export
 rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 

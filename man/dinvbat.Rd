@@ -2,9 +2,12 @@
 % Please edit documentation in R/InvBatschelet.R
 \name{dinvbat}
 \alias{dinvbat}
+\alias{rinvbat}
 \title{The von-Mises based symmetric inverse Batschelet distribution}
 \usage{
 dinvbat(x, mu = 0, kp = 1, lam = 0, log = FALSE)
+
+rinvbat(n, mu = 0, kp = 1, lam = 0)
 }
 \arguments{
 \item{x}{An angle in radians.}
@@ -25,6 +28,11 @@ The inverse Batschelet distribution, with mean direction \code{mu}, concentratio
 shape (peakedness) parameter \code{lam}. This is the von Mises based version, without a skewness
 parameter.
 }
+\section{Functions}{
+\itemize{
+\item \code{rinvbat}: Random generation
+}}
+
 \examples{
 dinvbat(3)
 

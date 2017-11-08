@@ -9,7 +9,7 @@ likfuninvbat(x, weights = rep(1, length(x)), log = TRUE)
 \arguments{
 \item{x}{An set of angles in radians.}
 
-\item{weights}{A vector of length \code{length(x)}, which gives importace weights to be used for x.}
+\item{weights}{A vector of length \code{length(x)}, which gives importance weights to be used for x.}
 
 \item{log}{If \code{TRUE} (the default), the log-likelihood is used.}
 
