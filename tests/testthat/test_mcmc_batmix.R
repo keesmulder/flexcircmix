@@ -34,6 +34,17 @@ test_that("Proposals similar to full conditionals", {
 
 })
 
+test_that("MCMC runs", {
+
+  x <-  rinvbatmix(100)
+
+  sam <- mcmcBatscheletMixture(x, Q = 10)
+
+})
+
+
+
+
 
 test_that("MCMC runs", {
 
@@ -48,6 +59,7 @@ test_that("MCMC runs", {
 
 
 
+  # MCMC default arguments for testing
   # x <-  rinvbatmix(100)
   # Q = 1000
   # burnin = 0

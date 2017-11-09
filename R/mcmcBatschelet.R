@@ -106,6 +106,53 @@ sample_lam_bat <- function(x, mu, kp, lam_cur, llbat, lam_logprior_fun, lam_bw =
   }
 }
 
+#' MCMC sampling for Batschelet-type distributions.
+#'
+#' @param x A numeric vector of angles, in radians
+#' @param Q Integer; The number of iterations to return after taking burn in and
+#'   thinning into account.
+#' @param burnin Integer; The number of (non-thinned) iterations to discard. No
+#'   burn in is performed by default.
+#' @param thin Integer; Number of iterations to sample for each saved iteration.
+#'   Defaults to 1, which means no thinning.
+#' @param n_comp Integer; Fixed number of components to estimate.
+#' @param bat_type Either 'inverse' or 'power', the type of distribution to fit.
+#'   The two distributions are similar, but the power Batschelet distribution is
+#'   computationally much less demanding.
+#' @param init_pmat A numeric matrix with \code{n_comp} rows and four columns,
+#'   corresponding to \eqn{\mu, \kappa, \lambda, \alpha}, in that order. Gives
+#'   starting values for the parameters. If any element is \code{NA}, it will be
+#'   given a default starting value. For \eqn{mu}, the default starting values
+#'   are equally spaced on the circle. For \eqn{\kappa}, the default starting
+#'   value is 5. For \eqn{\lambda}, the default starting value is 0, which
+#'   corresponds to the von Mises distribution. For \eqn{\alpha}, the default
+#'   starting value is \code{1/n_comp}.
+#' @param fixed_pmat A numeric matrix with \code{n_comp} rows and four columns,
+#'   corresponding to \eqn{\mu, \kappa, \lambda, \alpha}, in that order. Any
+#'   element that is not \code{NA} in this matrix will be held constant at the
+#'   given value and not sampled.
+#' @param mu_logprior_fun Function; A function with a single argument, which
+#'   returns the log of the prior probability of \eqn{\mu}. Defaults to a
+#'   uniform prior function.
+#' @param kp_logprior_fun Function; A function with a single argument, which
+#'   returns the log of the prior probability of \eqn{\kappa}. Defaults to a
+#'   uniform prior function. In contrast to the other parameters, for
+#'   \eqn{\kappa} the constant (uniform) prior is improper.
+#' @param lam_logprior_fun Function; A function with a single argument, which
+#'   returns the log of the prior probability of \eqn{\lambda}. Defaults to a
+#'   uniform prior function.
+#' @param alph_prior_param Integer vector; The mixture weight parameter vector
+#'   \eqn{\alpha} is given its conjugate Dirichlet prior. The default is
+#'   \code{rep(1, n_comp)}, which is the noninformative uniform prior over the
+#'   \code{n_comp} simplex.
+#' @param verbose Logical; Whether or not to print debug information.
+#'
+#' @return A numeric matrix of sampled parameter values.
+#' @export
+#'
+#' @examples
+#' x <- rinvbatmix(100)
+#' mcmcBatscheletMixture(x, Q = 10)
 mcmcBatscheletMixture <- function(x, Q = 1000,
                                   burnin = 0, thin = 1,
                                   n_comp  = 4,
@@ -115,7 +162,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   mu_logprior_fun   = function(mu)   -log(2*pi),
                                   kp_logprior_fun   = function(kp)   1,
                                   lam_logprior_fun  = function(lam)  -log(2),
-                                  alph_prior_param  = rep(1, n_comp)
+                                  alph_prior_param  = rep(1, n_comp),
+                                  verbose = TRUE
                                   ) {
 
   # Select Batschelet type
@@ -136,10 +184,10 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   na_initpmat  <- is.na(init_pmat)
 
   # Set initial values if the initial parameter matrix is not given for that parameter (has NAs).
-  if (any(na_initpmat[, 1])) init_pmat[, 1] <- seq(0, 2*pi, length.out = n_comp + 1)[-1]
-  if (any(na_initpmat[, 2])) init_pmat[, 2] <- rep(5, n_comp)
-  if (any(na_initpmat[, 3])) init_pmat[, 3] <- rep(0, n_comp)
-  if (any(na_initpmat[, 4])) init_pmat[, 4] <- rep(1/n_comp, n_comp)
+  init_pmat[, 1] <- ifelse(na_initpmat[, 1], seq(0, 2*pi, length.out = n_comp + 1)[-1], init_pmat[, 1])
+  init_pmat[, 2] <- ifelse(na_initpmat[, 2], rep(5, n_comp), init_pmat[, 2])
+  init_pmat[, 3] <- ifelse(na_initpmat[, 3], rep(0, n_comp), init_pmat[, 3])
+  init_pmat[, 4] <- ifelse(na_initpmat[, 4], rep(1/n_comp, n_comp), init_pmat[, 4])
 
   # Force x to be in range -pi, pi.
   x <- force_neg_pi_pi(x)
@@ -164,8 +212,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   Qbythin <- Q * thin + burnin
 
 
+  if (verbose) cat("Starting MCMC sampling.\n Iteration")
+
 
   for (i in 1:Qbythin) {
+
+    if (verbose) cat(sprintf("%6s", i))
+    if (i %% 10 == 0 && verbose) cat("\n")
 
     ### Sample group assignments z
 
@@ -214,6 +267,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     }
 
   }
+  if (verbose) cat("\nFinished")
+
 
   output_matrix
 }
