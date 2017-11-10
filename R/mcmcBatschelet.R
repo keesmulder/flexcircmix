@@ -18,8 +18,7 @@ sample_mu_bat <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
   C_j    <- sum(cos(x))
   S_j    <- sum(sin(x))
   R_j    <- sqrt(C_j^2 + S_j^2)
-  mu_hat <- atan2(S_j, C_j)
-  mu_can <- circular:::RvonmisesRad(1, mu_cur, R_j * kp) # This line should be replaced with rvmc
+  mu_can <- circular:::RvonmisesRad(1, mu_cur, R_j * kp)
 
   ll_can <- ll_rhs_bat(x, mu_can, kp, lam, tlam_fun)
   ll_cur <- ll_rhs_bat(x, mu_cur, kp, lam, tlam_fun)
@@ -44,7 +43,7 @@ sample_mu_bat_2 <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
   S_j    <- sum(sin(x))
   R_j    <- sqrt(C_j^2 + S_j^2)
   mu_hat <- atan2(S_j, C_j)
-  mu_can <- circular:::RvonmisesRad(1, mu_hat, R_j * kp) # This line should be replaced with rvmc
+  mu_can <- circular:::RvonmisesRad(1, mu_hat, R_j * kp)
 
   ll_can <- ll_rhs_bat(x, mu_can, kp, lam, tlam_fun)
   ll_cur <- ll_rhs_bat(x, mu_cur, kp, lam, tlam_fun)
@@ -82,16 +81,13 @@ sample_kp_bat <- function(x, mu, kp_cur, lam, llbat, kp_logprior_fun) {
   }
 }
 
-
-
-
 sample_lam_bat <- function(x, mu, kp, lam_cur, llbat, lam_logprior_fun, lam_bw = .05) {
 
   # Sample a candidate
   lam_can <- runif(1, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw))
 
-  ll_can <- ll_rhs_bat(x, mu, kp, lam_can, tlam_fun)
-  ll_cur <- ll_rhs_bat(x, mu, kp, lam_cur, tlam_fun)
+  ll_can <- llbat(x, mu, kp, lam_can)
+  ll_cur <- llbat(x, mu, kp, lam_cur)
 
   logp_lam_can_to_cur <- dunif(lam_cur, max(-1, lam_can - lam_bw), min(1, lam_can + lam_bw), log = TRUE)
   logp_lam_cur_to_can <- dunif(lam_can, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw), log = TRUE)
@@ -105,6 +101,37 @@ sample_lam_bat <- function(x, mu, kp, lam_cur, llbat, lam_logprior_fun, lam_bw =
     return(lam_cur)
   }
 }
+
+
+
+sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
+                                  kp_logprior_fun, lam_logprior_fun) {
+
+  # Sample a candidate
+  kp_can  <- rchisq(1, df = kp_cur)
+  lam_can <- runif(1, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw))
+
+  logp_kp_can_to_cur <- dchisq(kp_cur, kp_can, log = TRUE)
+  logp_kp_cur_to_can <- dchisq(kp_can, kp_cur, log = TRUE)
+  logp_lam_can_to_cur <- dunif(lam_cur, max(-1, lam_can - lam_bw), min(1, lam_can + lam_bw), log = TRUE)
+  logp_lam_cur_to_can <- dunif(lam_can, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw), log = TRUE)
+
+  ll_can <- llbat(x, mu, kp_can, lam_can, log = TRUE)
+  ll_cur <- llbat(x, mu, kp_cur, lam_cur, log = TRUE)
+
+  kplam_lograt <- ll_can + kp_logprior_fun(kp_can) + lam_logprior_fun(lam_can) +
+                     logp_kp_can_to_cur + logp_lam_can_to_cur -
+                  ll_cur - kp_logprior_fun(kp_cur) - lam_logprior_fun(lam_cur) -
+                     logp_kp_cur_to_can - logp_lam_cur_to_can
+
+  if (kplam_lograt > log(runif(1))) {
+    return(c(kp_can, lam_can))
+  } else {
+    return(c(kp_cur, lam_cur))
+  }
+}
+
+
 
 #' MCMC sampling for Batschelet-type distributions.
 #'
@@ -159,6 +186,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   bat_type = "inverse",
                                   init_pmat  = matrix(NA, n_comp, 4),
                                   fixed_pmat = matrix(NA, n_comp, 4),
+                                  joint_kp_lam = TRUE,
                                   mu_logprior_fun   = function(mu)   -log(2*pi),
                                   kp_logprior_fun   = function(kp)   1,
                                   lam_logprior_fun  = function(lam)  -log(2),
@@ -191,8 +219,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   # Force x to be in range -pi, pi.
   x <- force_neg_pi_pi(x)
-
-
   n <- length(x)
 
   # Initialize parameters
@@ -217,8 +243,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   for (i in 1:Qbythin) {
 
-    if (verbose) cat(sprintf("%5s,", i))
-    if (i %% 10 == 0 && verbose) cat("\n")
+    if (verbose) cat(sprintf("%5s, ", i))
+
 
     ### Sample group assignments z
 
@@ -241,25 +267,53 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     # component only can be sampled separately.
     for (j in 1:n_comp) {
 
+      if (verbose) cat(j)
+
       # Dataset assigned to this component.
       x_j <- x[z_cur == j]
+
+      # Check whether anything is assigned to this components. If not, don't update the parameters.
+      if (length(x_j) == 0) {
+        cat("---")
+        next
+      }
+
+      if (verbose) cat("m")
 
       # Sample mu
       if (na_fixedpmat[j, 1]) {
         mu_cur[j]  <- sample_mu_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
       }
 
-      # Sample kp
-      if (na_fixedpmat[j, 2]) {
-        kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun)
-      }
+      if (joint_kp_lam) {
 
-      # Sample lam
-      if (na_fixedpmat[j, 3]) {
-        lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)
+        if (verbose) cat("kl")
+
+        kplam_curj <- sample_kp_and_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_bw = .05,
+                                           kp_logprior_fun, lam_logprior_fun)
+
+        kp_cur[j]  <- kplam_curj[1]
+        lam_cur[j] <- kplam_curj[2]
+
+      } else {
+
+        if (verbose) cat("k")
+        # Sample kp
+        if (na_fixedpmat[j, 2]) {
+          kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun)
+        }
+
+        if (verbose) cat("l")
+        # Sample lam
+        if (na_fixedpmat[j, 3]) {
+          lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)
+        }
       }
 
     }
+
+
+    if (i %% 5 == 0 && verbose) cat("\n")
 
     if (i %% thin == 0 && i>= burnin) {
       isav <- (i-burnin)/thin
@@ -267,10 +321,10 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     }
 
   }
-  if (verbose) cat("Finished.")
+  if (verbose) cat("\nFinished.")
 
 
-  output_matrix
+  coda::mcmc(output_matrix)
 }
 
 
