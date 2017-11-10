@@ -191,6 +191,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   kp_logprior_fun   = function(kp)   1,
                                   lam_logprior_fun  = function(lam)  -log(2),
                                   alph_prior_param  = rep(1, n_comp),
+                                  compute_variance  = TRUE,
                                   verbose = 0
                                   ) {
 
@@ -227,12 +228,22 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   lam_cur  <- init_pmat[, 3]
   alph_cur <- init_pmat[, 4]
 
+
   # Initialize latent group labeling
   z_cur <- integer(n)
 
   output_matrix <- matrix(NA, nrow = Q, ncol = n_comp*4)
   colnames(output_matrix) <- c(paste0("mu_", 1:n_comp), paste0("kp_", 1:n_comp),
                                paste0("lam_", 1:n_comp), paste0("alph_", 1:n_comp))
+
+
+  if (compute_variance) {
+    variance_matrix <-  matrix(NA, nrow = Q, ncol = n_comp*3)
+    colnames(variance_matrix) <- c(paste0("mean_res_len_", 1:n_comp),
+                                   paste0("circ_var_", 1:n_comp),
+                                   paste0("circ_sd_", 1:n_comp))
+
+  }
 
 
   Qbythin <- Q * thin + burnin
@@ -311,6 +322,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         }
       }
 
+
     }
 
 
@@ -319,13 +331,32 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     if (i %% thin == 0 && i>= burnin) {
       isav <- (i-burnin)/thin
       output_matrix[isav, ] <- c(mu_cur, kp_cur, lam_cur, alph_cur)
+
+      if (compute_variance) {
+
+        # Compute mean resultant lengths for each component.
+        R_bar_cur <- sapply(1:n_comp, function(i) {
+          computeMeanResultantLengthBat(kp_cur[i], lam_cur[i], dbat_fun)
+        })
+
+        # Compute variances.
+        circ_var_cur <- 1 - R_bar_cur
+        circ_sd_cur  <- computeCircSD(R_bar_cur)
+
+        # Put the results in an output matrix.
+        variance_matrix[i, ] <- c(R_bar_cur, circ_var_cur, circ_sd_cur)
+      }
     }
 
   }
   if (verbose) cat("\nFinished.")
 
 
-  coda::mcmc(output_matrix)
+  if (compute_variance) {
+    return(coda::mcmc(cbind(output_matrix, variance_matrix)))
+  } else {
+    return(coda::mcmc(output_matrix))
+  }
 }
 
 
