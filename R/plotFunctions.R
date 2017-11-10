@@ -97,8 +97,22 @@ plot_movMF_as_batmix <- function(m, ...) {
 
 
 
-# Plot the data as well as a set of ssjp's based on a vector of parameters or a
-# matrix of parameter sets param.
+
+#' Plot a sample of Batschelet mixture parameter sets.
+#'
+#' @param x An optional dataset of angles to be plotted as a histogram.
+#' @param param A matrix of parameter sets.
+#' @param dbat_fun A function; The pdf of the chosen Batschelet distribution.
+#' @param bins The number of bins to draw in the histogram.
+#' @param res Number of points at which to evaluate the functions.
+#' @param orderColor Logical; If \code{TRUE}, plotted pdfs get darker and redder as they were sampled later.
+#'
+#' @return A ggplot.
+#' @export
+#'
+#' @examples
+#'
+#'
 plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, bins = 100, res = 400, orderColor = TRUE) {
 
   # Change to matrix if needed.
@@ -142,7 +156,8 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, bins = 100, re
   for (i in 1:nprm) {
     p <- p + ggplot2::stat_function(fun = dbatmix,
                                     args = list(mus  = mu_mat[i, ],  kps = kp_mat[i, ],
-                                                   lams = lam_mat[i, ], alphs = alph_mat[i, ]),
+                                                lams = lam_mat[i, ], alphs = alph_mat[i, ],
+                                                dbat_fun = dbat_fun),
                                     col = rgb(ifelse(orderColor, ordseq[i], 0.15), 0.2, 0.2,
                                               ifelse(orderColor, ordseq[i], 0.15)),
                                     n = res)
