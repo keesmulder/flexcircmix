@@ -328,12 +328,12 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
     if (i %% 5 == 0 && verbose) cat("\n")
 
-    if (i %% thin == 0 && i>= burnin) {
+    if (i %% thin == 0 && i >= burnin) {
       isav <- (i-burnin)/thin
       output_matrix[isav, ] <- c(mu_cur, kp_cur, lam_cur, alph_cur)
 
-      if (compute_variance) {
 
+      if (compute_variance) {
         # Compute mean resultant lengths for each component.
         R_bar_cur <- sapply(1:n_comp, function(i) {
           computeMeanResultantLengthBat(kp_cur[i], lam_cur[i], dbat_fun)
@@ -344,7 +344,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         circ_sd_cur  <- computeCircSD(R_bar_cur)
 
         # Put the results in an output matrix.
-        variance_matrix[i, ] <- c(R_bar_cur, circ_var_cur, circ_sd_cur)
+        variance_matrix[isav, ] <- c(R_bar_cur, circ_var_cur, circ_sd_cur)
       }
     }
 
@@ -353,9 +353,9 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
 
   if (compute_variance) {
-    return(coda::mcmc(cbind(output_matrix, variance_matrix)))
+    return(coda::mcmc(cbind(output_matrix, variance_matrix), start = burnin + 1, end = Qbythin, thin = thin))
   } else {
-    return(coda::mcmc(output_matrix))
+    return(coda::mcmc(output_matrix, start = burnin + 1, end = Qbythin, thin = thin))
   }
 }
 
