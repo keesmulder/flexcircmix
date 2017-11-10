@@ -245,17 +245,17 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       x_j <- x[z_cur == j]
 
       # Sample mu
-      if (!na_fixedpmat[j, 1]) {
+      if (na_fixedpmat[j, 1]) {
         mu_cur[j]  <- sample_mu_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
       }
 
       # Sample kp
-      if (!na_fixedpmat[j, 2]) {
+      if (na_fixedpmat[j, 2]) {
         kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun)
       }
 
       # Sample lam
-      if (!na_fixedpmat[j, 3]) {
+      if (na_fixedpmat[j, 3]) {
         lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)
       }
 
