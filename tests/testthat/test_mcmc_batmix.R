@@ -38,7 +38,11 @@ test_that("MCMC runs", {
 
   x <-  rinvbatmix(100)
 
-  sam <- mcmcBatscheletMixture(x, Q = 100)
+  sam_inv <- mcmcBatscheletMixture(x, Q = 100, bat_type = 'inverse')
+  sam_pow <- mcmcBatscheletMixture(x, Q = 100, bat_type = 'power')
+
+  plot_batmix_sample(x = x, param = sam_inv)
+  plot_batmix_sample(x = x, param = sam_pow)
 
 })
 
@@ -60,20 +64,21 @@ test_that("MCMC runs", {
 
 
   # MCMC default arguments for testing
-  # x <-  rinvbatmix(100)
-  # Q = 1000
-  # burnin = 0
-  # thin = 1
-  # n_comp  = 4
-  # bat_type = "inverse"
-  # init_pmat  = matrix(NA, n_comp, 4)
-  # fixed_pmat = matrix(NA, n_comp, 4)
-  # mu_logprior_fun   = function(mu)   -log(2*pi)
-  # kp_logprior_fun   = function(kp)   1
-  # lam_logprior_fun  = function(lam)  -log(2)
-  # alph_prior_param  = rep(1, n_comp)
-  # i <- 2
-  # j <- 1
+  x <-  rinvbatmix(100)
+  Q = 1000
+  burnin = 0
+  thin = 1
+  n_comp  = 4
+  bat_type = "inverse"
+  init_pmat  = matrix(NA, n_comp, 4)
+  fixed_pmat = matrix(NA, n_comp, 4)
+  mu_logprior_fun   = function(mu)   -log(2*pi)
+  kp_logprior_fun   = function(kp)   1
+  lam_logprior_fun  = function(lam)  -log(2)
+  alph_prior_param  = rep(1, n_comp)
+  i <- 2
+  j <- 1
+  verbose = TRUE
 
 
 })
