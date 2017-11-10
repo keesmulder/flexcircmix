@@ -238,7 +238,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   Qbythin <- Q * thin + burnin
 
 
-  if (verbose) cat("Starting MCMC sampling.\n Iteration:\n")
+  if (verbose)     cat("Starting MCMC sampling.\n")
+  if (verbose > 1) cat("Iteration:\n")
 
 
   for (i in 1:Qbythin) {
@@ -282,7 +283,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
       # Sample mu
       if (na_fixedpmat[j, 1]) {
-        mu_cur[j]  <- sample_mu_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
+        mu_cur[j]  <- sample_mu_bat_2(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
       }
 
       if (joint_kp_lam) {
