@@ -191,7 +191,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   kp_logprior_fun   = function(kp)   1,
                                   lam_logprior_fun  = function(lam)  -log(2),
                                   alph_prior_param  = rep(1, n_comp),
-                                  verbose = TRUE
+                                  verbose = 0
                                   ) {
 
   # Select Batschelet type
@@ -243,7 +243,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   for (i in 1:Qbythin) {
 
-    if (verbose) cat(sprintf("%5s, ", i))
+    if (verbose > 1) cat(sprintf("%5s, ", i))
 
 
     ### Sample group assignments z
@@ -267,18 +267,18 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     # component only can be sampled separately.
     for (j in 1:n_comp) {
 
-      if (verbose) cat(j)
+      if (verbose > 2) cat(j)
 
       # Dataset assigned to this component.
       x_j <- x[z_cur == j]
 
       # Check whether anything is assigned to this components. If not, don't update the parameters.
       if (length(x_j) == 0) {
-        cat("---")
+        if (verbose > 1) cat("---")
         next
       }
 
-      if (verbose) cat("m")
+      if (verbose > 2) cat("m")
 
       # Sample mu
       if (na_fixedpmat[j, 1]) {
@@ -287,7 +287,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
       if (joint_kp_lam) {
 
-        if (verbose) cat("kl")
+        if (verbose > 2) cat("kl")
 
         kplam_curj <- sample_kp_and_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_bw = .05,
                                            kp_logprior_fun, lam_logprior_fun)
@@ -297,13 +297,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
       } else {
 
-        if (verbose) cat("k")
+        if (verbose > 2) cat("k")
         # Sample kp
         if (na_fixedpmat[j, 2]) {
           kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun)
         }
 
-        if (verbose) cat("l")
+        if (verbose > 2) cat("l")
         # Sample lam
         if (na_fixedpmat[j, 3]) {
           lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)

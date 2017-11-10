@@ -44,6 +44,11 @@ test_that("MCMC runs", {
   plot_batmix_sample(x = x, param = sam_inv)
   plot_batmix_sample(x = x, param = sam_pow)
 
+  plot(sam_inv)
+
+  sam_pow <- mcmcBatscheletMixture(x, Q = 100, thin = 10, bat_type = 'power', verbose = TRUE)
+  plot_batmix_sample(x = x, param = sam_pow)
+
 })
 
 
