@@ -212,12 +212,12 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   Qbythin <- Q * thin + burnin
 
 
-  if (verbose) cat("Starting MCMC sampling.\n Iteration")
+  if (verbose) cat("Starting MCMC sampling.\n Iteration:\n")
 
 
   for (i in 1:Qbythin) {
 
-    if (verbose) cat(sprintf("%6s", i))
+    if (verbose) cat(sprintf("%5s,", i))
     if (i %% 10 == 0 && verbose) cat("\n")
 
     ### Sample group assignments z
@@ -267,7 +267,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     }
 
   }
-  if (verbose) cat("\nFinished")
+  if (verbose) cat("Finished.")
 
 
   output_matrix

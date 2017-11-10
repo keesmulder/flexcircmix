@@ -94,3 +94,60 @@ plot_movMF_as_batmix <- function(m, ...) {
 
 
 
+
+
+
+# Plot the data as well as a set of ssjp's based on a vector of parameters or a
+# matrix of parameter sets param.
+plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, bins = 100, res = 400, orderColor = TRUE) {
+
+  # Change to matrix if needed.
+  if (is.vector(param)) param <- t(param)
+
+  nprm <- nrow(param)
+
+
+  # Initialize plot.
+  if (missing(x)) {
+    p <- ggplot2::ggplot(data.frame(x = c(-pi, pi)))
+  } else {
+    p <- ggplot2::ggplot(data.frame(x))
+  }
+
+  p <- p +
+    ggplot2::xlim(-pi, pi) +
+    ggplot2::ylim(c(0, NA)) +
+    ggplot2::coord_cartesian(expand = TRUE) +
+    ggplot2::theme_bw()
+
+
+  # If we don't have data given as well, return only the pdfs. Otherwise, add a histogram.
+  if (!missing(x)) {
+    p <- p +
+      ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
+                              fill = rgb(.65, .65, .85, .3), col = "white",
+                              boundary = -pi, binwidth = 2*pi / bins)
+  }
+
+  n_comp <- ncol(param) / 4
+
+  mu_mat   <- param[, grep("mu_[0-9]",   colnames(param))]
+  kp_mat   <- param[, grep("kp_[0-9]",   colnames(param))]
+  lam_mat  <- param[, grep("lam_[0-9]",  colnames(param))]
+  alph_mat <- param[, grep("alph_[0-9]", colnames(param))]
+
+
+  if (orderColor) ordseq <- seq(0, 1, 0.6/nprm)
+
+  for (i in 1:nprm) {
+    p <- p + ggplot2::stat_function(fun = dbatmix,
+                                    args = list(mus  = mu_mat[i, ],  kps = kp_mat[i, ],
+                                                   lams = lam_mat[i, ], alphs = alph_mat[i, ]),
+                                    col = rgb(ifelse(orderColor, ordseq[i], 0.15), 0.2, 0.2,
+                                              ifelse(orderColor, ordseq[i], 0.15)),
+                                    n = res)
+  }
+  p
+}
+
+

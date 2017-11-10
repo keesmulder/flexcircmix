@@ -38,7 +38,7 @@ test_that("MCMC runs", {
 
   x <-  rinvbatmix(100)
 
-  sam <- mcmcBatscheletMixture(x, Q = 10)
+  sam <- mcmcBatscheletMixture(x, Q = 100)
 
 })
 

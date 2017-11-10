@@ -22,6 +22,9 @@ dbatmix <- function(x, dbat_fun = dinvbat,
                        mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
                        lams = c(-.5, 0, .5), alphs = c(.3, .4, .3), log = FALSE) {
 
+
+  x <- force_neg_pi_pi(x)
+
   # Check the parameter sizes.
   if (!all.equal(length(mus), length(kps), length(lams), length(alphs))) {
     stop("Unequal parameter lengths")
