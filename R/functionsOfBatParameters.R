@@ -22,6 +22,9 @@ computeMeanResultantLengthVM <- function(kp) {
 #' @export
 computeMeanResultantLengthBat <- function(kp, lam, dbat_fun = dinvbat) {
 
+  # Use the von Mises resultant length when possible.
+  if (lam == 0) computeMeanResultantLengthVM(kp)
+
   # R = E[cos(theta)], so we need a function f(theta) = cos(theta)
   # p(theta, kp, lam) to integrate over.
   cos_fun <- function(theta) cos(theta) * dbat_fun(theta, 0, kp, lam, log = FALSE)
