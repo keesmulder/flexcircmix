@@ -100,6 +100,7 @@ fitbatmix <- function(x, bat_type = "inverse",
       if (verbose) cat(" (", ci,")", sep = "")
 
       pmat_cur[ci, 1:3] <- maxlikbat(x, likfunbat_fun = likfunbat_fun,
+                                     init_kp = pmat_cur[ci, 2], init_lam = pmat_cur[ci, 3],
                                         weights = pmat_cur[ci, 'alph'] * W[, ci],
                                         fixed_mu  = fixed_pmat[ci, 1],
                                         fixed_kp  = fixed_pmat[ci, 2],
