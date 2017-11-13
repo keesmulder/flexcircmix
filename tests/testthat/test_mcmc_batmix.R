@@ -38,8 +38,8 @@ test_that("MCMC runs", {
 
   x <-  rinvbatmix(100)
 
-  time_inv <- system.time(sam_inv <- mcmcBatscheletMixture(x, Q = 100, bat_type = 'inverse'))
-  time_pow <- system.time(sam_pow <- mcmcBatscheletMixture(x, Q = 100, bat_type = 'power'))
+  time_inv <- system.time(sam_inv <- mcmcBatscheletMixture(x, Q = 10, bat_type = 'inverse'))
+  time_pow <- system.time(sam_pow <- mcmcBatscheletMixture(x, Q = 10, bat_type = 'power'))
 
   time_inv
   time_pow
@@ -47,9 +47,10 @@ test_that("MCMC runs", {
   plot_batmix_sample(x = x, param = sam_inv)
   plot_batmix_sample(x = x, param = sam_pow)
 
-  plot(sam_inv)
 
-  sam_pow <- mcmcBatscheletMixture(x, Q = 100, thin = 1, bat_type = 'power', verbose = 2)
+  skip("Long-chain MCMC testing skipped for because they take too long.")
+
+  sam_pow <- mcmcBatscheletMixture(x, Q = 100, thin = 10, bat_type = 'power', verbose = 0)
   plot(sam_pow)
 
   plot_batmix_sample(x = x, param = sam_pow)

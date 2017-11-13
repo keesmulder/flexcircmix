@@ -9,7 +9,8 @@ License: GPL-3
 Encoding: UTF-8
 Imports: circular, ggplot2, RColorBrewer,
     MCMCpack,
-    coda
+    coda,
+    boot
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: testthat
