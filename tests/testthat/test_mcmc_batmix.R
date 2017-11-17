@@ -50,8 +50,10 @@ test_that("MCMC runs", {
 
 
   skip("Long-chain MCMC testing skipped for because they take too long.")
+  x <-  rinvbatmix(100)
 
-  sam_pow <- mcmcBatscheletMixture(x, Q = 100, thin = 10, bat_type = 'power', verbose = 0)
+  set.seed(1)
+  sam_pow <- mcmcBatscheletMixture(x, Q = 1000, thin = 10, bat_type = 'power', verbose = 4)
   plot(sam_pow)
 
   plot_batmix_sample(x = x, param = sam_pow)

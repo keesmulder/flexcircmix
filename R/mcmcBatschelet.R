@@ -120,9 +120,9 @@ sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
   ll_cur <- llbat(x, mu, kp_cur, lam_cur, log = TRUE)
 
   kplam_lograt <- ll_can + kp_logprior_fun(kp_can) + lam_logprior_fun(lam_can) +
-                     logp_kp_can_to_cur + logp_lam_can_to_cur -
-                  ll_cur - kp_logprior_fun(kp_cur) - lam_logprior_fun(lam_cur) -
-                     logp_kp_cur_to_can - logp_lam_cur_to_can
+    logp_kp_can_to_cur + logp_lam_can_to_cur -
+    ll_cur - kp_logprior_fun(kp_cur) - lam_logprior_fun(lam_cur) -
+    logp_kp_cur_to_can - logp_lam_cur_to_can
 
   if (kplam_lograt > log(runif(1))) {
     return(c(kp_can, lam_can))
@@ -193,7 +193,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   alph_prior_param  = rep(1, n_comp),
                                   compute_variance  = TRUE,
                                   verbose = 0
-                                  ) {
+) {
 
   # Select Batschelet type
   if (bat_type == "inverse") {
@@ -302,7 +302,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         if (verbose > 2) cat("kl")
 
         kplam_curj <- sample_kp_and_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_bw = .05,
-                                           kp_logprior_fun, lam_logprior_fun)
+                                            kp_logprior_fun, lam_logprior_fun)
 
         kp_cur[j]  <- kplam_curj[1]
         lam_cur[j] <- kplam_curj[2]
@@ -326,17 +326,25 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     }
 
 
+    # Possibly extremely detailed debugging information.
+    if (verbose > 3) {
+      cat("\n",
+          sprintf("mu:   %8s, ", round(mu_cur, 3)), "\n",
+          sprintf("kp:   %8s, ", round(kp_cur, 3)), "\n",
+          sprintf("lam:  %8s, ", round(lam_cur, 3)), "\n",
+          sprintf("alph: %8s, ", round(alph_cur, 3)), "\n")
+    }
+
     if (i %% 5 == 0 && verbose) cat("\n")
 
     if (i %% thin == 0 && i >= burnin) {
-      isav <- (i-burnin)/thin
+      isav <- (i - burnin) / thin
       output_matrix[isav, ] <- c(mu_cur, kp_cur, lam_cur, alph_cur)
-
 
       if (compute_variance) {
         # Compute mean resultant lengths for each component.
         R_bar_cur <- sapply(1:n_comp, function(i) {
-          computeMeanResultantLengthBat(kp_cur[i], lam_cur[i], dbat_fun)
+          computeMeanResultantLengthBat(kp_cur[i], lam_cur[i], bat_type)
         })
 
         # Compute variances.
