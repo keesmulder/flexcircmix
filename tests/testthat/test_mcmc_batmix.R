@@ -11,6 +11,7 @@ test_that("Proposals similar to full conditionals", {
 
 
   mu = 1; kp = 6; lam = .6
+
   dat   <- rinvbat(100, mu, kp, lam)
 
   mylik <- likfuninvbat(dat, log = FALSE)

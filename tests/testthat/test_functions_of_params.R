@@ -15,30 +15,18 @@ test_that("Functions of parameters are computed correctly", {
   expect_true(abs(computeMeanResultantLengthVM(10) - computeMeanResultantLengthBat(10, 0)) < .0001)
 
 
-  # Test the full
-  expect_equal(computeMeanResultantLengthBat(5, 0),
-               computeMeanResultantLengthBat_old(5, 0))
-  expect_equal(computeMeanResultantLengthBat(5, .2),
-               computeMeanResultantLengthBat_old(5, .2))
-  expect_equal(computeMeanResultantLengthBat(5, -.2),
-               computeMeanResultantLengthBat_old(5, -.2))
-  expect_equal(computeMeanResultantLengthBat(0, -.2),
-               computeMeanResultantLengthBat_old(0, -.2))
-
   skip("Initial testing")
 
   kp <- 4
   lam <- 0
 
   computeMeanResultantLengthBat(kp, lam)
-  computeMeanResultantLengthBat_old(kp, lam)
 
 
   kp <- 4
   lam <- 0.2
 
   computeMeanResultantLengthBat(kp, lam)
-  computeMeanResultantLengthBat_old(kp, lam)
 
   integrate(function(x) dinvbatkern(x, 0, kp, lam), -pi, pi)
   K_kplam(kp, lam)
