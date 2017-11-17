@@ -63,7 +63,7 @@ computeMeanResultantLengthBat <- function(kp, lam, bat_type = "inverse") {
   # computational efficiency.
   cos_fun <- function(theta) cos(theta) * dbatkernfun(theta, 0, kp, lam, log = FALSE)
 
-  nc_batfun(kp, lam) * integrate(cos_fun, -pi, pi)$value
+  integrate(cos_fun, -pi, pi)$value / nc_batfun(kp, lam)
 }
 
 

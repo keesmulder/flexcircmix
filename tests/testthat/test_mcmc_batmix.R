@@ -61,7 +61,7 @@ test_that("MCMC runs", {
 
 
 
-test_that("MCMC runs", {
+test_that("Initial MCMC tests", {
 
   skip("Initial mcmc testing")
 

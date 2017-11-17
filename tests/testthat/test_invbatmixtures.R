@@ -52,7 +52,7 @@ test_that("Mixture is computed correctly", {
 test_that("EM Algorithm works", {
 
 
-  dat <- rinvbatmix(80, mus = c(-1, 1), kps = c(4, 6), lams = c(-.3, .6), alphs = c(.4, .6))
+  dat <- rinvbatmix(30, mus = c(-1, 1), kps = c(4, 6), lams = c(-.3, .6), alphs = c(.4, .6))
 
   expect_error(pmat <- fitbatmix(dat, bat_type = "random_string"))
 
@@ -74,22 +74,4 @@ test_that("EM Algorithm works", {
   plot_batmixfit(dat, params = pmat_pow, dbat_fun = dpowbat) + ggplot2::ggtitle("Power Batschelet fit")
 
 })
-
-
-
-
-
-test_that("EM Algorithm is fast", {
-  dat <- rinvbatmix(800, mus = c(-1, 1), kps = c(8, 10), lams = c(-.3, .3), alphs = c(.4, .6))
-
-  cat(system.time(
-  pmat <- fitbatmix(dat, n_comp = 2, verbose = TRUE, ll_tol = 1, max_its = 5)
-  ))
-
-  expect_true(is.matrix(pmat))
-  expect_true(all(!is.na(pmat)))
-
-})
-#
-#
 
