@@ -113,12 +113,13 @@ plot_movMF_as_batmix <- function(m, ...) {
 #' @examples
 #'
 #'
-plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, bins = 100, res = 400, orderColor = TRUE) {
+plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(param), bins = 100, res = 400, orderColor = TRUE) {
 
   # Change to matrix if needed.
   if (is.vector(param)) param <- t(param)
 
-  nprm <- nrow(param)
+  nprm <- plot_n
+
 
 
   # Initialize plot.
@@ -145,15 +146,18 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, bins = 100, re
 
   n_comp <- ncol(param) / 4
 
+  # Remove some rows if we don't plot every row of param.
+  param <- param[round(seq(1, total, length.out = plot_n)), ]
+
   mu_mat   <- param[, grep("mu_[0-9]",   colnames(param))]
   kp_mat   <- param[, grep("kp_[0-9]",   colnames(param))]
   lam_mat  <- param[, grep("lam_[0-9]",  colnames(param))]
   alph_mat <- param[, grep("alph_[0-9]", colnames(param))]
 
 
-  if (orderColor) ordseq <- seq(0, 1, 0.6/nprm)
+  if (orderColor) ordseq <- seq(0, 1, 0.6/plot_n)
 
-  for (i in 1:nprm) {
+  for (i in 1:plot_n) {
     p <- p + ggplot2::stat_function(fun = dbatmix,
                                     args = list(mus  = mu_mat[i, ],  kps = kp_mat[i, ],
                                                 lams = lam_mat[i, ], alphs = alph_mat[i, ],
