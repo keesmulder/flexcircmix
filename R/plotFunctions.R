@@ -118,10 +118,6 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
   # Change to matrix if needed.
   if (is.vector(param)) param <- t(param)
 
-  nprm <- plot_n
-
-
-
   # Initialize plot.
   if (missing(x)) {
     p <- ggplot2::ggplot(data.frame(x = c(-pi, pi)))
@@ -147,7 +143,7 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
   n_comp <- ncol(param) / 4
 
   # Remove some rows if we don't plot every row of param.
-  param <- param[round(seq(1, total, length.out = plot_n)), ]
+  param <- param[round(seq(1, nrow(param), length.out = plot_n)), ]
 
   mu_mat   <- param[, grep("mu_[0-9]",   colnames(param))]
   kp_mat   <- param[, grep("kp_[0-9]",   colnames(param))]
