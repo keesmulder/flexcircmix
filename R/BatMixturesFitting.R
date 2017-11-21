@@ -17,16 +17,17 @@
 #'
 #' @examples
 #' dat <- rinvbatmix(100)
-#' fitbatmix(dat, n_comp = 3)
+#' batmixEM(dat, n_comp = 3)
 #'
-fitbatmix <- function(x, bat_type = "inverse",
-                         n_comp  = 4,
-                         init_pmat  = matrix(NA, n_comp, 4),
-                         fixed_pmat = matrix(NA, n_comp, 4),
-                         ll_tol = 1,
-                         max_its = 50,
-                         verbose = FALSE,
-                         optimization_its = 5) {
+batmixEM <- function(x,
+                      bat_type = "inverse",
+                      n_comp  = 4,
+                      init_pmat  = matrix(NA, n_comp, 4),
+                      fixed_pmat = matrix(NA, n_comp, 4),
+                      ll_tol = 1,
+                      boot_se = FALSE,
+                      verbose = FALSE,
+                      optimization_its = 5) {
 
   if (bat_type == "inverse") {
     dbat_fun      <- dinvbat
@@ -118,4 +119,26 @@ fitbatmix <- function(x, bat_type = "inverse",
 
   pmat_cur
 }
+
+
+
+
+
+# fitbatmix <- function(x,
+#                           bat_type = "inverse",
+#                           method = "bayes",
+#                           n_comp  = 4,
+#                           init_pmat  = matrix(NA, n_comp, 4),
+#                           fixed_pmat = matrix(NA, n_comp, 4),
+#                           ll_tol = 1,
+#                           boot_se = FALSE,
+#                           verbose = FALSE,
+#                           optimization_its = 5) {
+#
+#
+#
+# }
+
+
+
 

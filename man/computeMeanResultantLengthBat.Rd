@@ -4,7 +4,7 @@
 \alias{computeMeanResultantLengthBat}
 \title{The mean resultant length of a Batschelet-type distribution.}
 \usage{
-computeMeanResultantLengthBat(kp, lam, dbat_fun = dinvbat)
+computeMeanResultantLengthBat(kp, lam, bat_type = "inverse")
 }
 \arguments{
 \item{kp}{The concentration parameter.}

@@ -5,10 +5,13 @@
 \title{Find maximum likelihood estimates for the inverse Batschelet distribution}
 \usage{
 maxlikbat(x, likfunbat_fun = likfuninvbat, weights, fixed_mu = NA,
-  fixed_kp = NA, fixed_lam = NA, max_its = 20, kp_max = 100)
+  fixed_kp = NA, fixed_lam = NA, init_kp = 1, init_lam = 0,
+  max_its = 20, kp_max = 100)
 }
 \arguments{
 \item{x}{An set of angles in radians.}
+
+\item{likfunbat_fun}{A function that returns a function, which is the desired likelihood function to maximize over. Either \code{likfuninvbat} (the default) or \code{likfunpowbat}.}
 
 \item{weights}{A vector of length \code{length(x)}, which gives importace
 weights to be used for x.}
@@ -21,6 +24,10 @@ value of kp.}
 
 \item{fixed_lam}{If NA, lam will be estimated. Else, a numeric giving the
 fixed value of lam.}
+
+\item{init_kp}{An initial value for \eqn{\kappa}, only used if neither \eqn{\kappa} or \eqn{\lambda} is fixed.}
+
+\item{init_lam}{An initial value for \eqn{\lambda}, only used if neither \eqn{\kappa} or \eqn{\lambda} is fixed.}
 
 \item{max_its}{Used only if neither \code{fixed_kp} nor \code{fixed_lam} is
 provided. The maximum number of iterations for the Nelder-Mead optimization.}
