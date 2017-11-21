@@ -20,14 +20,15 @@
 #' batmixEM(dat, n_comp = 3)
 #'
 batmixEM <- function(x,
-                      bat_type = "inverse",
-                      n_comp  = 4,
-                      init_pmat  = matrix(NA, n_comp, 4),
-                      fixed_pmat = matrix(NA, n_comp, 4),
-                      ll_tol = 1,
-                      boot_se = FALSE,
-                      verbose = FALSE,
-                      optimization_its = 5) {
+                     bat_type = "inverse",
+                     n_comp  = 4,
+                     init_pmat  = matrix(NA, n_comp, 4),
+                     fixed_pmat = matrix(NA, n_comp, 4),
+                     ll_tol = 1,
+                     max_its = 50,
+                     boot_se = FALSE,
+                     verbose = FALSE,
+                     optimization_its = 5) {
 
   if (bat_type == "inverse") {
     dbat_fun      <- dinvbat
@@ -76,9 +77,9 @@ batmixEM <- function(x,
     W <- t(sapply(x, function(xi) {
       sapply(1:n_comp, function(k) {
         pmat_cur[k, 'alph'] * dbat_fun(xi,
-                                      pmat_cur[k, 'mu'],
-                                      pmat_cur[k, 'kp'],
-                                      pmat_cur[k, 'lam'])
+                                       pmat_cur[k, 'mu'],
+                                       pmat_cur[k, 'kp'],
+                                       pmat_cur[k, 'lam'])
       })
     }))
     W <- W / rowSums(W)
@@ -102,11 +103,11 @@ batmixEM <- function(x,
 
       pmat_cur[ci, 1:3] <- maxlikbat(x, likfunbat_fun = likfunbat_fun,
                                      init_kp = pmat_cur[ci, 2], init_lam = pmat_cur[ci, 3],
-                                        weights = pmat_cur[ci, 'alph'] * W[, ci],
-                                        fixed_mu  = fixed_pmat[ci, 1],
-                                        fixed_kp  = fixed_pmat[ci, 2],
-                                        fixed_lam = fixed_pmat[ci, 3],
-                                        max_its = optimization_its)
+                                     weights = pmat_cur[ci, 'alph'] * W[, ci],
+                                     fixed_mu  = fixed_pmat[ci, 1],
+                                     fixed_kp  = fixed_pmat[ci, 2],
+                                     fixed_lam = fixed_pmat[ci, 3],
+                                     max_its = optimization_its)
     }
 
     lls[i + 1] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
@@ -124,20 +125,47 @@ batmixEM <- function(x,
 
 
 
-# fitbatmix <- function(x,
-#                           bat_type = "inverse",
-#                           method = "bayes",
-#                           n_comp  = 4,
-#                           init_pmat  = matrix(NA, n_comp, 4),
-#                           fixed_pmat = matrix(NA, n_comp, 4),
-#                           ll_tol = 1,
-#                           boot_se = FALSE,
-#                           verbose = FALSE,
-#                           optimization_its = 5) {
-#
-#
-#
-# }
+fitbatmix <- function(x,
+                      bat_type = "power",
+                      method = "bayes",
+                      n_comp  = 4,
+                      init_pmat  = matrix(NA, n_comp, 4),
+                      fixed_pmat = matrix(NA, n_comp, 4),
+                      verbose = FALSE,
+                      ...) {
+
+
+
+  bm_fit <- list(method = method, bat_type = bat_type)
+
+  # First, check if the
+
+  if (method == "bayes") {
+
+
+    bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, ...)
+
+    # Placeholder, this is obviously not a good idea
+    bm_fit$estimates <- colMeans(bm_fit$mcmc_sample)
+
+  } else if (method == "EM") {
+
+    bm_fit$estimates <- batmixEM(x, ...)
+
+  } else if (method == "boot") {
+
+    bm_fit$estimates <- batmixEM(x, ...)
+
+
+
+  } else stop("Method not found.")
+
+
+  class(bm_fit) <- c("batmixmod", class(bm_fit))
+
+  bm_fit
+
+}
 
 
 

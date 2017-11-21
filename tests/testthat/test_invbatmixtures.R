@@ -27,7 +27,7 @@ test_that("Random generation works", {
 
 test_that("EM Algorithm works", {
   dat <- rinvbatmix(80, mus = c(-1, 1), kps = c(8, 10), lams = c(-.3, .3), alphs = c(.4, .6))
-  pmat <- fitbatmix(dat, n_comp = 2, verbose = FALSE, max_its = 3)
+  pmat <- batmixEM(dat, n_comp = 2, verbose = FALSE, max_its = 3)
 
   expect_true(is.matrix(pmat))
   expect_true(all(!is.na(pmat)))
@@ -54,17 +54,17 @@ test_that("EM Algorithm works", {
 
   dat <- rinvbatmix(30, mus = c(-1, 1), kps = c(4, 6), lams = c(-.3, .6), alphs = c(.4, .6))
 
-  expect_error(pmat <- fitbatmix(dat, bat_type = "random_string"))
+  expect_error(pmat <- batmixEM(dat, bat_type = "random_string"))
 
 
   # Inverse Batschelet
-  pmat_inv <- fitbatmix(dat, bat_type = "inverse", n_comp = 2, verbose = FALSE, max_its = 10, ll_tol = .1)
+  pmat_inv <- batmixEM(dat, bat_type = "inverse", n_comp = 2, verbose = FALSE, max_its = 10, ll_tol = .1)
 
   expect_true(is.matrix(pmat_inv))
   expect_true(all(!is.na(pmat_inv)))
 
   # Power Batschelet
-  pmat_pow <- fitbatmix(dat, bat_type = "power", n_comp = 2, verbose = FALSE, max_its = 10, ll_tol = .1)
+  pmat_pow <- batmixEM(dat, bat_type = "power", n_comp = 2, verbose = FALSE, max_its = 10, ll_tol = .1)
 
   expect_true(is.matrix(pmat_pow))
   expect_true(all(!is.na(pmat_pow)))

@@ -4,8 +4,8 @@
 \alias{plot_batmix_sample}
 \title{Plot a sample of Batschelet mixture parameter sets.}
 \usage{
-plot_batmix_sample(x = NA, param, dbat_fun = dinvbat, bins = 100,
-  res = 400, orderColor = TRUE)
+plot_batmix_sample(x = NA, param, dbat_fun = dinvbat,
+  plot_n = nrow(param), bins = 100, res = 400, orderColor = TRUE)
 }
 \arguments{
 \item{x}{An optional dataset of angles to be plotted as a histogram.}
