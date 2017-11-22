@@ -5,9 +5,13 @@ context("General tests for fitting batmix through wrapper fitbatmix")
 
 test_that("EM fitbatmix wrapper works", {
 
-  x <- rinvbatmix(50)
-  fit1 <- fitbatmix(x, method = "EM")
+  x <- rinvbatmix(500)
+  (system.time(fit1 <- fitbatmix(x, bat_type = "inverse", method = "EM")))
+  (system.time(fit1 <- fitbatmix(x, bat_type = "power", method = "EM")))
 
+
+  expect_true(fit$method == "EM")
+  expect_true(fit$method == "EM")
 
 })
 

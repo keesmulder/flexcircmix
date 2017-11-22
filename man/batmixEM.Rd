@@ -6,10 +6,13 @@
 \usage{
 batmixEM(x, bat_type = "inverse", n_comp = 4, init_pmat = matrix(NA,
   n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4), ll_tol = 1,
-  boot_se = FALSE, verbose = FALSE, optimization_its = 5)
+  max_its = 50, verbose = FALSE, optimization_its = 5)
 }
 \arguments{
 \item{x}{A dataset of angles in radians.}
+
+\item{bat_type}{String; Either "power" or "inverse", denoting the type of
+Batschelet distribution to employ.}
 
 \item{n_comp}{The number of components to be used in the mixture. This is fixed, so it can not be
 estimated.}
@@ -23,9 +26,11 @@ specific value.}
 
 \item{ll_tol}{Numeric; the algorithm is stopped after the log-likelihood improves less than \code{ll_tol}.}
 
+\item{max_its}{The maximum number of iterations.}
+
 \item{verbose}{Logical; whether to print debug statements.}
 
-\item{max_its}{The maximum number of iterations.}
+\item{optimization_its}{Integer; The maximum number of iterations to perform in the M-step (Maximization) part of the algorithm.}
 }
 \value{
 A parameter matrix of results.

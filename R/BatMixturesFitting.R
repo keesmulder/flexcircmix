@@ -1,16 +1,22 @@
 #' Fit mixtures of inverse or power Batschelet distributions.
 #'
 #' @param x A dataset of angles in radians.
-#' @param n_comp The number of components to be used in the mixture. This is fixed, so it can not be
-#'   estimated.
-#' @param init_pmat An \code{n_comp * 4} matrix, the initial values of the parameter matrix. The
-#'   parameters are ordered \code{mu}, \code{kp}, \code{lam} and then \code{alph}.
-#' @param fixed_pmat An \code{n_comp * 4} matrix, containing a parameter matrix, with \code{NA} for
-#'   parameters to be estimated, and a numeric for each parameter that should be kept fixed to a
-#'   specific value.
-#' @param ll_tol Numeric; the algorithm is stopped after the log-likelihood improves less than \code{ll_tol}.
+#' @param bat_type String; Either "power" or "inverse", denoting the type of
+#'   Batschelet distribution to employ.
+#' @param n_comp The number of components to be used in the mixture. This is
+#'   fixed, so it can not be estimated.
+#' @param init_pmat An \code{n_comp * 4} matrix, the initial values of the
+#'   parameter matrix. The parameters are ordered \code{mu}, \code{kp},
+#'   \code{lam} and then \code{alph}.
+#' @param fixed_pmat An \code{n_comp * 4} matrix, containing a parameter matrix,
+#'   with \code{NA} for parameters to be estimated, and a numeric for each
+#'   parameter that should be kept fixed to a specific value.
+#' @param ll_tol Numeric; the algorithm is stopped after the log-likelihood
+#'   improves less than \code{ll_tol}.
 #' @param max_its The maximum number of iterations.
 #' @param verbose Logical; whether to print debug statements.
+#' @param optimization_its Integer; The maximum number of iterations to perform
+#'   in the M-step (Maximization) part of the algorithm.
 #'
 #' @return A parameter matrix of results.
 #' @export
@@ -26,7 +32,6 @@ batmixEM <- function(x,
                      fixed_pmat = matrix(NA, n_comp, 4),
                      ll_tol = 1,
                      max_its = 50,
-                     boot_se = FALSE,
                      verbose = FALSE,
                      optimization_its = 5) {
 
@@ -125,6 +130,33 @@ batmixEM <- function(x,
 
 
 
+#' Fit a mixture of
+#'
+#' This is the main function of the package \code{flexcircmix}, and functions as
+#' an interface to fit mixtures of Batschelet-type distributions, using
+#' frequentist or Bayesian methods.
+#'
+#' @param x A dataset of angles in radians.
+#' @param method String; One of "bayes", "EM", or "boot". The method of obtaining a fit.
+#' @param bat_type String; Either "power" or "inverse", denoting the type of
+#'   Batschelet distribution to employ.
+#' @param n_comp The number of components to be used in the mixture. This is
+#'   fixed, so it can not be estimated.
+#' @param init_pmat An \code{n_comp * 4} matrix, the initial values of the
+#'   parameter matrix. The parameters are ordered \code{mu}, \code{kp},
+#'   \code{lam} and then \code{alph}.
+#' @param fixed_pmat An \code{n_comp * 4} matrix, containing a parameter matrix,
+#'   with \code{NA} for parameters to be estimated, and a numeric for each
+#'   parameter that should be kept fixed to a specific value.
+#' @param verbose Logical; whether to print debug statements.'
+#' @param ... Additional arguments to be passed to the selected \code{method}.
+#'
+#' @return An object of class 'batmixmod'.
+#' @export
+#'
+#' @examples
+#'
+#'
 fitbatmix <- function(x,
                       bat_type = "power",
                       method = "bayes",
@@ -155,8 +187,6 @@ fitbatmix <- function(x,
   } else if (method == "boot") {
 
     bm_fit$estimates <- batmixEM(x, ...)
-
-
 
   } else stop("Method not found.")
 
