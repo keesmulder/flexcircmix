@@ -64,7 +64,8 @@ batmixEM <- function(x,
   pmat_cur <- init_pmat
   colnames(pmat_cur) <- c("mu", "kp", "lam", "alph")
 
-  # initialize W matrix.
+  # initialize W matrix, an n*n_comp matrix that has the probability of each
+  # datapoint for each of the components, given the current parameter set.
   W <- matrix(1/n_comp, nrow = n, ncol = n_comp)
 
   # Accumulate the log likelihoods
@@ -87,6 +88,10 @@ batmixEM <- function(x,
                                        pmat_cur[k, 'lam'])
       })
     }))
+
+    # sapply drops
+    if (n_comp == 1 && ncol(W) != 1) W <- t(W)
+
     W <- W / rowSums(W)
 
 
@@ -137,8 +142,8 @@ batmixEM <- function(x,
 #' frequentist or Bayesian methods.
 #'
 #' @param x A dataset of angles in radians.
-#' @param method String; One of "bayes", "EM", or "boot". The method of obtaining a fit.
-#' @param bat_type String; Either "power" or "inverse", denoting the type of
+#' @param method Character; One of "bayes", "EM", or "boot". The method of obtaining a fit.
+#' @param bat_type Character; Either "power" or "inverse", denoting the type of
 #'   Batschelet distribution to employ.
 #' @param n_comp The number of components to be used in the mixture. This is
 #'   fixed, so it can not be estimated.
@@ -158,22 +163,12 @@ batmixEM <- function(x,
 #'
 #'
 fitbatmix <- function(x,
-                      bat_type = "power",
                       method = "bayes",
-                      n_comp  = 4,
-                      init_pmat  = matrix(NA, n_comp, 4),
-                      fixed_pmat = matrix(NA, n_comp, 4),
-                      verbose = FALSE,
                       ...) {
 
-
-
-  bm_fit <- list(method = method, bat_type = bat_type)
-
-  # First, check if the
+  bm_fit <- list(method = method)
 
   if (method == "bayes") {
-
 
     bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, ...)
 
