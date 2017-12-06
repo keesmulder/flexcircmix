@@ -56,7 +56,17 @@ dpowbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 
 # Compute the normalizing constant of the power Batschelet function.
 powbat_nc <- function(kp, lam) {
-  integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi)$value
+
+  # Try to use the usual numerical integration, which usually doesn't fail. With
+  # some values of lambda, particularly very high, this might fail and the
+  # tolerance can be lowered for a sensible answer.
+  tryCatch(
+    integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi)$value,
+
+    error = function(e) {
+      return(integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi,
+                       abs.tol = 1)$value)
+    })
 }
 
 
