@@ -14,23 +14,26 @@ batmixEM(x, bat_type = "inverse", n_comp = 4, init_pmat = matrix(NA,
 \item{bat_type}{String; Either "power" or "inverse", denoting the type of
 Batschelet distribution to employ.}
 
-\item{n_comp}{The number of components to be used in the mixture. This is fixed, so it can not be
-estimated.}
+\item{n_comp}{The number of components to be used in the mixture. This is
+fixed, so it can not be estimated.}
 
-\item{init_pmat}{An \code{n_comp * 4} matrix, the initial values of the parameter matrix. The
-parameters are ordered \code{mu}, \code{kp}, \code{lam} and then \code{alph}.}
+\item{init_pmat}{An \code{n_comp * 4} matrix, the initial values of the
+parameter matrix. The parameters are ordered \code{mu}, \code{kp},
+\code{lam} and then \code{alph}.}
 
-\item{fixed_pmat}{An \code{n_comp * 4} matrix, containing a parameter matrix, with \code{NA} for
-parameters to be estimated, and a numeric for each parameter that should be kept fixed to a
-specific value.}
+\item{fixed_pmat}{An \code{n_comp * 4} matrix, containing a parameter matrix,
+with \code{NA} for parameters to be estimated, and a numeric for each
+parameter that should be kept fixed to a specific value.}
 
-\item{ll_tol}{Numeric; the algorithm is stopped after the log-likelihood improves less than \code{ll_tol}.}
+\item{ll_tol}{Numeric; the algorithm is stopped after the log-likelihood
+improves less than \code{ll_tol}.}
 
 \item{max_its}{The maximum number of iterations.}
 
 \item{verbose}{Logical; whether to print debug statements.}
 
-\item{optimization_its}{Integer; The maximum number of iterations to perform in the M-step (Maximization) part of the algorithm.}
+\item{optimization_its}{Integer; The maximum number of iterations to perform
+in the M-step (Maximization) part of the algorithm.}
 }
 \value{
 A parameter matrix of results.

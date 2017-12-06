@@ -27,9 +27,12 @@ parameter matrix. The parameters are ordered \code{mu}, \code{kp},
 with \code{NA} for parameters to be estimated, and a numeric for each
 parameter that should be kept fixed to a specific value.}
 
-\item{verbose}{Logical; whether to print debug statements.' @param ...}
+\item{verbose}{Logical; whether to print debug statements.'}
 
-\item{...}{}
+\item{...}{Additional arguments to be passed to the selected \code{method}.}
+}
+\value{
+An object of class 'batmixmod'.
 }
 \description{
 This is the main function of the package \code{flexcircmix}, and functions as
