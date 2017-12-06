@@ -321,8 +321,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
           lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)
         }
       }
-
-
     }
 
 

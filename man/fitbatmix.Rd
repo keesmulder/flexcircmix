@@ -4,17 +4,17 @@
 \alias{fitbatmix}
 \title{Fit a mixture of}
 \usage{
-fitbatmix(x, bat_type = "power", method = "bayes", n_comp = 4,
-  init_pmat = matrix(NA, n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4),
-  verbose = FALSE, ...)
+fitbatmix(x, method = "bayes", ...)
 }
 \arguments{
 \item{x}{A dataset of angles in radians.}
 
+\item{method}{Character; One of "bayes", "EM", or "boot". The method of obtaining a fit.}
+
+\item{...}{Additional arguments to be passed to the selected \code{method}.}
+
 \item{bat_type}{Character; Either "power" or "inverse", denoting the type of
 Batschelet distribution to employ.}
-
-\item{method}{Character; One of "bayes", "EM", or "boot". The method of obtaining a fit.}
 
 \item{n_comp}{The number of components to be used in the mixture. This is
 fixed, so it can not be estimated.}
@@ -28,8 +28,6 @@ with \code{NA} for parameters to be estimated, and a numeric for each
 parameter that should be kept fixed to a specific value.}
 
 \item{verbose}{Logical; whether to print debug statements.'}
-
-\item{...}{Additional arguments to be passed to the selected \code{method}.}
 }
 \value{
 An object of class 'batmixmod'.
