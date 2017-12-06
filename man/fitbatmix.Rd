@@ -11,10 +11,10 @@ fitbatmix(x, bat_type = "power", method = "bayes", n_comp = 4,
 \arguments{
 \item{x}{A dataset of angles in radians.}
 
-\item{bat_type}{String; Either "power" or "inverse", denoting the type of
+\item{bat_type}{Character; Either "power" or "inverse", denoting the type of
 Batschelet distribution to employ.}
 
-\item{method}{String; One of "bayes", "EM", or "boot". The method of obtaining a fit.}
+\item{method}{Character; One of "bayes", "EM", or "boot". The method of obtaining a fit.}
 
 \item{n_comp}{The number of components to be used in the mixture. This is
 fixed, so it can not be estimated.}
