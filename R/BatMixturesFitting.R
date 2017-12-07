@@ -64,6 +64,8 @@ batmixEM <- function(x,
   pmat_cur <- init_pmat
   colnames(pmat_cur) <- c("mu", "kp", "lam", "alph")
 
+  if (verbose) cat("Starting log-likelihood: ")
+
   # initialize W matrix, an n*n_comp matrix that has the probability of each
   # datapoint for each of the components, given the current parameter set.
   W <- matrix(1/n_comp, nrow = n, ncol = n_comp)
@@ -73,7 +75,7 @@ batmixEM <- function(x,
   lls[1] <- sum(dbatmix_pmat(x, dbat_fun = dbat_fun, pmat = pmat_cur, log = TRUE))
 
 
-  if (verbose) cat("Starting log-likelihood: ", lls[1], "\n")
+  if (verbose) cat(lls[1], "\n")
 
   for (i in 1:max_its) {
 
