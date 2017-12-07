@@ -89,7 +89,7 @@ batmixEM <- function(x,
       })
     }))
 
-    # sapply drops
+    # sapply has drop = TRUE, which we have to fix if n_comp == 1
     if (n_comp == 1 && ncol(W) != 1) W <- t(W)
 
     W <- W / rowSums(W)
