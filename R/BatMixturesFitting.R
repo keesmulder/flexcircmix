@@ -80,14 +80,9 @@ batmixEM <- function(x,
     if (verbose) cat(" Iteration: ", sprintf("%4s", i), ", E-step: ", sep = "")
 
     # E-step
-    W <- t(sapply(x, function(xi) {
-      sapply(1:n_comp, function(k) {
-        pmat_cur[k, 'alph'] * dbat_fun(xi,
-                                       pmat_cur[k, 'mu'],
-                                       pmat_cur[k, 'kp'],
-                                       pmat_cur[k, 'lam'])
-      })
-    }))
+    W <- sapply(1:n_comp, function(k) {
+      pmat_cur[k, 'alph'] * dbat_fun(x, pmat_cur[k, 'mu'], pmat_cur[k, 'kp'], pmat_cur[k, 'lam'])
+    })
 
     # sapply has drop = TRUE, which we have to fix if n_comp == 1
     if (n_comp == 1 && ncol(W) != 1) W <- t(W)
