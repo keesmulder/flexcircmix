@@ -36,8 +36,10 @@ test_that("Fixing parameters works", {
                         NA, 2, NA, NA),
                       nrow = 3, ncol = 4, byrow = TRUE)
 
-  fit_pow <- fitbatmix(x, n_comp = 3, verbose = TRUE,
+  fit_pow <- fitbatmix(x, n_comp = 3, verbose = FALSE,
                        bat_type = "power", method = "EM")
+  fit_inv <- fitbatmix(x, n_comp = 3, verbose = FALSE,
+                       bat_type = "inverse", method = "EM")
 
 
   expect_true(fit_inv$method == "EM")

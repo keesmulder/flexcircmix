@@ -84,8 +84,6 @@ batmixEM <- function(x,
       pmat_cur[k, 'alph'] * dbat_fun(x, pmat_cur[k, 'mu'], pmat_cur[k, 'kp'], pmat_cur[k, 'lam'])
     })
 
-    # sapply has drop = TRUE, which we have to fix if n_comp == 1
-    if (n_comp == 1 && ncol(W) != 1) W <- t(W)
 
     W <- W / rowSums(W)
 
