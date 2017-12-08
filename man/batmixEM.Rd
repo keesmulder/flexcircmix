@@ -5,8 +5,8 @@
 \title{Fit mixtures of inverse or power Batschelet distributions.}
 \usage{
 batmixEM(x, bat_type = "inverse", n_comp = 4, init_pmat = matrix(NA,
-  n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4), ll_tol = 1,
-  max_its = 50, verbose = FALSE, optimization_its = 5)
+  n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4), ll_tol = 0.1,
+  max_its = 50, verbose = FALSE, optimization_its = 10)
 }
 \arguments{
 \item{x}{A dataset of angles in radians.}

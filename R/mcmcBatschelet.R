@@ -242,7 +242,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     colnames(variance_matrix) <- c(paste0("mean_res_len_", 1:n_comp),
                                    paste0("circ_var_", 1:n_comp),
                                    paste0("circ_sd_", 1:n_comp))
-
   }
 
 
