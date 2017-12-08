@@ -312,13 +312,15 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         if (verbose > 2) cat("k")
         # Sample kp
         if (na_fixedpmat[j, 2]) {
-          kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun, lam_bw = lam_bw,)
+          kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat,
+                                      kp_logprior_fun)
         }
 
         if (verbose > 2) cat("l")
         # Sample lam
         if (na_fixedpmat[j, 3]) {
-          lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun, lam_bw = lam_bw)
+          lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat,
+                                       lam_logprior_fun, lam_bw = lam_bw)
         }
       }
     }
