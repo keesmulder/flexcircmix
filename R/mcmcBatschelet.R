@@ -192,8 +192,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   lam_logprior_fun  = function(lam)  -log(2),
                                   alph_prior_param  = rep(1, n_comp),
                                   compute_variance  = TRUE,
-                                  verbose = 0
-) {
+                                  verbose = 0) {
 
   # Select Batschelet type
   if (bat_type == "inverse") {

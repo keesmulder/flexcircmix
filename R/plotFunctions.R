@@ -140,7 +140,6 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
                               boundary = -pi, binwidth = 2*pi / bins)
   }
 
-  n_comp <- ncol(param) / 4
 
   # Remove some rows if we don't plot every row of param.
   param <- param[round(seq(1, nrow(param), length.out = plot_n)), ]
@@ -150,6 +149,7 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
   lam_mat  <- param[, grep("lam_[0-9]",  colnames(param))]
   alph_mat <- param[, grep("alph_[0-9]", colnames(param))]
 
+  n_comp <- ncol(mu_mat) / 4
 
   if (orderColor) ordseq <- seq(0, 1, 0.6/plot_n)
 
