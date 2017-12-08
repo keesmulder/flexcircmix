@@ -113,7 +113,8 @@ plot_movMF_as_batmix <- function(m, ...) {
 #' @examples
 #'
 #'
-plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(param), bins = 100, res = 400, orderColor = TRUE) {
+plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(param),
+                               bins = 100, res = 400, orderColor = FALSE) {
 
   # Change to matrix if needed.
   if (is.vector(param)) param <- t(param)
@@ -153,14 +154,17 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
 
   if (orderColor) ordseq <- seq(0, 1, 0.6/plot_n)
 
+
   for (i in 1:plot_n) {
-    p <- p + ggplot2::stat_function(fun = dbatmix,
+    suppressWarnings(
+      p <- p + ggplot2::stat_function(fun = dbatmix,
                                     args = list(mus  = mu_mat[i, ],  kps = kp_mat[i, ],
                                                 lams = lam_mat[i, ], alphs = alph_mat[i, ],
                                                 dbat_fun = dbat_fun),
-                                    col = rgb(ifelse(orderColor, ordseq[i], 0.15), 0.2, 0.2,
-                                              ifelse(orderColor, ordseq[i], 0.15)),
+                                    col = rgb(ifelse(orderColor, ordseq[i], 0.2), 0.2, 0.2,
+                                              min(1, 25/plot_n)),
                                     n = res)
+    )
   }
   p
 }
