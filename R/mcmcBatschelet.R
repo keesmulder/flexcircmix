@@ -187,6 +187,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   init_pmat  = matrix(NA, n_comp, 4),
                                   fixed_pmat = matrix(NA, n_comp, 4),
                                   joint_kp_lam = FALSE,
+                                  lam_bw = .05,
                                   mu_logprior_fun   = function(mu)   -log(2*pi),
                                   kp_logprior_fun   = function(kp)   1,
                                   lam_logprior_fun  = function(lam)  -log(2),
@@ -300,7 +301,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
         if (verbose > 2) cat("kl")
 
-        kplam_curj <- sample_kp_and_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_bw = .05,
+        kplam_curj <- sample_kp_and_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_bw = lam_bw,
                                             kp_logprior_fun, lam_logprior_fun)
 
         kp_cur[j]  <- kplam_curj[1]
@@ -311,13 +312,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         if (verbose > 2) cat("k")
         # Sample kp
         if (na_fixedpmat[j, 2]) {
-          kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun)
+          kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, kp_logprior_fun, lam_bw = lam_bw,)
         }
 
         if (verbose > 2) cat("l")
         # Sample lam
         if (na_fixedpmat[j, 3]) {
-          lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun)
+          lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_logprior_fun, lam_bw = lam_bw)
         }
       }
     }
