@@ -265,6 +265,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         alph_cur[k] * dbat_fun(xi, mu_cur[k], kp_cur[k], lam_cur[k])
       })
     }))
+
     W <- W / rowSums(W)
 
     # Randomly sample group assignments from the component probabilities.
@@ -334,7 +335,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
           sprintf("alph: %8s, ", round(alph_cur, 3)), "\n")
     }
 
-    if (i %% 5 == 0 && verbose) cat("\n")
+    if (i %% 50 == 0 && verbose == 1) cat(i, ", \n")
+    if (i %% 5 == 0 && verbose > 1) cat("\n")
 
     if (i %% thin == 0 && i >= burnin) {
       isav <- (i - burnin) / thin
