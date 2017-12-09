@@ -130,7 +130,7 @@ batmixEM <- function(x,
 
 
 
-#' Fit a mixture of
+#' Fit a mixture of Batschelet distributions
 #'
 #' This is the main function of the package \code{flexcircmix}, and functions as
 #' an interface to fit mixtures of Batschelet-type distributions, using
@@ -170,9 +170,13 @@ fitbatmix <- function(x,
     # Placeholder, this is obviously not a good idea
     bm_fit$estimates <- colMeans(bm_fit$mcmc_sample)
 
+
+    bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
+
   } else if (method == "EM") {
 
-    bm_fit$estimates <- batmixEM(x, ...)
+    bm_fit$estimates  <- batmixEM(x, ...)
+    bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
 
   } else if (method == "boot") {
 
