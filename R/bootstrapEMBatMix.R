@@ -2,7 +2,7 @@ one_bat_boot_EM <- function(boot_x, bat_type = "power", n_comp  = 4,
                             init_pmat  = matrix(NA, n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4),
                             ll_tol = .1, max_its = 50, optimization_its = 10) {
 
-  pmat <- batmixEM(x, bat_type = bat_type, n_comp  = n_comp, verbose = FALSE,
+  pmat <- batmixEM(boot_x, bat_type = bat_type, n_comp  = n_comp, verbose = FALSE,
                    init_pmat  = init_pmat, fixed_pmat = fixed_pmat,
                    ll_tol = ll_tol, max_its = max_its, optimization_its = optimization_its)
 
