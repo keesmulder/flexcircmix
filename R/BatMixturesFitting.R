@@ -127,7 +127,22 @@ batmixEM <- function(x,
 }
 
 
+vectorize_pmat <- function(pmat) {
+  vec        <- as.vector(pmat)
+  names(vec) <- paste(rep(colnames(pmat), each = nrow(pmat)), 1:nrow(pmat), sep = "_")
+  vec
+}
 
+# Function to compute the circular variance and circular sd and add it to a
+# parameter matrix.
+add_circ_var_to_pmat <- function(pmat, bat_type = "power") {
+  var_mat <- t(apply(pmat, 1, function(row) {
+    R_bar <- computeMeanResultantLengthBat(row["kp"], row["lam"], bat_type = bat_type)
+    c(circ_var = 1 - R_bar, circ_sd = computeCircSD(R_bar))
+  }))
+
+  cbind(pmat, var_mat)
+}
 
 
 #' Fit a mixture of Batschelet distributions
