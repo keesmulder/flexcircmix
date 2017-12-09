@@ -178,13 +178,14 @@ add_circ_var_to_pmat <- function(pmat, bat_type = "power") {
 #'
 fitbatmix <- function(x,
                       method = "bayes",
+                      bat_type = "power",
                       ...) {
 
   bm_fit <- list(method = method)
 
   if (method == "bayes") {
 
-    bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, ...)
+    bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, bat_type = bat_type, ...)
 
     # Placeholder, this is obviously not a good idea
     bm_fit$estimates <- colMeans(bm_fit$mcmc_sample)
@@ -194,19 +195,18 @@ fitbatmix <- function(x,
 
   } else if (method == "EM") {
 
-    bmfit$estimates   <- batmixEM(x, ...)
+    bm_fit$estimates   <- batmixEM(x, bat_type = bat_type, ...)
 
   } else if (method == "boot") {
 
-    bm_fit$estimates <- batmixEM(x, ...)
+    bm_fit$estimates <- batmixEM(x, bat_type = bat_type, ...)
 
   } else stop("Method not found.")
 
 
   # Augment the results
-  bmfit$estimates   <- add_circ_var_to_pmat(bmfit$estimates, ...)
-  bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
-
+  # bm_fit$estimates   <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
+  # bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
 
 
   class(bm_fit) <- c("batmixmod", class(bm_fit))
