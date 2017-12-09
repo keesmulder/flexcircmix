@@ -130,6 +130,35 @@ batmixEM <- function(x,
 }
 
 
+# FUNCTION meanDir  ---------------------------------------------------
+# Calculates the mean direction from a dataset.
+#   th:       A numeric vector containing the angles in the sample, in radians.
+#   na.rm:    Whether NA's will be removed.
+# Returns:    A scalar, the mean direction in radians, in the range [0, 2pi].
+meanDir <- function (th, na.rm = TRUE) {
+  C <- sum(cos(th), na.rm = na.rm)
+  S <- sum(sin(th), na.rm = na.rm)
+  force_neg_pi_pi(atan2(S, C))
+}
+
+###
+### FUNCTION circularQuantile
+###
+# A wrapper for quantile() that first reverse-centres the circular data in order
+# to prevent the results being influenced by an arbitrary starting point.
+#   th:         A numeric vector containing the angles in the sample.
+#   ...:        Arguments to be passed to quantile().
+# Returns:    A vector containing the angles of the desired quantiles.
+circularQuantile <- function (th, ...) {
+
+  # The desired rotation before taking the quantile.
+  rotation <- meanDir(th)
+
+  # Centre the data, and move it as far away from 0 radians as possible by
+  # th+rot. Then, apply the quantile function, and rotate back.
+  force_neg_pi_pi(quantile(force_neg_pi_pi(th - rotation), ...) + rotation)
+}
+
 # Create a vector from a parameter matrix for convenience.
 vectorize_pmat <- function(pmat) {
   vec        <- as.vector(pmat)
@@ -145,7 +174,7 @@ matrixize_pvec <- function(pvec) {
   unique_nms <- nms[3 * (1:(length(nms)/3) -1) + 1]
   colnms     <- substr(unique_nms, 1, nchar(unique_nms) - 2)
   colnames(mat) <- colnms
-    mat
+  mat
 }
 
 
@@ -160,10 +189,40 @@ add_circ_var_to_pmat <- function(pmat, bat_type = "power") {
   cbind(pmat, var_mat)
 }
 
+summarize_one_mu_vector <- function(mu_vec, probs = c(.025, .975)) {
+  R_bar <- sqrt(sum(cos(mu_vec))^2 + sum(sin(mu_vec))^2) / length(mu_vec)
 
-summarize_batmix_param_sample <- fucntion(bm_sam) {
-
+  c(mean_dir = meanDir(mu_vec),
+    circ_median = circularQuantile(mu_vec, .5),
+    circ_se = computeCircSD(R_bar),
+    circularQuantile(mu_vec, probs = probs))
 }
+
+summarize_one_lin_param <- function(pm_vec, probs = c(.025, .975)) {
+  c(mean = mean(pm_vec), median = median(pm_vec), se = sd(pm_vec),
+    quantile(pm_vec, probs = probs))
+}
+
+# Function to take a sample of parameters and compute a summary of it. Can be an
+# mcmc sample or a bootstrap sample, for example.
+summarize_batmix_param_sample <- function(bm_sam, probs = c(.025, .975)) {
+
+  # First, treat circular variables
+  mu_cols <- grepl("mu_[0-9]",   colnames(bm_sam))
+  mu_mat  <- bm_sam[, mu_cols, drop = FALSE]
+  mu_summary <- t(apply(mu_mat, 2, summarize_one_mu_vector, probs = probs))
+
+  # Linear parameters
+  lp_cols <- !mu_cols
+  lp_mat  <- bm_sam[, lp_cols, drop = FALSE]
+  lp_summary <- t(apply(lp_mat, 2, summarize_one_lin_param, probs = probs))
+
+  full_summary <- rbind(mu_summary, lp_summary)
+  colnames(full_summary) <- colnames(lp_summary)
+
+  full_summary
+}
+
 
 
 
@@ -206,6 +265,8 @@ fitbatmix <- function(x,
     bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, bat_type = bat_type, ...)
 
     # Placeholder, this is obviously not a good idea
+    mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample)
+
     bm_fit$estimates <- colMeans(bm_fit$mcmc_sample)
 
 
