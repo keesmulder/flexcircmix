@@ -9,9 +9,9 @@ test_that("EM fitbatmix wrapper works", {
 
   x <- rinvbatmix(100)
 
-  (system.time(fit_inv <- fitbatmix(x, bat_type = "inverse", method = "EM")))
+  (system.time(fit_inv <- fitbatmix(x, bat_type = "inverse", max_its = 2, method = "EM")))
 
-  (system.time(fit_pow <- fitbatmix(x, bat_type = "power", method = "EM")))
+  (system.time(fit_pow <- fitbatmix(x, bat_type = "power", max_its = 2, method = "EM")))
 
 
   expect_true(fit_inv$method == "EM")
@@ -31,7 +31,7 @@ test_that("Plotting works" , {
 
   fit_pow <- fitbatmix(x, n_comp = 3, verbose = FALSE,
                        bat_type = "power", method = "EM")
-  fit_mcmc <- fitbatmix(x, n_comp = 3, verbose = 2, bat_type = "power", Q = 10, method = "bayes")
+  fit_mcmc <- fitbatmix(x, n_comp = 3, verbose = 0, bat_type = "power", Q = 10, method = "bayes")
 
   plot_batmixfit(x, fit_pow$estimates)
   plot_batmix_sample(x, fit_mcmc$mcmc_sample, plot_n = 4)
@@ -39,7 +39,7 @@ test_that("Plotting works" , {
 
   fit_pow <- fitbatmix(x, n_comp = 1, verbose = FALSE,
                        bat_type = "power", method = "EM")
-  fit_mcmc <- fitbatmix(x, n_comp = 1, verbose = 2, bat_type = "power", Q = 10, method = "bayes")
+  fit_mcmc <- fitbatmix(x, n_comp = 1, verbose = 0, bat_type = "power", Q = 10, method = "bayes")
 
   plot_batmixfit(x, fit_pow$estimates)
   plot_batmix_sample(x, fit_mcmc$mcmc_sample, plot_n = 4)
