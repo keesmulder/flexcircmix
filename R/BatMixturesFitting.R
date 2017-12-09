@@ -264,17 +264,20 @@ fitbatmix <- function(x,
 
     bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, bat_type = bat_type, ...)
 
-    # Placeholder, this is obviously not a good idea
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample)
+    mcmc_sum <- mcmc_sum[!grepl("mean_res_len", rownames(mcmc_sum)), ]
 
-    bm_fit$estimates <- colMeans(bm_fit$mcmc_sample)
-
-
-    # bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
+    bm_fit$est_vector <- mcmc_sum[, 2]
+    bm_fit$estimates <- matrixize_pvec(bm_fit$est_vector)
+    bm_fit$mcmc_summary <- mcmc_sum
 
   } else if (method == "EM") {
 
     bm_fit$estimates   <- batmixEM(x, bat_type = bat_type, ...)
+
+    # Augment the results
+    bm_fit$estimates   <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
+    bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
 
   } else if (method == "boot") {
 
@@ -283,9 +286,8 @@ fitbatmix <- function(x,
   } else stop("Method not found.")
 
 
-  # Augment the results
-  # bm_fit$estimates   <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
-  # bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
+  rownames(bm_fit$estimates) <- paste("comp", 1:nrow(bm_fit$estimates), sep = "_")
+
 
 
   class(bm_fit) <- c("batmixmod", class(bm_fit))
