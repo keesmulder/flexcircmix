@@ -5,8 +5,9 @@ context("General tests for fitting batmix through wrapper fitbatmix")
 
 test_that("EM fitbatmix wrapper works", {
 
-  x <- rinvbatmix(50)
+  set.seed(15)
 
+  x <- rinvbatmix(100)
 
   (system.time(fit_inv <- fitbatmix(x, bat_type = "inverse", method = "EM")))
 
@@ -22,8 +23,26 @@ test_that("EM fitbatmix wrapper works", {
     fit_pow <- fitbatmix(x, n_comp = 1, verbose = FALSE,
                          bat_type = "power", method = "EM")
     , NA)
+})
+
+test_that("Plotting works" , {
+
+  x <- rinvbatmix(100)
+
+  fit_pow <- fitbatmix(x, n_comp = 3, verbose = FALSE,
+                       bat_type = "power", method = "EM")
+  fit_mcmc <- fitbatmix(x, n_comp = 3, verbose = 2, bat_type = "power", Q = 10, method = "bayes")
+
+  plot_batmixfit(x, fit_pow$estimates)
+  plot_batmix_sample(x, fit_mcmc$mcmc_sample, plot_n = 4)
 
 
+  fit_pow <- fitbatmix(x, n_comp = 1, verbose = FALSE,
+                       bat_type = "power", method = "EM")
+  fit_mcmc <- fitbatmix(x, n_comp = 1, verbose = 2, bat_type = "power", Q = 10, method = "bayes")
+
+  plot_batmixfit(x, fit_pow$estimates)
+  plot_batmix_sample(x, fit_mcmc$mcmc_sample, plot_n = 4)
 
 })
 
