@@ -259,7 +259,8 @@ fitbatmix <- function(x,
                       bat_type = "power",
                       ...) {
 
-  bm_fit <- list(method = method)
+  # Construct fit object.
+  bm_fit <- list(method = method, bat_type = bat_type, x = x, call = match.call())
 
   if (method == "bayes") {
 
