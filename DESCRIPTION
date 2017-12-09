@@ -10,7 +10,8 @@ Encoding: UTF-8
 Imports: circular, ggplot2, RColorBrewer,
     MCMCpack,
     coda,
-    boot
+    pbapply,
+    parallel
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: testthat

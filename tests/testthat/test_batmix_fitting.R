@@ -86,7 +86,8 @@ test_that("Bootstrap works", {
   x <- rinvbatmix(50)
   fit1 <- fitbatmix(x, method = "EM")
 
-  # fit2 <- fitbatmix(x, method = "boot", B = 10)
+  fit2 <- fitbatmix(x, method = "boot", B = 10)
+
 
 })
 
