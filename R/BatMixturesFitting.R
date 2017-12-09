@@ -130,11 +130,24 @@ batmixEM <- function(x,
 }
 
 
+# Create a vector from a parameter matrix for convenience.
 vectorize_pmat <- function(pmat) {
   vec        <- as.vector(pmat)
   names(vec) <- paste(rep(colnames(pmat), each = nrow(pmat)), 1:nrow(pmat), sep = "_")
   vec
 }
+
+# Create a matrix from a parameter vector for convenience.
+matrixize_pvec <- function(pvec) {
+  nms    <- names(pvec)
+  n_comp <- sum(grepl("alph", nms))
+  mat        <- matrix(pvec, nrow = n_comp)
+  unique_nms <- nms[3 * (1:(length(nms)/3) -1) + 1]
+  colnms     <- substr(unique_nms, 1, nchar(unique_nms) - 2)
+  colnames(mat) <- colnms
+    mat
+}
+
 
 # Function to compute the circular variance and circular sd and add it to a
 # parameter matrix.
@@ -145,6 +158,11 @@ add_circ_var_to_pmat <- function(pmat, bat_type = "power") {
   }))
 
   cbind(pmat, var_mat)
+}
+
+
+summarize_batmix_param_sample <- fucntion(bm_sam) {
+
 }
 
 
