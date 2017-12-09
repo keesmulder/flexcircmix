@@ -145,10 +145,10 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
   # Remove some rows if we don't plot every row of param.
   param <- param[round(seq(1, nrow(param), length.out = plot_n)), ]
 
-  mu_mat   <- param[, grep("mu_[0-9]",   colnames(param))]
-  kp_mat   <- param[, grep("kp_[0-9]",   colnames(param))]
-  lam_mat  <- param[, grep("lam_[0-9]",  colnames(param))]
-  alph_mat <- param[, grep("alph_[0-9]", colnames(param))]
+  mu_mat   <- param[, grep("mu_[0-9]",   colnames(param)), drop = FALSE]
+  kp_mat   <- param[, grep("kp_[0-9]",   colnames(param)), drop = FALSE]
+  lam_mat  <- param[, grep("lam_[0-9]",  colnames(param)), drop = FALSE]
+  alph_mat <- param[, grep("alph_[0-9]", colnames(param)), drop = FALSE]
 
   n_comp <- ncol(mu_mat)
 
