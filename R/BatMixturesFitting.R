@@ -226,6 +226,7 @@ summarize_batmix_param_sample <- function(bm_sam, probs = c(.025, .975)) {
 
 
 
+
 #' Fit a mixture of Batschelet distributions
 #'
 #' This is the main function of the package \code{flexcircmix}, and functions as
@@ -281,14 +282,12 @@ fitbatmix <- function(x,
 
   } else if (method == "boot") {
 
-    bm_fit$estimates <- batmixEM(x, bat_type = bat_type, ...)
+    bm_fit <- c(bm_fit, bootstrapEMBatMix(x, bat_type = bat_type, ...))
+    bm_fit$boot_summary <- summarize_batmix_param_sample(bm_fit$boot_sample)
 
   } else stop("Method not found.")
 
-
   rownames(bm_fit$estimates) <- paste("comp", 1:nrow(bm_fit$estimates), sep = "_")
-
-
 
   class(bm_fit) <- c("batmixmod", class(bm_fit))
 
