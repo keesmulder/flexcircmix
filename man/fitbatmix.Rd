@@ -2,19 +2,19 @@
 % Please edit documentation in R/BatMixturesFitting.R
 \name{fitbatmix}
 \alias{fitbatmix}
-\title{Fit a mixture of}
+\title{Fit a mixture of Batschelet distributions}
 \usage{
-fitbatmix(x, method = "bayes", ...)
+fitbatmix(x, method = "bayes", bat_type = "power", ...)
 }
 \arguments{
 \item{x}{A dataset of angles in radians.}
 
 \item{method}{Character; One of "bayes", "EM", or "boot". The method of obtaining a fit.}
 
-\item{...}{Additional arguments to be passed to the selected \code{method}.}
-
 \item{bat_type}{Character; Either "power" or "inverse", denoting the type of
 Batschelet distribution to employ.}
+
+\item{...}{Additional arguments to be passed to the selected \code{method}.}
 
 \item{n_comp}{The number of components to be used in the mixture. This is
 fixed, so it can not be estimated.}
