@@ -258,13 +258,10 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
 
     ### Sample group assignments z
-
     # Probability of each component for each data point.
-    W <- t(sapply(x, function(xi) {
-      sapply(1:n_comp, function(k) {
-        alph_cur[k] * dbat_fun(xi, mu_cur[k], kp_cur[k], lam_cur[k])
-      })
-    }))
+    W <- sapply(1:n_comp, function(k) {
+      alph_cur[k] * dbat_fun(x, mu_cur[k], kp_cur[k], lam_cur[k])
+    })
 
     W <- W / rowSums(W)
 
