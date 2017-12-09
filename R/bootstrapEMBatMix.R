@@ -97,6 +97,8 @@ bootstrapEMBatMix <- function(x, B = 500, parallel = TRUE, verbose = FALSE,
 
   if (verbose) cat("\nFinished.\n")
 
-  t(rep_sam)
+  out$boot_sample <- t(rep_sam)
+
+  out
 }
 
