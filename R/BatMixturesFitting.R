@@ -145,6 +145,7 @@ add_circ_var_to_pmat <- function(pmat, bat_type = "power") {
 }
 
 
+
 #' Fit a mixture of Batschelet distributions
 #'
 #' This is the main function of the package \code{flexcircmix}, and functions as
@@ -186,18 +187,23 @@ fitbatmix <- function(x,
     bm_fit$estimates <- colMeans(bm_fit$mcmc_sample)
 
 
-    bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
+    # bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
 
   } else if (method == "EM") {
 
-    bm_fit$estimates  <- batmixEM(x, ...)
-    bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
+    bmfit$estimates   <- batmixEM(x, ...)
 
   } else if (method == "boot") {
 
     bm_fit$estimates <- batmixEM(x, ...)
 
   } else stop("Method not found.")
+
+
+  # Augment the results
+  bmfit$estimates   <- add_circ_var_to_pmat(bmfit$estimates, ...)
+  bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
+
 
 
   class(bm_fit) <- c("batmixmod", class(bm_fit))
