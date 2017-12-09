@@ -212,6 +212,10 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   na_fixedpmat <- is.na(fixed_pmat)
   na_initpmat  <- is.na(init_pmat)
 
+  if (any(!na_fixedpmat[, 2] & fixed_pmat[,2] < 0))      stop("Invalid fixed kappa value.")
+  if (any(!na_fixedpmat[, 3] & abs(fixed_pmat[,3]) > 1)) stop("Invalid fixed lambda value.")
+
+
   # Set initial values if the initial parameter matrix is not given for that parameter (has NAs).
   init_pmat[, 1] <- ifelse(na_initpmat[, 1], seq(0, 2*pi, length.out = n_comp + 1)[-1], init_pmat[, 1])
   init_pmat[, 2] <- ifelse(na_initpmat[, 2], rep(5, n_comp), init_pmat[, 2])
@@ -227,7 +231,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   kp_cur   <- init_pmat[, 2]
   lam_cur  <- init_pmat[, 3]
   alph_cur <- init_pmat[, 4]
-
 
   # Initialize latent group labeling
   z_cur <- integer(n)
