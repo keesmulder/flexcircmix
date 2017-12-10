@@ -26,7 +26,7 @@
 #' batmixEM(dat, n_comp = 3)
 #'
 batmixEM <- function(x,
-                     bat_type = "inverse",
+                     bat_type = "power",
                      n_comp  = 4,
                      init_pmat  = matrix(NA, n_comp, 4),
                      fixed_pmat = matrix(NA, n_comp, 4),
