@@ -171,7 +171,7 @@ matrixize_pvec <- function(pvec) {
   nms    <- names(pvec)
   n_comp <- sum(grepl("alph", nms))
   mat        <- matrix(pvec, nrow = n_comp)
-  unique_nms <- nms[3 * (1:(length(nms)/3) -1) + 1]
+  unique_nms <- nms[n_comp * (1:(length(nms)/n_comp) - 1) + 1]
   colnms     <- substr(unique_nms, 1, nchar(unique_nms) - 2)
   colnames(mat) <- colnms
   mat

@@ -94,7 +94,6 @@ test_that("Bootstrap works", {
 test_that("MCMC works", {
 
   x <- rinvbatmix(50)
-  fit1 <- fitbatmix(x, method = "EM")
 
   fit2 <- fitbatmix(x, method = "bayes", Q = 10)
 
