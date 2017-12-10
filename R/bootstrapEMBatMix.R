@@ -1,5 +1,7 @@
+
+
 one_bat_boot_EM <- function(boot_x, bat_type = "power", n_comp  = 4,
-                            init_pmat  = matrix(NA, n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4),
+                            init_pmat = matrix(NA, n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4),
                             ll_tol = .1, max_its = 50, optimization_its = 10) {
 
   pmat <- batmixEM(boot_x, bat_type = bat_type, n_comp  = n_comp, verbose = FALSE,
@@ -69,12 +71,15 @@ bootstrapEMBatMix <- function(x, B = 500, parallel = TRUE, verbose = FALSE,
     no_cores <- parallel::detectCores() - 1
     cl <- parallel::makeCluster(no_cores)
     parallel::clusterEvalQ(cl, library(flexcircmix))
-    parallel::clusterExport(cl, c("one_bat_boot_EM",
-                                  "x", "bat_type", "n_comp", "fulldata_fit_pmat", "fixed_pmat",
+    parallel::clusterExport(cl,
+                            envir = environment(),
+                            varlist = c("one_bat_boot_EM",
+                                  "x", "bat_type", "n_comp",
+                                  "fulldata_fit_pmat", "fixed_pmat",
                                   "ll_tol", "max_its", "optimization_its"))
 
     # Run the bootstrap
-    rep_sam <- pbreplicate(B, {
+    rep_sam <- pbapply::pbreplicate(B, {
       one_bat_boot_EM(boot_x = sample(x, size = length(x), replace = TRUE),
                       bat_type = bat_type, n_comp  = n_comp,
                       init_pmat  = fulldata_fit_pmat, fixed_pmat = fixed_pmat,
@@ -84,15 +89,13 @@ bootstrapEMBatMix <- function(x, B = 500, parallel = TRUE, verbose = FALSE,
     parallel::stopCluster(cl)
   } else {
     # Run the bootstrap non-parallelized
-    rep_sam <- pbreplicate(B, {
+    rep_sam <- pbapply::pbreplicate(B, {
+
       one_bat_boot_EM(boot_x = sample(x, size = length(x), replace = TRUE),
                       bat_type = bat_type, n_comp  = n_comp,
                       init_pmat  = fulldata_fit_pmat, fixed_pmat = fixed_pmat,
                       ll_tol = ll_tol, max_its = max_its, optimization_its = optimization_its)
     })
-
-    parallel::stopCluster(cl)
-
   }
 
   if (verbose) cat("\nFinished.\n")
