@@ -68,34 +68,34 @@ test_that("Fixing parameters works", {
                        fixed_pmat = fixed_pmat,
                         Q = 10, method = "bayes")
 
-
-
   expect_true(fit_pow$estimates[1, 3] == fixed_pmat[1, 3])
   expect_true(fit_pow$estimates[2, 1] == fixed_pmat[2, 1])
   expect_true(fit_pow$estimates[3, 2] == fixed_pmat[3, 2])
   expect_true(fit_pow$estimates[1, 3] == fixed_pmat[1, 3])
   expect_true(fit_pow$estimates[2, 1] == fixed_pmat[2, 1])
   expect_true(fit_pow$estimates[3, 2] == fixed_pmat[3, 2])
-
-
 })
 
 
 test_that("Bootstrap works", {
 
-  x <- rinvbatmix(50)
-  fit1 <- fitbatmix(x, method = "EM")
+  x <- rinvbatmix(200)
 
-  fit2 <- fitbatmix(x, method = "boot", B = 10)
+  # Test without parallelization
+  fit_boot <- fitbatmix(x, method = "boot", B = 3, parallel = FALSE)
+  expect_error(fit_boot, NA)
+  expect_error(summary(fit_boot), NA)
 
-
+  # Test with parallelization
+  fit_boot_2 <- fitbatmix(x, method = "boot", B = 3, parallel = TRUE)
+  expect_error(fit_boot_2, NA)
+  expect_error(summary(fit_boot_2), NA)
 })
 
 test_that("MCMC works", {
 
-  x <- rinvbatmix(50)
-
-  fit2 <- fitbatmix(x, method = "bayes", Q = 10)
-
+  x <- rinvbatmix(200)
+  fit_mcmc <- fitbatmix(x, method = "bayes", Q = 10)
+  fit_mcmc$mcmc_summary
 })
 
