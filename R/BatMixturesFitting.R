@@ -237,7 +237,7 @@ summary.batmixmod <- function(bm_mod) {
     return(bm_mod$estimates)
   } else if (bm_mod$method == "bayes") {
     return(bm_mod$mcmc_summary)
-  } else if (bm_mod$method == "EM") {
+  } else if (bm_mod$method == "boot") {
     return(bm_mod$boot_summary)
   } else {
     stop("Method not found." )
