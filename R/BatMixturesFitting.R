@@ -224,7 +224,25 @@ summarize_batmix_param_sample <- function(bm_sam, probs = c(.025, .975)) {
 }
 
 
+print.batmixmod <- function(bm_mod) {
+  cat("Mixture of ", bm_mod$bat_type,
+      " Batschelet distributions, using method '",
+      bm_mod$method, "'.\n", sep = "")
 
+  print(bm_mod$estimates)
+}
+
+summary.batmixmod <- function(bm_mod) {
+  if (bm_mod$method == "EM") {
+    return(bm_mod$estimates)
+  } else if (bm_mod$method == "bayes") {
+    return(bm_mod$mcmc_summary)
+  } else if (bm_mod$method == "EM") {
+    return(bm_mod$boot_summary)
+  } else {
+    stop("Method not found." )
+  }
+}
 
 
 #' Fit a mixture of Batschelet distributions
@@ -275,10 +293,10 @@ fitbatmix <- function(x,
 
   } else if (method == "EM") {
 
-    bm_fit$estimates   <- batmixEM(x, bat_type = bat_type, ...)
+    bm_fit$estimates  <- batmixEM(x, bat_type = bat_type, ...)
 
     # Augment the results
-    bm_fit$estimates   <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
+    bm_fit$estimates  <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
     bm_fit$est_vector <- vectorize_pmat(bm_fit$estimates)
 
   } else if (method == "boot") {
