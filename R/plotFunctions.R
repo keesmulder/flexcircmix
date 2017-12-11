@@ -12,7 +12,8 @@
 #' @examples
 #' plot_batmixfit(params = cbind(mu = c(-pi/2, 0, pi/2, pi), kp = 4, lam = c(-.9, .2, .8, 0), alph = .25))
 #'
-plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400) {
+plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
+                           hist_transparancy = .3) {
 
 
   # Initialize plot.
@@ -33,7 +34,7 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400)
   if (!missing(x)) {
     p <- p +
       ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
-                              fill = rgb(.65, .65, .85, .3), col = "white",
+                              fill = rgb(.65, .65, .85, hist_transparancy), col = "white",
                               boundary = -pi, binwidth = 2*pi / bins)
   }
 
