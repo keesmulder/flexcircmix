@@ -193,14 +193,16 @@ summarize_one_mu_vector <- function(mu_vec, probs = c(.025, .975)) {
   R_bar <- sqrt(sum(cos(mu_vec))^2 + sum(sin(mu_vec))^2) / length(mu_vec)
 
   c(mean_dir = meanDir(mu_vec),
-    circ_median = circularQuantile(mu_vec, .5),
+    circ_median = circularQuantile(mu_vec, .5, na.rm = TRUE),
     circ_se = computeCircSD(R_bar),
     circularQuantile(mu_vec, probs = probs))
 }
 
 summarize_one_lin_param <- function(pm_vec, probs = c(.025, .975)) {
-  c(mean = mean(pm_vec), median = median(pm_vec), se = sd(pm_vec),
-    quantile(pm_vec, probs = probs))
+  c(mean = mean(pm_vec, na.rm = TRUE),
+    median = median(pm_vec, na.rm = TRUE),
+    se = sd(pm_vec, na.rm = TRUE),
+    quantile(pm_vec, probs = probs, na.rm = TRUE))
 }
 
 # Function to take a sample of parameters and compute a summary of it. Can be an
