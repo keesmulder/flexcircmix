@@ -105,7 +105,13 @@ plot_movMF_as_batmix <- function(m, ...) {
 #' @param dbat_fun A function; The pdf of the chosen Batschelet distribution.
 #' @param bins The number of bins to draw in the histogram.
 #' @param res Number of points at which to evaluate the functions.
-#' @param orderColor Logical; If \code{TRUE}, plotted pdfs get darker and redder as they were sampled later.
+#' @param orderColor Logical; If \code{TRUE}, plotted pdfs get darker and redder
+#'   as they were sampled later.
+#' @param plot_n Integer; the number of parameter rows to sample from the matrix
+#'   \code{param}. This is intended for MCMC for example, where we can take a
+#'   subsample of the parameter matrix to plot for speed.
+#' @param hist_transparancy Numeric; The alpha value of the histogram of the data.
+#' @param dens_darkness Numeric; Higher numbers result in less transparent densities plotted.
 #'
 #' @return A ggplot.
 #' @export
@@ -114,6 +120,7 @@ plot_movMF_as_batmix <- function(m, ...) {
 #'
 #'
 plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(param),
+                               hist_transparancy = .3, dens_darkness = 20,
                                bins = 100, res = 400, orderColor = FALSE) {
 
   # Change to matrix if needed.
@@ -165,7 +172,7 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
                                                 lams = lam_mat[i, ], alphs = alph_mat[i, ],
                                                 dbat_fun = dbat_fun),
                                     col = rgb(ifelse(orderColor, ordseq[i], 0.2), 0.2, 0.2,
-                                              min(1, 25/plot_n)),
+                                              min(1, dens_darkness/plot_n)),
                                     n = res)
     )
   }
