@@ -35,7 +35,7 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
     p <- p +
       ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
                               fill = rgb(.65, .65, .85, hist_transparancy), col = "white",
-                              boundary = -pi, binwidth = 2*pi / bins)
+                              boundary = -pi, binwidth = 2*pi / bins) + ylab("Density")
   }
 
 
