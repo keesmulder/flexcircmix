@@ -119,7 +119,7 @@ plot_movMF_as_batmix <- function(m, ...) {
 #' @examples
 #'
 #'
-plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(param),
+plot_batmix_sample <- function(x, param, dbat_fun = dinvbat, plot_n = nrow(param),
                                hist_transparancy = .3, dens_darkness = 20,
                                bins = 100, res = 400, orderColor = FALSE) {
 
@@ -148,12 +148,12 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
                               boundary = -pi, binwidth = 2*pi / bins)
 
     # If there are no parameters given, just return the histogram.
-    if (is.na(param)) return(p)
+    if (identical(param, NA)) return(p)
   }
 
 
   # Remove some rows if we don't plot every row of param.
-  param <- param[round(seq(1, nrow(param), length.out = plot_n)), ]
+  param <- param[round(seq(1, nrow(param), length.out = plot_n)), , drop = FALSE]
 
   mu_mat   <- param[, grep("mu_[0-9]",   colnames(param)), drop = FALSE]
   kp_mat   <- param[, grep("kp_[0-9]",   colnames(param)), drop = FALSE]
