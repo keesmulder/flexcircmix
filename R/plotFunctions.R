@@ -139,6 +139,9 @@ plot_batmix_sample <- function(x = NA, param, dbat_fun = dinvbat, plot_n = nrow(
       ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
                               fill = rgb(.65, .65, .85, .3), col = "white",
                               boundary = -pi, binwidth = 2*pi / bins)
+
+    # If there are no parameters given, just return the histogram.
+    if (is.na(param)) return(p)
   }
 
 
