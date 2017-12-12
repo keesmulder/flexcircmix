@@ -4,17 +4,18 @@
 \alias{fitbatmix}
 \title{Fit a mixture of Batschelet distributions}
 \usage{
-fitbatmix(x, method = "bayes", bat_type = "power", ...)
+fitbatmix(x, method = "bayes", bat_type = "power", n_comp = 4,
+  init_pmat = matrix(NA, n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4),
+  probs = c(0.025, 0.975), ...)
 }
 \arguments{
 \item{x}{A dataset of angles in radians.}
 
-\item{method}{Character; One of "bayes", "EM", or "boot". The method of obtaining a fit.}
+\item{method}{Character; One of "bayes", "EM", or "boot". The method of
+obtaining a fit.}
 
 \item{bat_type}{Character; Either "power" or "inverse", denoting the type of
 Batschelet distribution to employ.}
-
-\item{...}{Additional arguments to be passed to the selected \code{method}.}
 
 \item{n_comp}{The number of components to be used in the mixture. This is
 fixed, so it can not be estimated.}
@@ -27,7 +28,13 @@ parameter matrix. The parameters are ordered \code{mu}, \code{kp},
 with \code{NA} for parameters to be estimated, and a numeric for each
 parameter that should be kept fixed to a specific value.}
 
-\item{verbose}{Logical; whether to print debug statements.'}
+\item{probs}{Numeric vector; The probabilities for which to compute quantiles
+in summarizing bootstrap or mcmc samples. By default, \code{probs = c(.025,
+.975)}, which corresponds to standard 95% confidence or credible intervals.}
+
+\item{...}{Additional arguments to be passed to the selected \code{method}.}
+
+\item{verbose}{Logical; whether to print debug statements.}
 }
 \value{
 An object of class 'batmixmod'.

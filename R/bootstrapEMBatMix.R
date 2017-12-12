@@ -59,11 +59,13 @@ bootstrapEMBatMix <- function(x, B = 500, parallel = TRUE, verbose = FALSE,
                                 init_pmat  = init_pmat, fixed_pmat = fixed_pmat,
                                 ll_tol = ll_tol, max_its = max_its, optimization_its = optimization_its)
 
+  # Add circular variances
+  fulldata_fit_pmat_with_cvar <- add_circ_var_to_pmat(fulldata_fit_pmat, bat_type = bat_type)
 
   if (verbose) cat("\nStarting bootstrap:\n")
 
-  est_vector <- vectorize_pmat(fulldata_fit_pmat)
-  out <- list(estimates = fulldata_fit_pmat, est_vector = est_vector)
+  est_vector <- vectorize_pmat(fulldata_fit_pmat_with_cvar)
+  out <- list(estimates = fulldata_fit_pmat_with_cvar, est_vector = est_vector)
 
   if (parallel) {
 

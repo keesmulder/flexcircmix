@@ -246,12 +246,73 @@ summary.batmixmod <- function(bm_mod) {
   }
 }
 
-# This function takes a list of bat_mix_mods, and provides a table that compares the fits.
-multisummary.batmixmod <- function(bm_mod_list) {
+# This function reorganizes a batmixmod object into a summary by component.
+bm_summary_by_component <- function(bmm, add_ci = TRUE,
+                                    add_circ_sd = TRUE,
+                                    add_circ_var = FALSE) {
 
-  bm_mod_list
+  # The reordering vector to get by-component results.
+  reorder_vector <- as.vector(sapply(1:bmm$n_components,
+                                     function(comp) grep(paste0("_", comp), names(bmm$est_vector))))
+  nms <- names(bmm$est_vector[reorder_vector])
+
+  # Gather results
+  if (bmm$method == "EM") {
+    out <- matrix(bmm$est_vector[reorder_vector])
+    rownames(out) <- nms
+  } else if(bmm$method == "boot") {
+    out <- matrix(bmm$est_vector[reorder_vector])
+    rownames(out) <- nms
+    if (add_ci) {
+      nsumcol <- ncol(bmm$boot_summary)
+      out <- cbind(out, bmm$boot_summary[reorder_vector, (nsumcol-1):nsumcol] )
+    }
+  } else if(bmm$method == "bayes") {
+    out <- matrix(bmm$est_vector[reorder_vector])
+    rownames(out) <- nms
+    if (add_ci) {
+      nsumcol <- ncol(bmm$mcmc_summary)
+      out <- cbind(out, bmm$mcmc_summary[reorder_vector, (nsumcol-1):nsumcol] )
+    }
+  }
+
+  # Remove unwanted variances.
+  if (!add_circ_sd)  out <- out[!grepl("circ_sd", nms), , drop = FALSE]
+  if (!add_circ_var) out <- out[!grepl("circ_var", nms), , drop = FALSE]
+
+  out
+}
+
+#' This function takes a list of bat_mix_mods, and provides a table that compares the fits.
+#'
+#' @param bm_mod_list A list of \code{batmixmod} objects.
+#' @param add_ci Logical; Whether to add confidence intervals.
+#' @param add_circ_sd Logical; Whether to add circular sd.
+#' @param add_circ_var Logical; Whether to add circular variance.
+#'
+#' @return A data frame with a summary.
+#' @export
+#'
+multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
+                                   add_circ_sd = TRUE, add_circ_var = FALSE) {
 
 
+  # Summarize each model in the list.
+  mod_summaries <- sapply(bm_mod_list, bm_summary_by_component,
+         add_ci = add_ci, add_circ_sd = add_circ_sd, add_circ_var = add_circ_var)
+
+  # Add NA to the missing variables.
+  max_nrow <- max(sapply(mod_summaries, nrow))
+  mod_summary_df <- as.data.frame(sapply(mod_summaries, function(x) {
+    if (nrow(x) != max_nrow) {
+      return(rbind(x, matrix(NA, ncol = ncol(x), nrow = max_nrow - nrow(x))))
+    } else {
+      return(x)
+    }
+  }))
+
+
+  mod_summary_df
 }
 
 
@@ -262,7 +323,8 @@ multisummary.batmixmod <- function(bm_mod_list) {
 #' frequentist or Bayesian methods.
 #'
 #' @param x A dataset of angles in radians.
-#' @param method Character; One of "bayes", "EM", or "boot". The method of obtaining a fit.
+#' @param method Character; One of "bayes", "EM", or "boot". The method of
+#'   obtaining a fit.
 #' @param bat_type Character; Either "power" or "inverse", denoting the type of
 #'   Batschelet distribution to employ.
 #' @param n_comp The number of components to be used in the mixture. This is
@@ -273,7 +335,10 @@ multisummary.batmixmod <- function(bm_mod_list) {
 #' @param fixed_pmat An \code{n_comp * 4} matrix, containing a parameter matrix,
 #'   with \code{NA} for parameters to be estimated, and a numeric for each
 #'   parameter that should be kept fixed to a specific value.
-#' @param verbose Logical; whether to print debug statements.'
+#' @param verbose Logical; whether to print debug statements.
+#' @param probs Numeric vector; The probabilities for which to compute quantiles
+#'   in summarizing bootstrap or mcmc samples. By default, \code{probs = c(.025,
+#'   .975)}, which corresponds to standard 95% confidence or credible intervals.
 #' @param ... Additional arguments to be passed to the selected \code{method}.
 #'
 #' @return An object of class 'batmixmod'.
@@ -288,6 +353,7 @@ fitbatmix <- function(x,
                       n_comp = 4,
                       init_pmat  = matrix(NA, n_comp, 4),
                       fixed_pmat = matrix(NA, n_comp, 4),
+                      probs = c(.025, .975),
                       ...) {
 
   # Construct fit object.
@@ -299,9 +365,10 @@ fitbatmix <- function(x,
                                                 n_comp = n_comp,
                                                 init_pmat = init_pmat,
                                                 fixed_pmat = fixed_pmat,
+
                                                 ...)
 
-    mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample)
+    mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
     mcmc_sum <- mcmc_sum[!grepl("mean_res_len", rownames(mcmc_sum)), ]
 
     bm_fit$est_vector <- mcmc_sum[, 2]
@@ -328,8 +395,7 @@ fitbatmix <- function(x,
                                           fixed_pmat = fixed_pmat,
                                           ...))
 
-    bm_fit$estimates  <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
-    bm_fit$boot_summary <- summarize_batmix_param_sample(bm_fit$boot_sample)
+    bm_fit$boot_summary <- summarize_batmix_param_sample(bm_fit$boot_sample, probs = probs)
 
   } else stop("Method not found.")
 

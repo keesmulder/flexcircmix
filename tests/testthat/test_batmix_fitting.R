@@ -26,6 +26,9 @@ test_that("EM fitbatmix wrapper works", {
     fit_pow <- fitbatmix(x, n_comp = 1, verbose = FALSE,
                          bat_type = "power", method = "EM")
     , NA)
+
+
+  expect_equal(ncol(fit_pow$estimates), 6)
 })
 
 test_that("Plotting works" , {
@@ -82,14 +85,25 @@ test_that("Bootstrap works", {
   x <- rinvbatmix(200)
 
   # Test without parallelization
-  fit_boot <- fitbatmix(x, method = "boot", B = 3, parallel = FALSE)
+  expect_error(fit_boot <- fitbatmix(x, method = "boot", B = 3, parallel = FALSE), NA)
   expect_error(fit_boot, NA)
   expect_error(summary(fit_boot), NA)
 
   # Test with parallelization
-  fit_boot_2 <- fitbatmix(x, method = "boot", B = 3, parallel = TRUE)
+  expect_error(fit_boot_2 <- fitbatmix(x, method = "boot", B = 3, parallel = TRUE), NA)
   expect_error(fit_boot_2, NA)
   expect_error(summary(fit_boot_2), NA)
+
+  expect_equal(ncol(fit_boot_2$estimates), 6)
+
+
+  # Test with different probs
+  expect_error(fit_boot_3 <- fitbatmix(x, method = "boot", B = 3, parallel = TRUE), NA)
+  expect_error(fit_boot_3, NA)
+  expect_error(summary(fit_boot_3), NA)
+
+  expect_equal(ncol(fit_boot_3$estimates), 6)
+
 })
 
 test_that("MCMC works", {
@@ -97,5 +111,7 @@ test_that("MCMC works", {
   x <- rinvbatmix(200)
   fit_mcmc <- fitbatmix(x, method = "bayes", Q = 10)
   fit_mcmc$mcmc_summary
+
+  expect_equal(ncol(fit_mcmc$estimates), 6)
 })
 
