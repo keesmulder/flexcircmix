@@ -44,6 +44,10 @@ corresponding to \eqn{\mu, \kappa, \lambda, \alpha}, in that order. Any
 element that is not \code{NA} in this matrix will be held constant at the
 given value and not sampled.}
 
+\item{joint_kp_lam}{Logical; Whether}
+
+\item{lam_bw}{Numeric; the maximum distance from the current lambda at which uniform proposals are drawn.}
+
 \item{mu_logprior_fun}{Function; A function with a single argument, which
 returns the log of the prior probability of \eqn{\mu}. Defaults to a
 uniform prior function.}
@@ -62,7 +66,9 @@ uniform prior function.}
 \code{rep(1, n_comp)}, which is the noninformative uniform prior over the
 \code{n_comp} simplex.}
 
-\item{verbose}{Logical; Whether or not to print debug information.}
+\item{compute_variance}{Logical; Whether to add circular variance to the returned mcmc sample.}
+
+\item{verbose}{Integer up to 4; Determines the amount of printed debug information.}
 }
 \value{
 A numeric matrix of sampled parameter values.
