@@ -132,6 +132,20 @@ sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
 }
 
 
+#' A rescaled beta prior for lambda
+#'
+#' This prior is symmetric between -1 and 1, and captures the prior belief that
+#' values of \code{lam} on the boundary of the parameter space are a prior
+#' unlikely.
+#'
+#' @param lam Numeric;
+#'
+#' @return The log-prior probability.
+#'
+lam_beta_log_prior_2_2 <- function(lam) {
+  dbeta( (lam + 1) / 2, 2, 2, log = TRUE)
+}
+
 
 #' MCMC sampling for Batschelet-type distributions.
 #'
