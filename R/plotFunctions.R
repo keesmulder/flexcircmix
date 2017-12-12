@@ -13,7 +13,7 @@
 #' plot_batmixfit(params = cbind(mu = c(-pi/2, 0, pi/2, pi), kp = 4, lam = c(-.9, .2, .8, 0), alph = .25))
 #'
 plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
-                           hist_transparancy = .3) {
+                           hist_alpha = .3) {
 
 
   # Initialize plot.

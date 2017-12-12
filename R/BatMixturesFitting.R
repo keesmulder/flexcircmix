@@ -252,7 +252,7 @@ bm_summary_by_component <- function(bmm, add_ci = TRUE,
                                     add_circ_var = FALSE) {
 
   # The reordering vector to get by-component results.
-  reorder_vector <- as.vector(sapply(1:bmm$n_components,
+  reorder_vector <- as.vector(sapply(1:nrow(bmm$estimates),
                                      function(comp) grep(paste0("_", comp), names(bmm$est_vector))))
   nms <- names(bmm$est_vector[reorder_vector])
 
