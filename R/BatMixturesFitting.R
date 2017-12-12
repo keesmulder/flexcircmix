@@ -249,7 +249,7 @@ summary.batmixmod <- function(bm_mod) {
 # This function takes a list of bat_mix_mods, and provides a table that compares the fits.
 multisummary.batmixmod <- function(bm_mod_list) {
 
-
+  bm_mod_list
 
 
 }
@@ -285,6 +285,9 @@ multisummary.batmixmod <- function(bm_mod_list) {
 fitbatmix <- function(x,
                       method = "bayes",
                       bat_type = "power",
+                      n_comp = 4,
+                      init_pmat  = matrix(NA, n_comp, 4),
+                      fixed_pmat = matrix(NA, n_comp, 4),
                       ...) {
 
   # Construct fit object.
@@ -292,7 +295,11 @@ fitbatmix <- function(x,
 
   if (method == "bayes") {
 
-    bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, bat_type = bat_type, ...)
+    bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, bat_type = bat_type,
+                                                n_comp = n_comp,
+                                                init_pmat = init_pmat,
+                                                fixed_pmat = fixed_pmat,
+                                                ...)
 
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample)
     mcmc_sum <- mcmc_sum[!grepl("mean_res_len", rownames(mcmc_sum)), ]
@@ -303,7 +310,11 @@ fitbatmix <- function(x,
 
   } else if (method == "EM") {
 
-    bm_fit$estimates  <- batmixEM(x, bat_type = bat_type, ...)
+    bm_fit$estimates  <- batmixEM(x, bat_type = bat_type,
+                                  n_comp = n_comp,
+                                  init_pmat = init_pmat,
+                                  fixed_pmat = fixed_pmat,
+                                  ...)
 
     # Augment the results
     bm_fit$estimates  <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
@@ -311,14 +322,21 @@ fitbatmix <- function(x,
 
   } else if (method == "boot") {
 
-    bm_fit <- c(bm_fit, bootstrapEMBatMix(x, bat_type = bat_type, ...))
+    bm_fit <- c(bm_fit, bootstrapEMBatMix(x, bat_type = bat_type,
+                                          n_comp = n_comp,
+                                          init_pmat = init_pmat,
+                                          fixed_pmat = fixed_pmat,
+                                          ...))
+
     bm_fit$estimates  <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
     bm_fit$boot_summary <- summarize_batmix_param_sample(bm_fit$boot_sample)
 
   } else stop("Method not found.")
 
-  rownames(bm_fit$estimates) <- paste("comp", 1:nrow(bm_fit$estimates), sep = "_")
+  bm_fit$n_components <- nrow(bm_fit$estimates)
+  bm_fit$n_parameters <- sum(is.na(fixed_pmat))
 
+  rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
   class(bm_fit) <- c("batmixmod", class(bm_fit))
 
   bm_fit

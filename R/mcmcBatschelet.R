@@ -141,6 +141,7 @@ sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
 #' @param lam Numeric;
 #'
 #' @return The log-prior probability.
+#' @export
 #'
 lam_beta_log_prior_2_2 <- function(lam) {
   dbeta( (lam + 1) / 2, 2, 2, log = TRUE)
