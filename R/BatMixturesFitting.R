@@ -246,6 +246,14 @@ summary.batmixmod <- function(bm_mod) {
   }
 }
 
+# This function takes a list of bat_mix_mods, and provides a table that compares the fits.
+multisummary.batmixmod <- function(bm_mod_list) {
+
+
+
+
+}
+
 
 #' Fit a mixture of Batschelet distributions
 #'
@@ -304,6 +312,7 @@ fitbatmix <- function(x,
   } else if (method == "boot") {
 
     bm_fit <- c(bm_fit, bootstrapEMBatMix(x, bat_type = bat_type, ...))
+    bm_fit$estimates  <- add_circ_var_to_pmat(bm_fit$estimates, bat_type = bat_type)
     bm_fit$boot_summary <- summarize_batmix_param_sample(bm_fit$boot_sample)
 
   } else stop("Method not found.")

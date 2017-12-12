@@ -186,7 +186,10 @@ lam_beta_log_prior_2_2 <- function(lam) {
 #'   \eqn{\alpha} is given its conjugate Dirichlet prior. The default is
 #'   \code{rep(1, n_comp)}, which is the noninformative uniform prior over the
 #'   \code{n_comp} simplex.
-#' @param verbose Logical; Whether or not to print debug information.
+#' @param joint_kp_lam Logical; Whether
+#' @param verbose Integer up to 4; Determines the amount of printed debug information.
+#' @param lam_bw Numeric; the maximum distance from the current lambda at which uniform proposals are drawn.
+#' @param compute_variance Logical; Whether to add circular variance to the returned mcmc sample.
 #'
 #' @return A numeric matrix of sampled parameter values.
 #' @export
