@@ -316,6 +316,22 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 }
 
 
+#' Plot a Batschelet-type mixture model
+#'
+#' @param bmm A \code{batmixmod} object.
+#' @param ... Additional arguments to be passed to \code{plot_batmixfit}.
+#'
+#' @return A \code{ggplot}.
+#' @export
+#'
+#' @examples
+#' x <- rinvbatmix(50)
+#' plot(fitbatmix(x, method = "EM"))
+#'
+plot.batmixmod <- function(bmm, ...) {
+  plot_batmixfit(bmm$x, params = bmm$estimates, ...)
+}
+
 #' Fit a mixture of Batschelet distributions
 #'
 #' This is the main function of the package \code{flexcircmix}, and functions as
@@ -345,7 +361,8 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 #' @export
 #'
 #' @examples
-#'
+#' x <- rinvbatmix(50)
+#' fitbatmix(x, method = "EM")
 #'
 fitbatmix <- function(x,
                       method = "bayes",
