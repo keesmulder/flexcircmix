@@ -34,7 +34,7 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
   if (!missing(x)) {
     p <- p +
       ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
-                              fill = rgb(.65, .65, .85, hist_transparancy), col = "white",
+                              fill = rgb(.65, .65, .85, hist_alpha), col = "white",
                               boundary = -pi, binwidth = 2*pi / bins)
   }
 
@@ -121,7 +121,7 @@ plot_movMF_as_batmix <- function(m, ...) {
 #'
 #'
 plot_batmix_sample <- function(x, param, dbat_fun = dinvbat, plot_n = nrow(param),
-                               hist_transparancy = .3, dens_darkness = 20,
+                               hist_alpha = .3, dens_darkness = 20,
                                bins = 100, res = 400, orderColor = FALSE) {
 
   # Change to matrix if needed.
@@ -145,7 +145,7 @@ plot_batmix_sample <- function(x, param, dbat_fun = dinvbat, plot_n = nrow(param
   if (!missing(x)) {
     p <- p +
       ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
-                              fill = rgb(.65, .65, .85, hist_transparancy), col = "white",
+                              fill = rgb(.65, .65, .85, hist_alpha), col = "white",
                               boundary = -pi, binwidth = 2*pi / bins)
 
     # If there are no parameters given, just return the histogram.

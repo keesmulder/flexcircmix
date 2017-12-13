@@ -5,7 +5,7 @@
 \title{Plot a mixture of Batschelet type distributions.}
 \usage{
 plot_batmixfit(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
-  hist_transparancy = 0.3)
+  hist_alpha = 0.3)
 }
 \arguments{
 \item{x}{Optional data vector of angles in radians to plot a histogram of.}

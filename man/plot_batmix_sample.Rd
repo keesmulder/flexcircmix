@@ -5,7 +5,7 @@
 \title{Plot a sample of Batschelet mixture parameter sets.}
 \usage{
 plot_batmix_sample(x, param, dbat_fun = dinvbat, plot_n = nrow(param),
-  hist_transparancy = 0.3, dens_darkness = 20, bins = 100, res = 400,
+  hist_alpha = 0.3, dens_darkness = 20, bins = 100, res = 400,
   orderColor = FALSE)
 }
 \arguments{
@@ -19,8 +19,6 @@ plot_batmix_sample(x, param, dbat_fun = dinvbat, plot_n = nrow(param),
 \code{param}. This is intended for MCMC for example, where we can take a
 subsample of the parameter matrix to plot for speed.}
 
-\item{hist_transparancy}{Numeric; The alpha value of the histogram of the data.}
-
 \item{dens_darkness}{Numeric; Higher numbers result in less transparent densities plotted.}
 
 \item{bins}{The number of bins to draw in the histogram.}
@@ -29,6 +27,8 @@ subsample of the parameter matrix to plot for speed.}
 
 \item{orderColor}{Logical; If \code{TRUE}, plotted pdfs get darker and redder
 as they were sampled later.}
+
+\item{hist_transparancy}{Numeric; The alpha value of the histogram of the data.}
 }
 \value{
 A ggplot.

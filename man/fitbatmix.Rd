@@ -45,6 +45,7 @@ an interface to fit mixtures of Batschelet-type distributions, using
 frequentist or Bayesian methods.
 }
 \examples{
-
+x <- rinvbatmix(50)
+fitbatmix(x, method = "EM")
 
 }
