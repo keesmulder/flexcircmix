@@ -374,7 +374,8 @@ fitbatmix <- function(x,
                       ...) {
 
   # Construct fit object.
-  bm_fit <- list(method = method, bat_type = bat_type, x = x, call = match.call())
+  bm_fit <- list(method = method, bat_type = bat_type, x = x,
+                 call = match.call())
 
   if (method == "bayes") {
 
@@ -418,6 +419,9 @@ fitbatmix <- function(x,
 
   bm_fit$n_components <- nrow(bm_fit$estimates)
   bm_fit$n_parameters <- sum(is.na(fixed_pmat))
+
+  # Add the arguments of the call to the output.
+  bm_fit$args <- list(...)
 
   rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
   class(bm_fit) <- c("batmixmod", class(bm_fit))
