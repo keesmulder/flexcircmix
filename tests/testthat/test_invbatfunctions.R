@@ -9,6 +9,12 @@ test_that("Distribution is computed correctly", {
   expect_equal(dinvbat(3, mu = 2, kp = -1, lam = .2), NA)
   expect_equal(dinvbat(3, mu = 2, kp = 1, lam = 1.2), NA)
 
+  lam <- .4
+  kpsq <- seq(.2, 8, by = .2)
+  plot(sapply(kpsq, function(x) flexcircmix:::K_kplam(x, lam)),
+       sapply(kpsq, function(x) 1 - lam * besselI(x, 1) / besselI(x, 0)),
+       xlab = "K_{kappa, lambda}", ylab = " 1 - lam * I(kp, 1) / I(kp, 0)")
+
 })
 
 
