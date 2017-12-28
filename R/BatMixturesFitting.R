@@ -339,7 +339,7 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 #' @param verbose Logical; whether to print debug statements.
 #' @param probs Numeric vector; The probabilities for which to compute quantiles
 #'   in summarizing bootstrap or mcmc samples. By default, \code{probs = c(.025,
-#'   .975)}, which corresponds to standard 95% confidence or credible intervals.
+#'   .975)}, which corresponds to standard 95\% confidence or credible intervals.
 #' @param ... Additional arguments to be passed to the selected \code{method}.
 #'
 #' @return An object of class 'batmixmod'.

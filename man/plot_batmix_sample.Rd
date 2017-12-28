@@ -37,6 +37,9 @@ A ggplot.
 Plot a sample of Batschelet mixture parameter sets.
 }
 \examples{
+x <- rinvbatmix(50)
+mod <- fitbatmix(x, method = "bayes",  Q = 10)
 
+plot_batmix_sample(x, mod$mcmc_sample, dens_darkness = 5)
 
 }
