@@ -43,7 +43,7 @@ s_lam <- function(x, lam) {
 #'
 s_lam_inv <- function(x, lam) {
   # Compute the root to obtain the inverse.
-  uniroot(function(y) s_lam(y, lam) - x, lower = -pi, upper = pi)$root
+  stats::uniroot(function(y) s_lam(y, lam) - x, lower = -pi, upper = pi)$root
 }
 
 #' Vectorized version of the inversion of s_lam
