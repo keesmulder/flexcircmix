@@ -10,8 +10,8 @@
 #' @export
 #'
 coef_polar_movMF <- function(m) {
-  t1 <- coef(m)$theta[, 1]
-  t2 <- coef(m)$theta[, 2]
+  t1 <- stats::coef(m)$theta[, 1]
+  t2 <- stats::coef(m)$theta[, 2]
   mu <- atan2(t2, t1)
   kp <- sqrt(t1^2 + t2^2)
   cbind(mu = mu, kp = kp)

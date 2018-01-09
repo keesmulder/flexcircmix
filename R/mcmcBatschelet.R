@@ -23,10 +23,11 @@ sample_mu_bat <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
   ll_can <- ll_rhs_bat(x, mu_can, kp, lam, tlam_fun)
   ll_cur <- ll_rhs_bat(x, mu_cur, kp, lam, tlam_fun)
 
-  # The proposal is von Mises and thus symmetric, so the transition probabilities of MH are omitted here.
-  mu_lograt <- ll_can + mu_logprior_fun(mu_can) - ll_cur - mu_logprior_fun(mu)
+  # The proposal is von Mises and thus symmetric, so the transition
+  # probabilities of MH are omitted here.
+  mu_lograt <- ll_can + mu_logprior_fun(mu_can) - ll_cur - mu_logprior_fun(mu_cur)
 
-  if (mu_lograt > log(runif(1))) {
+  if (mu_lograt > log(stats::runif(1))) {
     return(mu_can)
   } else {
     return(mu_cur)
@@ -51,9 +52,10 @@ sample_mu_bat_2 <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
   logp_mu_can_to_cur <- dvm(mu_cur, mu_hat, kp, log = TRUE)
   logp_mu_cur_to_can <- dvm(mu_can, mu_hat, kp, log = TRUE)
 
-  mu_lograt <- ll_can + mu_logprior_fun(mu_can) + logp_mu_can_to_cur - ll_cur - mu_logprior_fun(mu_cur) - logp_mu_cur_to_can
+  mu_lograt <- ll_can + mu_logprior_fun(mu_can) + logp_mu_can_to_cur -
+    ll_cur - mu_logprior_fun(mu_cur) - logp_mu_cur_to_can
 
-  if (mu_lograt > log(runif(1))) {
+  if (mu_lograt > log(stats::runif(1))) {
     return(mu_can)
   } else {
     return(mu_cur)
@@ -64,17 +66,18 @@ sample_mu_bat_2 <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
 sample_kp_bat <- function(x, mu, kp_cur, lam, llbat, kp_logprior_fun) {
 
   # Sample a candidate
-  kp_can <- rchisq(1, df = kp_cur)
+  kp_can <- stats::rchisq(1, df = kp_cur)
 
   ll_can <- llbat(x, mu, kp_can, lam, log = TRUE)
   ll_cur <- llbat(x, mu, kp_cur, lam, log = TRUE)
 
-  logp_kp_can_to_cur <- dchisq(kp_cur, kp_can, log = TRUE)
-  logp_kp_cur_to_can <- dchisq(kp_can, kp_cur, log = TRUE)
+  logp_kp_can_to_cur <- stats::dchisq(kp_cur, kp_can, log = TRUE)
+  logp_kp_cur_to_can <- stats::dchisq(kp_can, kp_cur, log = TRUE)
 
-  kp_lograt <- ll_can + kp_logprior_fun(kp_can) + logp_kp_can_to_cur - ll_cur - kp_logprior_fun(kp_cur) - logp_kp_cur_to_can
+  kp_lograt <- ll_can + kp_logprior_fun(kp_can) + logp_kp_can_to_cur -
+    ll_cur - kp_logprior_fun(kp_cur) - logp_kp_cur_to_can
 
-  if (kp_lograt > log(runif(1))) {
+  if (kp_lograt > log(stats::runif(1))) {
     return(kp_can)
   } else {
     return(kp_cur)
@@ -84,18 +87,20 @@ sample_kp_bat <- function(x, mu, kp_cur, lam, llbat, kp_logprior_fun) {
 sample_lam_bat <- function(x, mu, kp, lam_cur, llbat, lam_logprior_fun, lam_bw = .05) {
 
   # Sample a candidate
-  lam_can <- runif(1, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw))
+  lam_can <- stats::runif(1, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw))
 
   ll_can <- llbat(x, mu, kp, lam_can)
   ll_cur <- llbat(x, mu, kp, lam_cur)
 
-  logp_lam_can_to_cur <- dunif(lam_cur, max(-1, lam_can - lam_bw), min(1, lam_can + lam_bw), log = TRUE)
-  logp_lam_cur_to_can <- dunif(lam_can, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw), log = TRUE)
+  logp_lam_can_to_cur <- stats::dunif(lam_cur, max(-1, lam_can - lam_bw),
+                                      min(1, lam_can + lam_bw), log = TRUE)
+  logp_lam_cur_to_can <- stats::dunif(lam_can, max(-1, lam_cur - lam_bw),
+                                      min(1, lam_cur + lam_bw), log = TRUE)
 
   lam_lograt <- ll_can + lam_logprior_fun(lam_can) + logp_lam_can_to_cur -
     ll_cur - lam_logprior_fun(lam_cur) - logp_lam_cur_to_can
 
-  if (lam_lograt > log(runif(1))) {
+  if (lam_lograt > log(stats::runif(1))) {
     return(lam_can)
   } else {
     return(lam_cur)
@@ -108,13 +113,21 @@ sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
                                   kp_logprior_fun, lam_logprior_fun) {
 
   # Sample a candidate
-  kp_can  <- rchisq(1, df = kp_cur)
-  lam_can <- runif(1, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw))
+  kp_can  <- stats::rchisq(1, df = kp_cur)
+  lam_can <- stats::runif(1,
+                          max(-1, lam_cur - lam_bw),
+                          min(1, lam_cur + lam_bw))
 
-  logp_kp_can_to_cur <- dchisq(kp_cur, kp_can, log = TRUE)
-  logp_kp_cur_to_can <- dchisq(kp_can, kp_cur, log = TRUE)
-  logp_lam_can_to_cur <- dunif(lam_cur, max(-1, lam_can - lam_bw), min(1, lam_can + lam_bw), log = TRUE)
-  logp_lam_cur_to_can <- dunif(lam_can, max(-1, lam_cur - lam_bw), min(1, lam_cur + lam_bw), log = TRUE)
+  logp_kp_can_to_cur <- stats::dchisq(kp_cur, kp_can, log = TRUE)
+  logp_kp_cur_to_can <- stats::dchisq(kp_can, kp_cur, log = TRUE)
+  logp_lam_can_to_cur <- stats::dunif(lam_cur,
+                                      max(-1, lam_can - lam_bw),
+                                      min(1, lam_can + lam_bw),
+                                      log = TRUE)
+  logp_lam_cur_to_can <- stats::dunif(lam_can,
+                                      max(-1, lam_cur - lam_bw),
+                                      min(1, lam_cur + lam_bw),
+                                      log = TRUE)
 
   ll_can <- llbat(x, mu, kp_can, lam_can, log = TRUE)
   ll_cur <- llbat(x, mu, kp_cur, lam_cur, log = TRUE)
@@ -124,7 +137,7 @@ sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
     ll_cur - kp_logprior_fun(kp_cur) - lam_logprior_fun(lam_cur) -
     logp_kp_cur_to_can - logp_lam_cur_to_can
 
-  if (kplam_lograt > log(runif(1))) {
+  if (kplam_lograt > log(stats::runif(1))) {
     return(c(kp_can, lam_can))
   } else {
     return(c(kp_cur, lam_cur))
@@ -144,7 +157,7 @@ sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
 #' @export
 #'
 lam_beta_log_prior_2_2 <- function(lam) {
-  dbeta( (lam + 1) / 2, 2, 2, log = TRUE)
+  stats::dbeta( (lam + 1) / 2, 2, 2, log = TRUE)
 }
 
 

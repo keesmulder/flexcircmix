@@ -176,7 +176,7 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
     while (!accepted) {
 
       th_can <- force_neg_pi_pi(circglmbayes::rvmc(1, 0, kp))
-      u <- runif(1, 0, 1)
+      u <- stats::runif(1, 0, 1)
 
       # The weight function alters the von Mises candidate to include peakedness set by the lambda
       w_lam <- weight_fun_rinvbat(th_can, lam)
