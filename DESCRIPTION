@@ -6,7 +6,9 @@ Author: Kees Mulder
 Maintainer: Kees Mulder <keestimmulder@gmail.com>
 URL: https://github.com/keesmulder/flexcircmix
 BugReports: https://github.com/keesmulder/flexcircmix/issues
-Description: An R package to fit mixtures of flexible circular distributions, in particular with symmetric inverse batschelet distributions, which allow for peaked distributions.
+Description: An R package to fit mixtures of flexible circular distributions, 
+    in particular with symmetric inverse batschelet distributions, which allow
+    for sharp peaks and flat tops.
 License: GPL-3
 Encoding: UTF-8
 Imports: ggplot2, 

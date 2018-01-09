@@ -10,12 +10,17 @@
 #' @param weights A vector of length \code{length(x)}, which gives importace
 #'   weights to be used for x.
 #' @param max_its Used only if neither \code{fixed_kp} nor \code{fixed_lam} is
-#'   provided. The maximum number of iterations for the Nelder-Mead optimization.
+#'   provided. The maximum number of iterations for the Nelder-Mead
+#'   optimization.
 #' @param kp_max Used only if \code{fixed_lam} is provided. The maximum value
 #'   for kappa to search for.
-#' @param likfunbat_fun A function that returns a function, which is the desired likelihood function to maximize over. Either \code{likfuninvbat} (the default) or \code{likfunpowbat}.
-#' @param init_kp An initial value for \eqn{\kappa}, only used if neither \eqn{\kappa} or \eqn{\lambda} is fixed.
-#' @param init_lam An initial value for \eqn{\lambda}, only used if neither \eqn{\kappa} or \eqn{\lambda} is fixed.
+#' @param likfunbat_fun A function that returns a function, which is the desired
+#'   likelihood function to maximize over. Either \code{likfuninvbat} (the
+#'   default) or \code{likfunpowbat}.
+#' @param init_kp An initial value for \eqn{\kappa}, only used if neither
+#'   \eqn{\kappa} or \eqn{\lambda} is fixed.
+#' @param init_lam An initial value for \eqn{\lambda}, only used if neither
+#'   \eqn{\kappa} or \eqn{\lambda} is fixed.
 #'
 #' @return The maximum likelihood estimates for the \code{mu}, \code{kp}, and
 #'   \code{lam}.

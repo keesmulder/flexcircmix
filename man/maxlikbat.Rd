@@ -11,7 +11,9 @@ maxlikbat(x, likfunbat_fun = likfuninvbat, weights, fixed_mu = NA,
 \arguments{
 \item{x}{An set of angles in radians.}
 
-\item{likfunbat_fun}{A function that returns a function, which is the desired likelihood function to maximize over. Either \code{likfuninvbat} (the default) or \code{likfunpowbat}.}
+\item{likfunbat_fun}{A function that returns a function, which is the desired
+likelihood function to maximize over. Either \code{likfuninvbat} (the
+default) or \code{likfunpowbat}.}
 
 \item{weights}{A vector of length \code{length(x)}, which gives importace
 weights to be used for x.}
@@ -25,12 +27,15 @@ value of kp.}
 \item{fixed_lam}{If NA, lam will be estimated. Else, a numeric giving the
 fixed value of lam.}
 
-\item{init_kp}{An initial value for \eqn{\kappa}, only used if neither \eqn{\kappa} or \eqn{\lambda} is fixed.}
+\item{init_kp}{An initial value for \eqn{\kappa}, only used if neither
+\eqn{\kappa} or \eqn{\lambda} is fixed.}
 
-\item{init_lam}{An initial value for \eqn{\lambda}, only used if neither \eqn{\kappa} or \eqn{\lambda} is fixed.}
+\item{init_lam}{An initial value for \eqn{\lambda}, only used if neither
+\eqn{\kappa} or \eqn{\lambda} is fixed.}
 
 \item{max_its}{Used only if neither \code{fixed_kp} nor \code{fixed_lam} is
-provided. The maximum number of iterations for the Nelder-Mead optimization.}
+provided. The maximum number of iterations for the Nelder-Mead
+optimization.}
 
 \item{kp_max}{Used only if \code{fixed_lam} is provided. The maximum value
 for kappa to search for.}
