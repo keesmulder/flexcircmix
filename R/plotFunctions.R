@@ -38,7 +38,7 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
   if (!missing(x)) {
     p <- p +
       ggplot2::geom_histogram(
-        apping = ggplot2::aes_string(x = "x", y = "..density.."),
+        mapping = ggplot2::aes_string(x = "x", y = "..density.."),
         fill = grDevices::rgb(.65, .65, .85, hist_alpha), col = "white",
         boundary = -pi, binwidth = 2*pi / bins)
   }
