@@ -21,7 +21,7 @@
 #' dbatmix(x)
 #'
 #' curve(dbatmix(x), -pi, pi)
-#' curve(dbatmix(x, dbatfun = dpowbat), -pi, pi)
+#' curve(dbatmix(x, dbat_fun = dpowbat), -pi, pi)
 #'
 dbatmix <- function(x, dbat_fun = dinvbat,
                        mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),

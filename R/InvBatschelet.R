@@ -235,7 +235,7 @@ likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
 
 #' Likelihood function of inverse Batschelet.
 #'
-#'  @rdname likfuninvbat
+#'  @describeIn likfuninvbat
 #'  @export
 #'
 likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {

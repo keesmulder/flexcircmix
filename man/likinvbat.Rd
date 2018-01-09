@@ -7,6 +7,6 @@
 likinvbat(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE)
 }
 \description{
-@rdname likfuninvbat
+@describeIn likfuninvbat
  @export
 }
