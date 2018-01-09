@@ -1,7 +1,7 @@
 Package: flexcircmix
 Type: Package
 Title: Fitting Mixtures Of Flexible Circular Distributions
-Version: 0.1.0
+Version: 0.2.0.9000
 Author: Kees Mulder
 Maintainer: Kees Mulder <keestimmulder@gmail.com>
 Description: An R package to fit mixtures of flexible circular distributions, in particular with symmetric inverse batschelet distributions, which allow for peaked distributions.
