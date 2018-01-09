@@ -61,10 +61,10 @@ powbat_nc <- function(kp, lam) {
   # some values of lambda, particularly very high, this might fail and the
   # tolerance can be lowered for a sensible answer.
   tryCatch(
-    integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi)$value,
+    stats::integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi)$value,
 
     error = function(e) {
-      return(integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi,
+      return(stats::integrate(function(x) dpowbatkern(x, mu = 0, kp, lam, log = FALSE), -pi, pi,
                        abs.tol = 1)$value)
     })
 }
