@@ -5,6 +5,8 @@
 #' @param dbat_fun A function; the Batschelet function to use. Defaults to the
 #'   Inverse Batschelet Function.
 #' @param bins Integer; The number of bins to use in the optional histogram.
+#' @param hist_alpha Numeric; The alpha value of the histogram of the
+#'   data.
 #' @param res Integer; The number of points at which to evaluate the density
 #'   function.
 #'
@@ -85,6 +87,7 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
 #' Plot a result from movMF using the Batschelet mixture plotting functions.
 #'
 #' @param m A movMF results object.
+#' @param ... Additional arguments to be passed to \code{plot_batmixfit}.
 #'
 #' @return A ggplot.
 #' @export
@@ -131,7 +134,7 @@ plot.batmixmod <- function(x, ...) {
 #' @param plot_n Integer; the number of parameter rows to sample from the matrix
 #'   \code{param}. This is intended for MCMC for example, where we can take a
 #'   subsample of the parameter matrix to plot for speed.
-#' @param hist_transparancy Numeric; The alpha value of the histogram of the
+#' @param hist_alpha Numeric; The alpha value of the histogram of the
 #'   data.
 #' @param dens_darkness Numeric; Higher numbers result in less transparent
 #'   densities plotted.

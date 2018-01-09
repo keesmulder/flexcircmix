@@ -47,7 +47,7 @@ one_bat_boot_EM <- function(boot_x, bat_type = "power", n_comp  = 4,
 #' @examples
 #' x <- rinvbatmix(100)
 #'
-#'  bootstrapEMBatMix(x, B = 5)
+#'  bootstrapEMBatMix(x, B = 5, parallel = FALSE)
 #'
 bootstrapEMBatMix <- function(x, B = 500, parallel = TRUE, verbose = FALSE,
                               bat_type = "power", n_comp  = 4,
