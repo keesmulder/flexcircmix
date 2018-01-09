@@ -4,12 +4,12 @@
 \alias{plot.batmixmod}
 \title{Plot a Batschelet-type mixture model}
 \usage{
-\method{plot}{batmixmod}(object, ...)
+\method{plot}{batmixmod}(x, ...)
 }
 \arguments{
-\item{...}{Additional arguments to be passed to \code{plot_batmixfit}.}
+\item{x}{A \code{batmixmod} object.}
 
-\item{bmm}{A \code{batmixmod} object.}
+\item{...}{Additional arguments to be passed to \code{plot_batmixfit}.}
 }
 \value{
 A \code{ggplot}.

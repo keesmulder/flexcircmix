@@ -19,16 +19,18 @@ plot_batmix_sample(x, param, dbat_fun = dinvbat, plot_n = nrow(param),
 \code{param}. This is intended for MCMC for example, where we can take a
 subsample of the parameter matrix to plot for speed.}
 
-\item{dens_darkness}{Numeric; Higher numbers result in less transparent densities plotted.}
+\item{dens_darkness}{Numeric; Higher numbers result in less transparent
+densities plotted.}
 
 \item{bins}{The number of bins to draw in the histogram.}
 
 \item{res}{Number of points at which to evaluate the functions.}
 
-\item{orderColor}{Logical; If \code{TRUE}, plotted pdfs get darker and redder
-as they were sampled later.}
+\item{orderColor}{Logical; If \code{TRUE}, plotted pdfs get darker and more
+red as they were sampled later.}
 
-\item{hist_transparancy}{Numeric; The alpha value of the histogram of the data.}
+\item{hist_transparancy}{Numeric; The alpha value of the histogram of the
+data.}
 }
 \value{
 A ggplot.

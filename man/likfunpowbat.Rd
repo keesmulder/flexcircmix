@@ -12,7 +12,8 @@ likpowbat(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE)
 \arguments{
 \item{x}{An set of angles in radians.}
 
-\item{weights}{A vector of length \code{length(x)}, which gives importace weights to be used for x.}
+\item{weights}{A vector of length \code{length(x)}, which gives importace
+weights to be used for \code{x}.}
 
 \item{log}{If \code{TRUE} (the default), the log-likelihood is used.}
 
@@ -23,9 +24,9 @@ likpowbat(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE)
 \item{lam}{The shape parameter (peakedness), -1 < \code{lam} < 1.}
 }
 \value{
-\code{likpowbat} returns a value, the likelihood given the data and parameters.
-  \code{likfunpowbat} returns a function of mu, kp and lam, which can be evaluated later for a
-  given set of parameters.
+\code{likpowbat} returns a value, the likelihood given the data and
+  parameters. \code{likfunpowbat} returns a function of mu, kp and lam, which
+  can be evaluated later for a given set of parameters.
 }
 \description{
 Obtain the likelihood of a power Batschelet distribution
@@ -38,6 +39,13 @@ Likelihood function of the power Batschelet function
 }}
 
 \examples{
+vm_data <- circglmbayes::rvmc(10, 1, 5)
+llfun <- likfunpowbat(vm_data)
 
+# log-likelihood value of true parameters.
+llfun(mu = 1, kp = 5, lam = 0)
 
+# Plot the conditional log-likelihood.
+kp_conditional_ll <- Vectorize(function(x) llfun(mu = 1, kp = x, lam = 0))
+curve(kp_conditional_ll, 0, 20)
 }

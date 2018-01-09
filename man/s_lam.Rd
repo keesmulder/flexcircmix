@@ -27,10 +27,3 @@ Inverse Batschelet inverse subfunction
 
 Vectorized version of the inversion of s_lam
 }
-\section{Functions}{
-\itemize{
-\item \code{s_lam_inv}: 
-
-\item \code{s_lam_inv_vec}: 
-}}
-

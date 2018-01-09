@@ -12,11 +12,13 @@ plot_batmixfit(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
 
 \item{params}{A matrix of parameters.}
 
-\item{dbat_fun}{A function; the Batschelet function to use. Defaults to the Inverse Batschelet Function.}
+\item{dbat_fun}{A function; the Batschelet function to use. Defaults to the
+Inverse Batschelet Function.}
 
 \item{bins}{Integer; The number of bins to use in the optional histogram.}
 
-\item{res}{Integer; The number of points at which to evaluate the density function.}
+\item{res}{Integer; The number of points at which to evaluate the density
+function.}
 }
 \value{
 A ggplot.
@@ -25,6 +27,7 @@ A ggplot.
 Plot a mixture of Batschelet type distributions.
 }
 \examples{
-plot_batmixfit(params = cbind(mu = c(-pi/2, 0, pi/2, pi), kp = 4, lam = c(-.9, .2, .8, 0), alph = .25))
+plot_batmixfit(params = cbind(mu = c(-pi/2, 0, pi/2, pi), kp = 4,
+                              lam = c(-.9, .2, .8, 0), alph = .25))
 
 }
