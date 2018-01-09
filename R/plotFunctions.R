@@ -98,7 +98,7 @@ plot_movMF_as_batmix <- function(m, ...) {
 
 #' Plot a Batschelet-type mixture model
 #'
-#' @param bmm A \code{batmixmod} object.
+#' @param x A \code{batmixmod} object.
 #' @param ... Additional arguments to be passed to \code{plot_batmixfit}.
 #'
 #' @return A \code{ggplot}.
@@ -108,8 +108,8 @@ plot_movMF_as_batmix <- function(m, ...) {
 #' x <- rinvbatmix(50)
 #' plot(fitbatmix(x, method = "EM"))
 #'
-plot.batmixmod <- function(object, ...) {
-  plot_batmixfit(object$x, params = object$estimates, ...)
+plot.batmixmod <- function(x, ...) {
+  plot_batmixfit(x$x, params = object$estimates, ...)
 }
 
 
