@@ -107,17 +107,21 @@ dinvbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 
 #' The von-Mises based symmetric inverse Batschelet distribution
 #'
-#' The inverse Batschelet distribution, with mean direction \code{mu}, concentration parameter \code{kp}, and
-#' shape (peakedness) parameter \code{lam}. This is the von Mises based version, without a skewness
+#' The inverse Batschelet distribution, with mean direction \code{mu},
+#' concentration parameter \code{kp}, and shape (peakedness) parameter
+#' \code{lam}. This is the von Mises based version, without a skewness
 #' parameter.
 #'
 #' @param x An angle in radians.
 #' @param mu A mean direction, in radians.
 #' @param kp Numeric, \eqn{> 0,}the concentration parameter.
 #' @param lam The shape parameter (peakedness), -1 < \code{lam} < 1.
+#' @param n The number of random variates to obtain.
 #' @param log Logical; whether to return the log of the probability or not.
 #'
-#' @return Numeric, the probability or log-probability of angle x given the parameters.
+#' @return Numeric. For \code{dinvbat}, the probability or log-probability of
+#'   angle x given the parameters. For \code{rinvbat}, a vector of random
+#'   variates from the inverse Batschelet distribution.
 #' @export
 #'
 #' @examples
@@ -231,7 +235,7 @@ likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
 
 #' Likelihood function of inverse Batschelet.
 #'
-#'  @describeIn likfuninvbat
+#'  @rdname likfuninvbat
 #'  @export
 #'
 likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {

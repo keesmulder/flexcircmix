@@ -48,6 +48,8 @@ tpow_lam_inv <- function(x, lam) {
 
 #' Kernel of the von-Mises based symmetric power Batschelet distribution
 #'
+#' @inheritParams dpowbat
+#'
 #' @return The unnormalized density value of the power Batschelet distribution.
 #'
 dpowbatkern <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {

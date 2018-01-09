@@ -336,11 +336,12 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 #' @param fixed_pmat An \code{n_comp * 4} matrix, containing a parameter matrix,
 #'   with \code{NA} for parameters to be estimated, and a numeric for each
 #'   parameter that should be kept fixed to a specific value.
-#' @param verbose Logical; whether to print debug statements.
 #' @param probs Numeric vector; The probabilities for which to compute quantiles
 #'   in summarizing bootstrap or mcmc samples. By default, \code{probs = c(.025,
-#'   .975)}, which corresponds to standard 95\% confidence or credible intervals.
+#'   .975)}, which corresponds to standard 95\% confidence or credible
+#'   intervals.
 #' @param ... Additional arguments to be passed to the selected \code{method}.
+#'   In particular, use \code{verbose = TRUE} to print debug statements.
 #'
 #' @return An object of class 'batmixmod'.
 #' @export

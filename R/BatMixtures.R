@@ -7,10 +7,13 @@
 #' @param lams A vector of shape parameters.
 #' @param alphs A vector of component weights. Batschelet density. By default,
 #'   inverse Batschelet.
-#' @param pmat A \code{k * 4} matrix of parameters for \code{dbatmix_pmat}.
+#' @param pmat A \code{k*4} matrix of parameters for \code{dbatmix_pmat}.
+#' @param n The number of data points to sample.
 #' @param log Logical; indicates if the logarithm of the density must be return.
 #'
-#' @return A vector of probabilities.
+#' @return For \code{dbatmix} and \code{dbatmix_pmat}, vector of probabilities.
+#'   For \code{rinvbatmix}, a vector of random variates from the mixture of the
+#'   inverse Batschelet distribution.
 #' @export
 #'
 #' @examples

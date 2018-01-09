@@ -8,6 +8,8 @@ plot_movMF_as_batmix(m, ...)
 }
 \arguments{
 \item{m}{A movMF results object.}
+
+\item{...}{Additional arguments to be passed to \code{plot_batmixfit}.}
 }
 \value{
 A ggplot.

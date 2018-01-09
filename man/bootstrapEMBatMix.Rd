@@ -53,6 +53,6 @@ Bootstrap the Batschelet mixture parameters
 \examples{
 x <- rinvbatmix(100)
 
- bootstrapEMBatMix(x, B = 5)
+ bootstrapEMBatMix(x, B = 5, parallel = FALSE)
 
 }

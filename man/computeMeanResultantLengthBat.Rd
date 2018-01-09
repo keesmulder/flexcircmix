@@ -4,14 +4,15 @@
 \alias{computeMeanResultantLengthBat}
 \title{The mean resultant length of a Batschelet-type distribution.}
 \usage{
-computeMeanResultantLengthBat(kp, lam, bat_type = "inverse")
+computeMeanResultantLengthBat(kp, lam, bat_type = "power")
 }
 \arguments{
 \item{kp}{The concentration parameter.}
 
 \item{lam}{The peakedness parameter.}
 
-\item{dbat_fun}{The pdf function of the required Batschelet distribution.}
+\item{bat_type}{Either 'inverse' or 'power', the type of distribution to
+compute the resultant length for.}
 }
 \value{
 The mean resultant length.

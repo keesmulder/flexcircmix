@@ -19,13 +19,18 @@ rinvbat(n, mu = 0, kp = 1, lam = 0)
 \item{lam}{The shape parameter (peakedness), -1 < \code{lam} < 1.}
 
 \item{log}{Logical; whether to return the log of the probability or not.}
+
+\item{n}{The number of random variates to obtain.}
 }
 \value{
-Numeric, the probability or log-probability of angle x given the parameters.
+Numeric. For \code{dinvbat}, the probability or log-probability of
+  angle x given the parameters. For \code{rinvbat}, a vector of random
+  variates from the inverse Batschelet distribution.
 }
 \description{
-The inverse Batschelet distribution, with mean direction \code{mu}, concentration parameter \code{kp}, and
-shape (peakedness) parameter \code{lam}. This is the von Mises based version, without a skewness
+The inverse Batschelet distribution, with mean direction \code{mu},
+concentration parameter \code{kp}, and shape (peakedness) parameter
+\code{lam}. This is the von Mises based version, without a skewness
 parameter.
 }
 \section{Functions}{

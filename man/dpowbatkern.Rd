@@ -6,6 +6,17 @@
 \usage{
 dpowbatkern(x, mu = 0, kp = 1, lam = 0, log = FALSE)
 }
+\arguments{
+\item{x}{An angle in radians.}
+
+\item{mu}{A mean direction, in radians.}
+
+\item{kp}{Numeric, \eqn{> 0,}the concentration parameter.}
+
+\item{lam}{The shape parameter (peakedness), -Inf < \code{lam} < Inf}
+
+\item{log}{Logical; whether to return the log of the probability or not.}
+}
 \value{
 The unnormalized density value of the power Batschelet distribution.
 }

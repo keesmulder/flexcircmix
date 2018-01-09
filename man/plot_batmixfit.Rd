@@ -19,6 +19,9 @@ Inverse Batschelet Function.}
 
 \item{res}{Integer; The number of points at which to evaluate the density
 function.}
+
+\item{hist_alpha}{Numeric; The alpha value of the histogram of the
+data.}
 }
 \value{
 A ggplot.

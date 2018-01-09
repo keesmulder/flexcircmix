@@ -30,11 +30,11 @@ parameter that should be kept fixed to a specific value.}
 
 \item{probs}{Numeric vector; The probabilities for which to compute quantiles
 in summarizing bootstrap or mcmc samples. By default, \code{probs = c(.025,
-.975)}, which corresponds to standard 95\% confidence or credible intervals.}
+.975)}, which corresponds to standard 95\% confidence or credible
+intervals.}
 
-\item{...}{Additional arguments to be passed to the selected \code{method}.}
-
-\item{verbose}{Logical; whether to print debug statements.}
+\item{...}{Additional arguments to be passed to the selected \code{method}.
+In particular, use \code{verbose = TRUE} to print debug statements.}
 }
 \value{
 An object of class 'batmixmod'.

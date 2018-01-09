@@ -18,20 +18,27 @@ rinvbatmix(n, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8), lams = c(-0.5, 0,
 \arguments{
 \item{x}{An angle in radians.}
 
+\item{dbat_fun}{A function that provides the pdf function of the desired}
+
 \item{mus}{A vector of component mean directions.}
 
 \item{kps}{A vector of nonnegative concentration parameters.}
 
 \item{lams}{A vector of shape parameters.}
 
-\item{alphs}{A vector of component weights.}
+\item{alphs}{A vector of component weights. Batschelet density. By default,
+inverse Batschelet.}
 
 \item{log}{Logical; indicates if the logarithm of the density must be return.}
 
-\item{bat_fun}{A function that provides the pdf function of the desired Batschelet density. By default, inverse Batschelet.}
+\item{pmat}{A \code{k*4} matrix of parameters for \code{dbatmix_pmat}.}
+
+\item{n}{The number of data points to sample.}
 }
 \value{
-A vector of probabilities.
+For \code{dbatmix} and \code{dbatmix_pmat}, vector of probabilities.
+  For \code{rinvbatmix}, a vector of random variates from the mixture of the
+  inverse Batschelet distribution.
 }
 \description{
 The Batschelet-type Mixture distribution
