@@ -41,7 +41,9 @@ computeMeanResultantLengthBat <- function(kp, lam, bat_type = "inverse") {
   # R = E[cos(theta)], so we need a function f(theta) = cos(theta) p(theta, kp,
   # lam) to integrate over. Note that the normalizing constant is removed for
   # computational efficiency.
-  cos_fun <- function(theta) cos(theta) * dbatkernfun(theta, 0, kp, lam, log = FALSE)
+  cos_fun <- function(theta) {
+    cos(theta) * dbatkernfun(theta, 0, kp, lam, log = FALSE)
+  }
 
   stats::integrate(cos_fun, -pi, pi)$value / nc_batfun(kp, lam)
 }
