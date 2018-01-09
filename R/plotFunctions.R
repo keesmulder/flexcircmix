@@ -2,15 +2,18 @@
 #'
 #' @param x Optional data vector of angles in radians to plot a histogram of.
 #' @param params A matrix of parameters.
-#' @param dbat_fun A function; the Batschelet function to use. Defaults to the Inverse Batschelet Function.
+#' @param dbat_fun A function; the Batschelet function to use. Defaults to the
+#'   Inverse Batschelet Function.
 #' @param bins Integer; The number of bins to use in the optional histogram.
-#' @param res Integer; The number of points at which to evaluate the density function.
+#' @param res Integer; The number of points at which to evaluate the density
+#'   function.
 #'
 #' @return A ggplot.
 #' @export
 #'
 #' @examples
-#' plot_batmixfit(params = cbind(mu = c(-pi/2, 0, pi/2, pi), kp = 4, lam = c(-.9, .2, .8, 0), alph = .25))
+#' plot_batmixfit(params = cbind(mu = c(-pi/2, 0, pi/2, pi), kp = 4,
+#'                               lam = c(-.9, .2, .8, 0), alph = .25))
 #'
 plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
                            hist_alpha = .3) {
@@ -30,12 +33,14 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
     ggplot2::theme_bw()
 
 
-  # If we don't have data given as well, return only the pdfs. Otherwise, add a histogram.
+  # If we don't have data given as well, return only the pdfs. Otherwise, add a
+  # histogram.
   if (!missing(x)) {
     p <- p +
-      ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
-                              fill = rgb(.65, .65, .85, hist_alpha), col = "white",
-                              boundary = -pi, binwidth = 2*pi / bins)
+      ggplot2::geom_histogram(
+        apping = ggplot2::aes_string(x = "x", y = "..density.."),
+        fill = grDevices::rgb(.65, .65, .85, hist_alpha), col = "white",
+        boundary = -pi, binwidth = 2*pi / bins)
   }
 
 
@@ -44,20 +49,20 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
     ggplot2::stat_function(fun = dbatmix_pmat,
                            args = list(pmat = params, dbat_fun = dbat_fun),
                            n = res,
-                           colour = rgb(.35, .35, .35, .8),
+                           colour = grDevices::rgb(.35, .35, .35, .8),
                            lwd = 1.2)
 
 
   # Add the separate densities.
   n_comp <- nrow(params)
 
-  # Force evaluation of the functions parameters, because otherwise lazy evaluation will only cause
-  # us to plot the last function.
+  # Force evaluation of the functions parameters, because otherwise lazy
+  # evaluation will only cause us to plot the last function.
   funlist <- lapply(1:n_comp, function(compi) {
     function(x) params[compi, 'alph'] * dbat_fun(x,
-                                                mu = params[compi, 'mu'],
-                                                kp = params[compi, 'kp'],
-                                                lam = params[compi, 'lam'])})
+                                                 mu = params[compi, 'mu'],
+                                                 kp = params[compi, 'kp'],
+                                                 lam = params[compi, 'lam'])})
 
   if (n_comp < 10) {
     palette <- RColorBrewer::brewer.pal(max(n_comp, 3), "Set1")
@@ -121,13 +126,15 @@ plot.batmixmod <- function(x, ...) {
 #' @param dbat_fun A function; The pdf of the chosen Batschelet distribution.
 #' @param bins The number of bins to draw in the histogram.
 #' @param res Number of points at which to evaluate the functions.
-#' @param orderColor Logical; If \code{TRUE}, plotted pdfs get darker and redder
-#'   as they were sampled later.
+#' @param orderColor Logical; If \code{TRUE}, plotted pdfs get darker and more
+#'   red as they were sampled later.
 #' @param plot_n Integer; the number of parameter rows to sample from the matrix
 #'   \code{param}. This is intended for MCMC for example, where we can take a
 #'   subsample of the parameter matrix to plot for speed.
-#' @param hist_transparancy Numeric; The alpha value of the histogram of the data.
-#' @param dens_darkness Numeric; Higher numbers result in less transparent densities plotted.
+#' @param hist_transparancy Numeric; The alpha value of the histogram of the
+#'   data.
+#' @param dens_darkness Numeric; Higher numbers result in less transparent
+#'   densities plotted.
 #'
 #' @return A ggplot.
 #' @export
@@ -138,7 +145,8 @@ plot.batmixmod <- function(x, ...) {
 #'
 #' plot_batmix_sample(x, mod$mcmc_sample, dens_darkness = 5)
 #'
-plot_batmix_sample <- function(x, param, dbat_fun = dinvbat, plot_n = nrow(param),
+plot_batmix_sample <- function(x, param, dbat_fun = dinvbat,
+                               plot_n = nrow(param),
                                hist_alpha = .3, dens_darkness = 20,
                                bins = 100, res = 400, orderColor = FALSE) {
 
@@ -159,11 +167,14 @@ plot_batmix_sample <- function(x, param, dbat_fun = dinvbat, plot_n = nrow(param
     ggplot2::theme_bw()
 
 
-  # If we don't have data given as well, return only the pdfs. Otherwise, add a histogram.
+  # If we don't have data given as well, return only the pdfs. Otherwise, add a
+  # histogram.
   if (!missing(x)) {
     p <- p +
-      ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x", y = "..density.."),
-                              fill = rgb(.65, .65, .85, hist_alpha), col = "white",
+      ggplot2::geom_histogram(mapping = ggplot2::aes_string(x = "x",
+                                                            y = "..density.."),
+                              fill = grDevices::rgb(.65, .65, .85, hist_alpha),
+                              col = "white",
                               boundary = -pi, binwidth = 2*pi / bins)
 
     # If there are no parameters given, just return the histogram.
@@ -172,7 +183,8 @@ plot_batmix_sample <- function(x, param, dbat_fun = dinvbat, plot_n = nrow(param
 
 
   # Remove some rows if we don't plot every row of param.
-  param <- param[round(seq(1, nrow(param), length.out = plot_n)), , drop = FALSE]
+  param <- param[round(seq(1, nrow(param),
+                           length.out = plot_n)), , drop = FALSE]
 
   mu_mat   <- param[, grep("mu_[0-9]",   colnames(param)), drop = FALSE]
   kp_mat   <- param[, grep("kp_[0-9]",   colnames(param)), drop = FALSE]
@@ -186,13 +198,16 @@ plot_batmix_sample <- function(x, param, dbat_fun = dinvbat, plot_n = nrow(param
 
   for (i in 1:plot_n) {
     suppressWarnings(
-      p <- p + ggplot2::stat_function(fun = dbatmix,
-                                    args = list(mus  = mu_mat[i, ],  kps = kp_mat[i, ],
-                                                lams = lam_mat[i, ], alphs = alph_mat[i, ],
-                                                dbat_fun = dbat_fun),
-                                    col = rgb(ifelse(orderColor, ordseq[i], 0.2), 0.2, 0.2,
-                                              min(1, dens_darkness/plot_n)),
-                                    n = res)
+      p <- p + ggplot2::stat_function(
+        fun = dbatmix,
+        args = list(mus      = mu_mat[i, ],
+                    kps      = kp_mat[i, ],
+                    lams     = lam_mat[i, ],
+                    alphs    = alph_mat[i, ],
+                    dbat_fun = dbat_fun),
+        col = grDevices::rgb(ifelse(orderColor, ordseq[i], 0.2),
+                             0.2, 0.2, min(1, dens_darkness/plot_n)),
+        n = res)
     )
   }
   p
