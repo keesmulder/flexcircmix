@@ -114,7 +114,7 @@ plot_movMF_as_batmix <- function(m, ...) {
 #' plot(fitbatmix(x, method = "EM"))
 #'
 plot.batmixmod <- function(x, ...) {
-  plot_batmixfit(x$x, params = object$estimates, ...)
+  plot_batmixfit(x$x, params = x$estimates, ...)
 }
 
 
