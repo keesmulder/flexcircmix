@@ -11,7 +11,8 @@ Imports: circular, ggplot2, RColorBrewer,
     MCMCpack,
     coda,
     pbapply,
-    parallel
+    parallel,
+    circglmbayes
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: testthat

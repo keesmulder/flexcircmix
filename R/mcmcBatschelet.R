@@ -18,7 +18,7 @@ sample_mu_bat <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
   C_j    <- sum(cos(x))
   S_j    <- sum(sin(x))
   R_j    <- sqrt(C_j^2 + S_j^2)
-  mu_can <- circular:::RvonmisesRad(1, mu_cur, R_j * kp)
+  mu_can <- circglmbayes::rvmc(1, mu_cur, R_j * kp)
 
   ll_can <- ll_rhs_bat(x, mu_can, kp, lam, tlam_fun)
   ll_cur <- ll_rhs_bat(x, mu_cur, kp, lam, tlam_fun)
@@ -43,13 +43,13 @@ sample_mu_bat_2 <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
   S_j    <- sum(sin(x))
   R_j    <- sqrt(C_j^2 + S_j^2)
   mu_hat <- atan2(S_j, C_j)
-  mu_can <- circular:::RvonmisesRad(1, mu_hat, R_j * kp)
+  mu_can <- circglmbayes::rvmc(1, mu_hat, R_j * kp)
 
   ll_can <- ll_rhs_bat(x, mu_can, kp, lam, tlam_fun)
   ll_cur <- ll_rhs_bat(x, mu_cur, kp, lam, tlam_fun)
 
-  logp_mu_can_to_cur <- circular:::DvonmisesRad(mu_cur, mu_hat, kp, log = TRUE)
-  logp_mu_cur_to_can <- circular:::DvonmisesRad(mu_can, mu_hat, kp, log = TRUE)
+  logp_mu_can_to_cur <- dvm(mu_cur, mu_hat, kp, log = TRUE)
+  logp_mu_cur_to_can <- dvm(mu_can, mu_hat, kp, log = TRUE)
 
   mu_lograt <- ll_can + mu_logprior_fun(mu_can) + logp_mu_can_to_cur - ll_cur - mu_logprior_fun(mu_cur) - logp_mu_cur_to_can
 
