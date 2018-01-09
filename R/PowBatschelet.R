@@ -138,7 +138,8 @@ likfunpowbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     function(mu, kp, lam) sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
   } else {
-    function(mu, kp, lam) exp(sum(weights * dpowbat(x, mu, kp, lam, log = TRUE)))
+    function(mu, kp, lam) exp(sum(weights * dpowbat(x, mu, kp,
+                                                    lam, log = TRUE)))
   }
 }
 
