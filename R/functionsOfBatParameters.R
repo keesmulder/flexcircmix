@@ -24,7 +24,7 @@ computeMeanResultantLengthVM <- function(kp) {
 #' @export
 computeMeanResultantLengthBat <- function(kp, lam, bat_type = "inverse") {
 
-  #
+  # Choose the appropriate functions for the bat_type.
   if (bat_type == "inverse") {
     dbatkernfun <- dinvbatkern
     nc_batfun <- K_kplam
@@ -34,7 +34,6 @@ computeMeanResultantLengthBat <- function(kp, lam, bat_type = "inverse") {
   } else {
     stop("Unknown Batschelet-type.")
   }
-
 
   # Use the von Mises resultant length when possible.
   if (lam == 0) computeMeanResultantLengthVM(kp)
