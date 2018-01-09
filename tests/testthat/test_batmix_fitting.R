@@ -9,10 +9,12 @@ test_that("EM fitbatmix wrapper works", {
 
   x <- rinvbatmix(100)
 
-  (system.time(fit_inv <- fitbatmix(x, bat_type = "inverse", optimization_its = 2,
+  (system.time(fit_inv <- fitbatmix(x, bat_type = "inverse",
+                                    optimization_its = 2,
                                     max_its = 2, method = "EM")))
 
-  (system.time(fit_pow <- fitbatmix(x, bat_type = "power", optimization_its = 2,
+  (system.time(fit_pow <- fitbatmix(x, bat_type = "power",
+                                    optimization_its = 2,
                                     max_its = 2, method = "EM")))
 
 
@@ -37,7 +39,8 @@ test_that("Plotting works" , {
 
   fit_pow <- fitbatmix(x, n_comp = 3, verbose = FALSE,
                        bat_type = "power", method = "EM")
-  fit_mcmc <- fitbatmix(x, n_comp = 3, verbose = 0, bat_type = "power", Q = 10, method = "bayes")
+  fit_mcmc <- fitbatmix(x, n_comp = 3, verbose = 0,
+                        bat_type = "power", Q = 10, method = "bayes")
 
   plot_batmixfit(x, fit_pow$estimates)
 
@@ -46,7 +49,8 @@ test_that("Plotting works" , {
 
   fit_pow <- fitbatmix(x, n_comp = 1, verbose = FALSE,
                        bat_type = "power", method = "EM")
-  fit_mcmc <- fitbatmix(x, n_comp = 1, verbose = 0, bat_type = "power", Q = 10, method = "bayes")
+  fit_mcmc <- fitbatmix(x, n_comp = 1, verbose = 0,
+                        bat_type = "power", Q = 10, method = "bayes")
 
   plot_batmixfit(x, fit_pow$estimates)
   plot_batmix_sample(x, fit_mcmc$mcmc_sample, plot_n = 2)
@@ -85,7 +89,8 @@ test_that("Bootstrap works", {
   x <- rinvbatmix(200)
 
   # Test without parallelization
-  expect_error(fit_boot <- fitbatmix(x, method = "boot", B = 3, parallel = FALSE), NA)
+  expect_error(fit_boot <- fitbatmix(x, method = "boot", B = 3,
+                                     parallel = FALSE), NA)
   expect_error(fit_boot, NA)
   expect_error(summary(fit_boot), NA)
 
@@ -95,7 +100,8 @@ test_that("Bootstrap works", {
   skip("Skip parallel tests because they fail in R CMD Check.")
 
   # Test with parallelization
-  expect_error(fit_boot_2 <- fitbatmix(x, method = "boot", B = 3, parallel = TRUE), NA)
+  expect_error(fit_boot_2 <- fitbatmix(x, method = "boot", B = 3,
+                                       parallel = TRUE), NA)
   expect_error(fit_boot_2, NA)
   expect_error(summary(fit_boot_2), NA)
 
