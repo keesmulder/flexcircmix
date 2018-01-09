@@ -4,6 +4,8 @@ Title: Fitting Mixtures Of Flexible Circular Distributions
 Version: 0.2.0.9000
 Author: Kees Mulder
 Maintainer: Kees Mulder <keestimmulder@gmail.com>
+URL: https://github.com/keesmulder/flexcircmix
+BugReports: https://github.com/keesmulder/flexcircmix/issues
 Description: An R package to fit mixtures of flexible circular distributions, in particular with symmetric inverse batschelet distributions, which allow for peaked distributions.
 License: GPL-3
 Encoding: UTF-8
