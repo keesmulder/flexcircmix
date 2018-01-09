@@ -39,7 +39,7 @@ s_lam <- function(x, lam) {
 
 #' Inverse Batschelet inverse subfunction
 #'
-#' @describeIn s_lam
+#' @rdname s_lam
 #'
 s_lam_inv <- function(x, lam) {
   # Compute the root to obtain the inverse.
@@ -48,7 +48,7 @@ s_lam_inv <- function(x, lam) {
 
 #' Vectorized version of the inversion of s_lam
 #'
-#' @describeIn s_lam
+#' @rdname s_lam
 #'
 s_lam_inv_vec <-  Vectorize(s_lam_inv)
 

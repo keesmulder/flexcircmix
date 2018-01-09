@@ -156,7 +156,7 @@ circularQuantile <- function (th, ...) {
 
   # Centre the data, and move it as far away from 0 radians as possible by
   # th+rot. Then, apply the quantile function, and rotate back.
-  force_neg_pi_pi(stats::quantile(force_neg_pi_pi(th - rotation), ...) + rotation)
+  force_neg_pi_pi(quantile(force_neg_pi_pi(th - rotation), ...) + rotation)
 }
 
 # Create a vector from a parameter matrix for convenience.
