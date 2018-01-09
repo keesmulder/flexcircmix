@@ -18,11 +18,12 @@ computeMeanResultantLengthVM <- function(kp) {
 #'
 #' @param kp The concentration parameter.
 #' @param lam The peakedness parameter.
-#' @param dbat_fun The pdf function of the required Batschelet distribution.
+#' @param bat_type Either 'inverse' or 'power', the type of distribution to
+#'   compute the resultant length for.
 #'
 #' @return The mean resultant length.
 #' @export
-computeMeanResultantLengthBat <- function(kp, lam, bat_type = "inverse") {
+computeMeanResultantLengthBat <- function(kp, lam, bat_type = "power") {
 
   # Choose the appropriate functions for the bat_type.
   if (bat_type == "inverse") {

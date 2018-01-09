@@ -1,11 +1,13 @@
 #' The Batschelet-type Mixture distribution
 #'
 #' @param x An angle in radians.
+#' @param dbat_fun A function that provides the pdf function of the desired
 #' @param mus A vector of component mean directions.
 #' @param kps A vector of nonnegative concentration parameters.
 #' @param lams A vector of shape parameters.
-#' @param alphs A vector of component weights.
-#' @param bat_fun A function that provides the pdf function of the desired Batschelet density. By default, inverse Batschelet.
+#' @param alphs A vector of component weights. Batschelet density. By default,
+#'   inverse Batschelet.
+#' @param pmat A \code{k * 4} matrix of parameters for \code{dbatmix_pmat}.
 #' @param log Logical; indicates if the logarithm of the density must be return.
 #'
 #' @return A vector of probabilities.
