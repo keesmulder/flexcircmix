@@ -237,7 +237,7 @@ likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
   }
 }
 
-#'  @describeIn likfuninvbat Return a likelihood function.
+#' @describeIn likinvbat Return a likelihood function.
 #' @export
 #'
 likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
