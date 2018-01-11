@@ -93,8 +93,11 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
 #' @export
 #'
 #' @examples
-#' movMF_model <- movMF(cbind(runif(100, -1, 1), runif(100, -1, 1), 2), k = 4)
-#' plot_movMF_as_batmix(movMF_model)
+#'
+#' \dontrun{
+#'   movMF_model <- movMF(cbind(runif(100, -1, 1), runif(100, -1, 1), 2), k = 4)
+#'   plot_movMF_as_batmix(movMF_model)
+#' }
 #'
 plot_movMF_as_batmix <- function(m, ...) {
   pmat <- invbatmix_pmat_from_movMF(m)

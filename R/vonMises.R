@@ -6,11 +6,6 @@
 #'
 #' @return The logarithm of the bessel funciton
 #'
-#' @examples
-#' log(besselI(10, 1))
-#' logBesselI(10, 1)
-#'
-#'
 logBesselI <- function(x, nu) {
   x + log(besselI(x, nu, expon.scaled = TRUE))
 }

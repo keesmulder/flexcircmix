@@ -18,9 +18,3 @@ The logarithm of the bessel funciton
 \description{
 This can be more numerically stable than taking the log directly.
 }
-\examples{
-log(besselI(10, 1))
-logBesselI(10, 1)
-
-
-}

@@ -109,7 +109,10 @@ dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 
 
 
-#' Obtain the likelihood of a power Batschelet distribution
+#' Likelihood of the power Batschelet distribution
+#'
+#' Two functions to obtain the power Batschelet likelihood of a set parameters,
+#' given a data set of angles.
 #'
 #' @param x An set of angles in radians.
 #' @param weights A vector of length \code{length(x)}, which gives importace
@@ -134,24 +137,23 @@ dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 #' # Plot the conditional log-likelihood.
 #' kp_conditional_ll <- Vectorize(function(x) llfun(mu = 1, kp = x, lam = 0))
 #' curve(kp_conditional_ll, 0, 20)
+likpowbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
+  if (log) {
+    sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
+  } else {
+    exp(sum(weights * dpowbat(x, mu, kp, lam, log = TRUE)))
+  }
+}
+
+#' @describeIn likpowbat Return a likelihood function.
+#' @export
+#'
 likfunpowbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     function(mu, kp, lam) sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
   } else {
     function(mu, kp, lam) exp(sum(weights * dpowbat(x, mu, kp,
                                                     lam, log = TRUE)))
-  }
-}
-
-#' Likelihood function of the power Batschelet function
-#'
-#' @describeIn likfunpowbat
-#'
-likpowbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
-  if (log) {
-    sum(weights * dpowbat(x, mu, kp, lam, log = TRUE))
-  } else {
-    exp(sum(weights * dpowbat(x, mu, kp, lam, log = TRUE)))
   }
 }
 

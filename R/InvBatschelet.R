@@ -201,7 +201,10 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 
 
 
-#' Obtain the likelihood of an inverse Batschelet distribution
+#' Likelihood of the inverse Batschelet distribution
+#'
+#' Two functions to obtain the inverse Batschelet likelihood of a set
+#' parameters, given a data set of angles.
 #'
 #' @param x An set of angles in radians.
 #' @param weights A vector of length \code{length(x)}, which gives importance
@@ -226,24 +229,23 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 #' # Plot the conditional log-likelihood.
 #' kp_conditional_ll <- Vectorize(function(x) llfun(mu = 1, kp = x, lam = 0))
 #' curve(kp_conditional_ll, 0, 20)
+likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
+  if (log) {
+    sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
+  } else {
+    exp(sum(weights * dinvbat(x, mu, kp, lam, log = TRUE)))
+  }
+}
+
+#'  @describeIn likfuninvbat Return a likelihood function.
+#' @export
+#'
 likfuninvbat <- function(x, weights = rep(1, length(x)), log = TRUE) {
   if (log) {
     function(mu, kp, lam) sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
   } else {
     function(mu, kp, lam) exp(sum(weights * dinvbat(x, mu, kp,
                                                     lam, log = TRUE)))
-  }
-}
-
-#' Likelihood function of inverse Batschelet.
-#'
-#'  @describeIn likfuninvbat
-#'
-likinvbat <- function(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE) {
-  if (log) {
-    sum(weights * dinvbat(x, mu, kp, lam, log = TRUE))
-  } else {
-    exp(sum(weights * dinvbat(x, mu, kp, lam, log = TRUE)))
   }
 }
 

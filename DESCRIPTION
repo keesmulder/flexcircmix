@@ -1,14 +1,19 @@
 Package: flexcircmix
 Type: Package
-Title: Fitting Mixtures Of Flexible Circular Distributions
+Title: Fit Mixtures Of Flexible Circular Distributions
 Version: 0.2.0.9000
 Author: Kees Mulder
 Maintainer: Kees Mulder <keestimmulder@gmail.com>
 URL: https://github.com/keesmulder/flexcircmix
 BugReports: https://github.com/keesmulder/flexcircmix/issues
-Description: An R package to fit mixtures of flexible circular distributions, 
-    in particular with symmetric inverse batschelet distributions, which allow
-    for sharp peaks and flat tops.
+Description: Fit mixtures of flexible circular distributions, 
+    in particular with symmetric Batschelet distributions, which allow
+    for sharp peaks and flat tops. A novel alternative
+    to the inverse Batschelet distribution is implemented called the 
+    Power Batschelet distribution. Both frequentist and Bayesian 
+    inference is implemented, through 
+    the Expectation-Maximization (EM) algorithm, the bootstrap, and 
+    Markov chain Monte Carlo (MCMC) methods.  
 License: GPL-3
 Encoding: UTF-8
 Imports: ggplot2, 
@@ -20,4 +25,4 @@ Imports: ggplot2,
     circglmbayes
 LazyData: true
 RoxygenNote: 6.0.1
-Suggests: testthat
+Suggests: testthat, movMF

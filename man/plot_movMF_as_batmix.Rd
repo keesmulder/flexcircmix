@@ -18,7 +18,10 @@ A ggplot.
 Plot a result from movMF using the Batschelet mixture plotting functions.
 }
 \examples{
-movMF_model <- movMF(cbind(runif(100, -1, 1), runif(100, -1, 1), 2), k = 4)
-plot_movMF_as_batmix(movMF_model)
+
+\dontrun{
+  movMF_model <- movMF(cbind(runif(100, -1, 1), runif(100, -1, 1), 2), k = 4)
+  plot_movMF_as_batmix(movMF_model)
+}
 
 }

@@ -2,11 +2,41 @@
 % Please edit documentation in R/InvBatschelet.R
 \name{likinvbat}
 \alias{likinvbat}
-\title{Likelihood function of inverse Batschelet.}
+\title{Likelihood of the inverse Batschelet distribution}
 \usage{
 likinvbat(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE)
 }
+\arguments{
+\item{x}{An set of angles in radians.}
+
+\item{mu}{A mean direction, in radians.}
+
+\item{kp}{Numeric, \eqn{> 0,}the concentration parameter.}
+
+\item{lam}{The shape parameter (peakedness), -1 < \code{lam} < 1.}
+
+\item{weights}{A vector of length \code{length(x)}, which gives importance
+weights to be used for x.}
+
+\item{log}{If \code{TRUE} (the default), the log-likelihood is used.}
+}
+\value{
+\code{likinvbat} returns a value, the likelihood given the data and
+  parameters. \code{likfuninvbat} returns a function of mu, kp and lam, which
+  can be evaluated later for a given set of parameters.
+}
 \description{
-@describeIn likfuninvbat
- @export
+Two functions to obtain the inverse Batschelet likelihood of a set
+parameters, given a data set of angles.
+}
+\examples{
+vm_data <- circglmbayes::rvmc(10, 1, 5)
+llfun <- likfuninvbat(vm_data)
+
+# log-likelihood value of true parameters.
+llfun(mu = 1, kp = 5, lam = 0)
+
+# Plot the conditional log-likelihood.
+kp_conditional_ll <- Vectorize(function(x) llfun(mu = 1, kp = x, lam = 0))
+curve(kp_conditional_ll, 0, 20)
 }

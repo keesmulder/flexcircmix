@@ -2,39 +2,10 @@
 % Please edit documentation in R/InvBatschelet.R
 \name{likfuninvbat}
 \alias{likfuninvbat}
-\title{Obtain the likelihood of an inverse Batschelet distribution}
+\title{@describeIn likfuninvbat Return a likelihood function.}
 \usage{
 likfuninvbat(x, weights = rep(1, length(x)), log = TRUE)
 }
-\arguments{
-\item{x}{An set of angles in radians.}
-
-\item{weights}{A vector of length \code{length(x)}, which gives importance weights to be used for x.}
-
-\item{log}{If \code{TRUE} (the default), the log-likelihood is used.}
-
-\item{mu}{A mean direction, in radians.}
-
-\item{kp}{Numeric, \eqn{> 0,}the concentration parameter.}
-
-\item{lam}{The shape parameter (peakedness), -1 < \code{lam} < 1.}
-}
-\value{
-\code{likinvbat} returns a value, the likelihood given the data and parameters.
-  \code{likfuninvbat} returns a function of mu, kp and lam, which can be evaluated later for a
-  given set of parameters.
-}
 \description{
-Obtain the likelihood of an inverse Batschelet distribution
-}
-\examples{
-x <- rinvbat(5)
-
-# Find the likelihood
-likinvbat(x, mu = 0, kp = 1, lam = 0.1, log = TRUE)
-
-# likfuninvbat returns a function.
-llfib <- likfuninvbat(x)
-llfib(mu = 0, kp = 1, lam = 0.1)
-
+@describeIn likfuninvbat Return a likelihood function.
 }
