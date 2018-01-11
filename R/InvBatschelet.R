@@ -206,7 +206,7 @@ rinvbat <- function(n, mu = 0, kp = 1, lam = 0) {
 #' Two functions to obtain the inverse Batschelet likelihood of a set
 #' parameters, given a data set of angles.
 #'
-#' @param x An set of angles in radians.
+#' @param x A set of angles in radians.
 #' @param weights A vector of length \code{length(x)}, which gives importance
 #'   weights to be used for x.
 #' @param log If \code{TRUE} (the default), the log-likelihood is used.

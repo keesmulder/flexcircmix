@@ -114,7 +114,7 @@ dpowbat <- function(x, mu = 0, kp = 1, lam = 0, log = FALSE) {
 #' Two functions to obtain the power Batschelet likelihood of a set parameters,
 #' given a data set of angles.
 #'
-#' @param x An set of angles in radians.
+#' @param x A set of angles in radians.
 #' @param weights A vector of length \code{length(x)}, which gives importace
 #'   weights to be used for \code{x}.
 #' @param log If \code{TRUE} (the default), the log-likelihood is used.
