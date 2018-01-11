@@ -52,8 +52,8 @@ test_that("Plotting works" , {
   fit_mcmc <- fitbatmix(x, n_comp = 1, verbose = 0,
                         bat_type = "power", Q = 10, method = "bayes")
 
-  plot_batmixfit(x, fit_pow$estimates)
-  plot_batmix_sample(x, fit_mcmc$mcmc_sample, plot_n = 2)
+  expect_true(class(plot_batmixfit(x, fit_pow$estimates))[2] == "ggplot")
+  expect_true(class(plot_batmix_sample(x, fit_mcmc$mcmc_sample, plot_n = 2))[2] == "ggplot")
 
 })
 
@@ -97,13 +97,7 @@ test_that("Bootstrap works", {
   expect_equal(ncol(fit_boot$estimates), 6)
 
 
-  skip("Skip parallel tests because they fail in R CMD Check.")
 
-  # Test with parallelization
-  expect_error(fit_boot_2 <- fitbatmix(x, method = "boot", B = 3,
-                                       parallel = TRUE), NA)
-  expect_error(fit_boot_2, NA)
-  expect_error(summary(fit_boot_2), NA)
 
 
 })

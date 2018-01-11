@@ -29,12 +29,6 @@ test_that("Random generation works", {
   expect_true(is.numeric(rinvbat(10, 0, 3, -.9)))
   expect_true(is.numeric(rinvbat(10, 0, 3, 1)))
 
-  skip("Initial checks to compare generated samples with pdf")
-
-  mu = 1; kp = 6; lam = .6
-  dat <- rinvbat(10000, mu, kp, lam)
-  curve(dinvbat(x, mu, kp, lam), -pi, pi, n = 2000)
-  hist(dat, breaks = 100, xlim = c(-pi, pi))
 
 })
 
