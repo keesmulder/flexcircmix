@@ -191,3 +191,26 @@ test_that("Initial MCMC tests", {
 
 
 
+test_that("Improvements for kappa proposal", {
+
+
+  makeKpLik <- function(mu = 1, lam = .4, n = 100, true_kp = 5, log = FALSE) {
+    x <- rinvbatmix(n, mu, true_kp, lam, 1)
+
+    llfun <- likfunpowbat(x, log = log)
+    Vectorize(function(kp) {llfun(mu, kp, lam)})
+  }
+
+
+
+  kplik1 <- makeKpLik(1, .6, 100, 5)
+  curve(kplik1, 0, 10)
+
+  # with a chi-square proposal, the proposal for a new velue of kp would be:
+  curve(dchisq(x, 5), 0, 10)
+  # Which is way too wide by comparison.
+
+
+  circglmbayes::
+
+})
