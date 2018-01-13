@@ -52,7 +52,7 @@ dvm <- function(x, mu = 0, kp = 1, log = FALSE) {
 
 #' Bessel exponential distribution
 #'
-#' Function for the Bessel exponential distribution. This is the conditional
+#' Functions for the Bessel exponential distribution. This is the conditional
 #' posterior distribution of the concentration parameter \code{kappa} of a von
 #' Mises distribution with conjugate prior. The random generation algorithm is
 #' due to Forbes and Mardia (2015).
@@ -84,7 +84,7 @@ dvm <- function(x, mu = 0, kp = 1, log = FALSE) {
 #'
 NULL
 
-#' @describeIn besselexp Probability density function
+#' @describeIn besselexp Probability density function.
 #' @export
 dbesselexp <- function(kp, eta, g, log = FALSE) {
   nc <- integrate(Vectorize(function(x) dbesselexpkern(x, eta, g, log = log)),
