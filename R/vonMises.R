@@ -101,7 +101,7 @@ dbesselexpkern <- function(kp, eta, g, log = FALSE) {
 #' @describeIn besselexp Random generation.
 #' @export
 rbesselexp <- function(n, eta, g) {
-  replicate(n, circglmbayes::sampleKappa(eta * g, eta))
+  replicate(n, circglmbayes::sampleKappa(eta * g, eta)[1])
 }
 
 
