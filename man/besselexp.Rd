@@ -26,12 +26,12 @@ posterior mean, while \code{mu} is the current value of the mean. Note that
 this parameter is called \eqn{\beta_0} in Forbes and Mardia (2015).}
 }
 \value{
-For \code{dbesselexp} and \code{dbesselexpkern}, an scalar. For
+For \code{dbesselexp} and \code{dbesselexpkern}, a scalar. For
   \code{rbesselexp}, a vector of random variates from the distribution.
 }
 \description{
 Function for the Bessel exponential distribution. This is the conditional
-posterior distribution of the concentrataion parameter \code{kappa} of a von
+posterior distribution of the concentration parameter \code{kappa} of a von
 Mises distribution with conjugate prior. The random generation algorithm is
 due to Forbes and Mardia (2015).
 }
@@ -45,11 +45,14 @@ due to Forbes and Mardia (2015).
 }}
 
 \examples{
-dbesselexp(3, 10, 3)
-rbesselexp(5, 10, 3)
+dbesselexp(2, 20, -.5)
+plot(density(rbesselexp(100, 20, -.5)), xlim = c(0, 5))
 
 # Plot probability density function
 dbesexpfun <- Vectorize(function(x) dbesselexp(x, 20, -.5))
 curve(dbesexpfun, 0, 5)
+
+# Compare with density of random draws
+plot(density(rbesselexp(1000, 20, -.5)), xlim = c(0, 5))
 
 }
