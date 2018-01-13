@@ -53,7 +53,7 @@ dvm <- function(x, mu = 0, kp = 1, log = FALSE) {
 #' Bessel exponential distribution
 #'
 #' Function for the Bessel exponential distribution. This is the conditional
-#' posterior distribution of the concentrataion parameter \code{kappa} of a von
+#' posterior distribution of the concentration parameter \code{kappa} of a von
 #' Mises distribution with conjugate prior. The random generation algorithm is
 #' due to Forbes and Mardia (2015).
 #'
@@ -68,16 +68,19 @@ dvm <- function(x, mu = 0, kp = 1, log = FALSE) {
 #'
 #' @name besselexp
 #'
-#' @return For \code{dbesselexp} and \code{dbesselexpkern}, an scalar. For
+#' @return For \code{dbesselexp} and \code{dbesselexpkern}, a scalar. For
 #'   \code{rbesselexp}, a vector of random variates from the distribution.
 #'
 #' @examples
-#' dbesselexp(3, 10, 3)
-#' rbesselexp(5, 10, 3)
+#' dbesselexp(2, 20, -.5)
+#' plot(density(rbesselexp(100, 20, -.5)), xlim = c(0, 5))
 #'
 #' # Plot probability density function
 #' dbesexpfun <- Vectorize(function(x) dbesselexp(x, 20, -.5))
 #' curve(dbesexpfun, 0, 5)
+#'
+#' # Compare with density of random draws
+#' plot(density(rbesselexp(1000, 20, -.5)), xlim = c(0, 5))
 #'
 NULL
 

@@ -7,7 +7,7 @@
 \alias{rbesselexp}
 \title{Bessel exponential distribution}
 \usage{
-dbesselexp(kp, eta, g)
+dbesselexp(kp, eta, g, log = FALSE)
 
 dbesselexpkern(kp, eta, g, log = FALSE)
 
@@ -33,11 +33,11 @@ For \code{dbesselexp} and \code{dbesselexpkern}, an scalar. For
 Function for the Bessel exponential distribution. This is the conditional
 posterior distribution of the concentrataion parameter \code{kappa} of a von
 Mises distribution with conjugate prior. The random generation algorithm is
-due to Forbes and MArdia (2015).
+due to Forbes and Mardia (2015).
 }
 \section{Functions}{
 \itemize{
-\item \code{dbesselexp}: Random generation.
+\item \code{dbesselexp}: Probability density function
 
 \item \code{dbesselexpkern}: Kernel (unnormalized version) of the pdf.
 
@@ -48,5 +48,8 @@ due to Forbes and MArdia (2015).
 dbesselexp(3, 10, 3)
 rbesselexp(5, 10, 3)
 
+# Plot probability density function
+dbesexpfun <- Vectorize(function(x) dbesselexp(x, 20, -.5))
+curve(dbesexpfun, 0, 5)
 
 }
