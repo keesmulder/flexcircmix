@@ -10,7 +10,7 @@ likpowbat(x, mu, kp, lam, weights = rep(1, length(x)), log = TRUE)
 likfunpowbat(x, weights = rep(1, length(x)), log = TRUE)
 }
 \arguments{
-\item{x}{An set of angles in radians.}
+\item{x}{A set of angles in radians.}
 
 \item{mu}{A mean direction, in radians.}
 

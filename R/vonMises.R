@@ -55,16 +55,16 @@ dvm <- function(x, mu = 0, kp = 1, log = FALSE) {
 #' Function for the Bessel exponential distribution. This is the conditional
 #' posterior distribution of the concentrataion parameter \code{kappa} of a von
 #' Mises distribution with conjugate prior. The random generation algorithm is
-#' due to Forbes and MArdia (2015).
+#' due to Forbes and Mardia (2015).
 #'
 #' @param kp Numeric;
-#' @param g Numeric; Should be \code{-R*cos(mu-theta_bar)/eta}, where \code{R}
-#'   is the posterior mean resultant length, and \code{theta_bar} is the
-#'   posterior mean, while \code{mu} is the current value of the mean. Note that
-#'   this is called \eqn{\beta_0} in Forbes and Mardia (2015).
 #' @param eta Integer; This is the posterior sample size, which is n + c where c
 #'   is the number of observations contained in the conjugate prior. For
 #'   uninformative, \code{c = 0} and \code{eta = n}.
+#' @param g Numeric; Should be \code{-R*cos(mu-theta_bar)/eta}, where \code{R}
+#'   is the posterior mean resultant length, and \code{theta_bar} is the
+#'   posterior mean, while \code{mu} is the current value of the mean. Note that
+#'   this parameter is called \eqn{\beta_0} in Forbes and Mardia (2015).
 #'
 #' @name besselexp
 #'
@@ -75,19 +75,22 @@ dvm <- function(x, mu = 0, kp = 1, log = FALSE) {
 #' dbesselexp(3, 10, 3)
 #' rbesselexp(5, 10, 3)
 #'
+#' # Plot probability density function
+#' dbesexpfun <- Vectorize(function(x) dbesselexp(x, 20, -.5))
+#' curve(dbesexpfun, 0, 5)
 #'
 NULL
 
-#' @describein besselexp Random generation.
+#' @describeIn besselexp Probability density function
 #' @export
-dbesselexp <- function(kp, eta, g) {
-  nc <- integrate(Vectorize(function(x) dbesselexpkern(x, eta, g, log = FALSE)),
+dbesselexp <- function(kp, eta, g, log = FALSE) {
+  nc <- integrate(Vectorize(function(x) dbesselexpkern(x, eta, g, log = log)),
                   0, Inf)$value
   dbesselexpkern(kp, eta, g) / nc
 }
 
 
-#' @describein besselexp Kernel (unnormalized version) of the pdf.
+#' @describeIn besselexp Kernel (unnormalized version) of the pdf.
 #' @export
 dbesselexpkern <- function(kp, eta, g, log = FALSE) {
   logprob <- - eta * g * kp - eta * logBesselI(kp, 0)
@@ -95,7 +98,7 @@ dbesselexpkern <- function(kp, eta, g, log = FALSE) {
 }
 
 
-#' @describein besselexp Random generation.
+#' @describeIn besselexp Random generation.
 #' @export
 rbesselexp <- function(n, eta, g) {
   replicate(n, circglmbayes::sampleKappa(eta * g, eta))
