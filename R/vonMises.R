@@ -86,8 +86,8 @@ NULL
 
 #' @describeIn besselexp Probability density function.
 #' @export
-dbesselexp <- function(kp, eta, g, log = FALSE) {
-  nc <- integrate(Vectorize(function(x) dbesselexpkern(x, eta, g, log = log)),
+dbesselexp <- function(kp, eta = 1, g = -.5, log = FALSE) {
+  nc <- integrate(function(x) dbesselexpkern(x, eta, g, log = log),
                   0, Inf)$value
   dbesselexpkern(kp, eta, g) / nc
 }
