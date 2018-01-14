@@ -201,16 +201,43 @@ test_that("Improvements for kappa proposal", {
     Vectorize(function(kp) {llfun(mu, kp, lam)})
   }
 
+  compareLikPropKappa <- function(mu = 1, kp = 4, lam = .4, n = 100, true_mu = 1, true_kp = 5,
+                                  log = FALSE,
+                                  kp_max = 20) {
+    x <- rinvbatmix(n, true_mu, true_kp, true_lam, 1)
+
+    llfun <- likfunpowbat(x, log = log)
+    kpfunkern <- Vectorize(function(kp) {llfun(mu, kp, lam)})
+    kpfun <- function(kp) kpfunkern(kp) / integrate(kpfunkern, 0, kp_max)$value
 
 
-  kplik1 <- makeKpLik(1, .6, 100, 5)
-  curve(kplik1, 0, 10)
+    curve(kpfun, 0, kp_max)
+    curve(dchisq(x, kp), 0, kp_max, add = TRUE, col = "tomato")
 
-  # with a chi-square proposal, the proposal for a new velue of kp would be:
-  curve(dchisq(x, 5), 0, 10)
-  # Which is way too wide by comparison.
+    # Obtain parameters of bessel exponential distribution
+    eta    <- length(x)
+    C      <- sum(cos(x))
+    S      <- sum(sin(x))
+    R      <- sqrt(C^2 + S^2)
+    th_bar <- atan2(S, C)
+    g      <- -R * cos(mu - th_bar) / eta
+
+    curve(dbesselexp(x, eta, g, log = FALSE), 0, kp_max, add = TRUE, col = "skyblue")
 
 
-  circglmbayes::
+
+    R2      <- computeMeanResultantLengthBat(kp, lam, bat_type = "power") * eta
+    g2      <- -R2 * cos(mu - th_bar) / eta
+
+    curve(dbesselexp(x, eta, g2, log = FALSE), 0, kp_max, add = TRUE, col = "darkolivegreen")
+    invisible(NULL)
+  }
+
+  compareLikPropKappa(kp = 15, true_kp = 5, kp_max = 50)
+  compareLikPropKappa()
+  compareLikPropKappa()
+  compareLikPropKappa()
+  compareLikPropKappa()
+
 
 })
