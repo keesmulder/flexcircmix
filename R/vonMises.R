@@ -95,10 +95,10 @@ dbesselexp <- function(kp, eta, g, log = FALSE) {
 
 #' @describeIn besselexp Kernel (unnormalized version) of the pdf.
 #' @export
-dbesselexpkern <- function(kp, eta, g, log = FALSE) {
+dbesselexpkern <- Vectorize(function(kp, eta, g, log = FALSE) {
   logprob <- - eta * g * kp - eta * logBesselI(kp, 0)
   ifelse(log, logprob, exp(logprob))
-}
+}, "kp")
 
 
 #' @describeIn besselexp Random generation.
