@@ -201,7 +201,8 @@ test_that("Improvements for kappa proposal", {
     Vectorize(function(kp) {llfun(mu, kp, lam)})
   }
 
-  compareLikPropKappa <- function(mu = 1, kp = 4, lam = .4, n = 100, true_mu = 1, true_kp = 5,
+  compareLikPropKappa <- function(mu = 1, kp = 4, lam = .4, n = 100,
+                                  true_mu = mu, true_kp = kp, true_lam = lam,
                                   log = FALSE,
                                   kp_max = 20) {
     x <- rinvbatmix(n, true_mu, true_kp, true_lam, 1)
@@ -233,7 +234,7 @@ test_that("Improvements for kappa proposal", {
     invisible(NULL)
   }
 
-  compareLikPropKappa(kp = 15, true_kp = 5, kp_max = 50)
+  compareLikPropKappa(kp = 15, lam = .5, kp_max = 50)
   compareLikPropKappa()
   compareLikPropKappa()
   compareLikPropKappa()
