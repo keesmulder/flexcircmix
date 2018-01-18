@@ -230,15 +230,12 @@ test_that("Improvements for kappa proposal", {
     R2      <- computeMeanResultantLengthBat(kp, lam, bat_type = "power") * eta
     g2      <- -R2 * cos(mu - th_bar) / eta
 
-    curve(dbesselexp(x, eta, g2, log = FALSE), 0, kp_max, add = TRUE, col = "darkolivegreen")
+    curve(dbesselexp(x, eta, g2, log = FALSE), 0, kp_max, add = TRUE, col = "green")
     invisible(NULL)
   }
 
-  compareLikPropKappa(kp = 15, lam = .5, kp_max = 50)
-  compareLikPropKappa()
-  compareLikPropKappa()
-  compareLikPropKappa()
-  compareLikPropKappa()
+  par(mfrow = c(3, 3))
+  replicate(9, compareLikPropKappa(n = 10, kp = 5, kp_max = 25))
 
 
 })
