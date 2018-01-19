@@ -201,6 +201,11 @@ test_that("Improvements for kappa proposal", {
     Vectorize(function(kp) {llfun(mu, kp, lam)})
   }
 
+  mu = 1; kp = 4; lam = .4; n = 100
+  true_mu = mu; true_kp = kp; true_lam = lam;
+  log = FALSE
+  kp_max = 20
+
   compareLikPropKappa <- function(mu = 1, kp = 4, lam = .4, n = 100,
                                   true_mu = mu, true_kp = kp, true_lam = lam,
                                   log = FALSE,
@@ -235,7 +240,22 @@ test_that("Improvements for kappa proposal", {
   }
 
   par(mfrow = c(3, 3))
-  replicate(9, compareLikPropKappa(n = 10, kp = 5, kp_max = 25))
+  replicate(9, compareLikPropKappa(n = 100, kp = 5, kp_max = 25))
+  par(mfrow = c(1, 1))
+
+
+  mu <- flexcircmix:::sample_mu_bat_2(x, mu, kp, lam, tlam_fun = flexcircmix:::tpow_lam, mu_logprior_fun = function(mu) 0)
+  kp <- flexcircmix:::sample_kp_bat(x, mu, kp, lam, likpowbat, kp_logprior_fun = function(kp) 0)
+  kp <- flexcircmix:::sample_lam_bat(x, mu, kp, lam, likpowbat, kp_logprior_fun = function(kp) 0)
+
+  x <- rinvbatmix(n, true_mu, true_kp, true_lam, 1)
+  plot(density(x))
+  curve(dpowbat(x, mu, kp, lam), add = TRUE, col = "blue")
+
+  llfun <- likfunpowbat(x, log = log)
+  kpfunkern <- Vectorize(function(kp) {llfun(mu, kp, lam)})
+  kpfun <- function(kp) kpfunkern(kp) / integrate(kpfunkern, 0, kp_max)$value
+
 
 
 })
