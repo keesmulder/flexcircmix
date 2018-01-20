@@ -201,7 +201,7 @@ test_that("Improvements for kappa proposal", {
     Vectorize(function(kp) {llfun(mu, kp, lam)})
   }
 
-  mu = 1; kp = 4; lam = .4; n = 100
+  mu = 1; kp = 5; lam = .6; n = 1000
   true_mu = mu; true_kp = kp; true_lam = lam;
   log = FALSE
   kp_max = 20
@@ -236,6 +236,24 @@ test_that("Improvements for kappa proposal", {
     g2      <- -R2 * cos(mu - th_bar) / eta
 
     curve(dbesselexp(x, eta, g2, log = FALSE), 0, kp_max, add = TRUE, col = "green")
+
+
+    phi  <- force_neg_pi_pi(flexcircmix:::tpow_lam_inv(x - mu, -lam) + mu)
+
+    # Obtain parameters of bessel exponential distribution
+    eta    <- length(phi)
+    C      <- sum(cos(phi))
+    S      <- sum(sin(phi))
+    R      <- sqrt(C^2 + S^2)
+    th_bar <- atan2(S, C)
+    g      <- -R * cos(mu - th_bar) / eta
+
+    # hist(x, breaks = 100)
+    # hist(phi, breaks = 100)
+
+    curve(dbesselexp(x, eta, g, log = FALSE), 0, kp_max, add = TRUE, col = "goldenrod")
+
+
     invisible(NULL)
   }
 
@@ -255,6 +273,38 @@ test_that("Improvements for kappa proposal", {
   llfun <- likfunpowbat(x, log = log)
   kpfunkern <- Vectorize(function(kp) {llfun(mu, kp, lam)})
   kpfun <- function(kp) kpfunkern(kp) / integrate(kpfunkern, 0, kp_max)$value
+
+
+
+  ?dgamma
+  # shape = a = n/2
+  # scale = s = h
+
+
+  # Chisq
+  # mean = df
+  # var = 2df
+
+  # Gamma
+  # mean = as = df
+  # var = ass
+
+  # If I know I want gamma with mean m and var v, we have
+  # s = v/m
+  # a = m/s
+
+  # So for chi-sq with mean 10 and variance 20, we have
+  # s = 20/10 = 2
+  # a = 10/2 = 5
+
+  curve(dgamma(x, shape = 5, scale = 2), 0, 20)
+  curve(dchisq(x, 10), 0, 20)
+
+
+  # Moreover, if we keep the chi-square base, we parameterize in terms of gamma
+  # mean , and variance tuning parameter phi, so that mean = m and variance =
+  # 2*m*phi.
+
 
 
 
