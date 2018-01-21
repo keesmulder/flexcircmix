@@ -89,8 +89,8 @@ sample_kp_bat <- function(x, mu, kp_cur, lam, llbat, kp_logprior_fun, var_tune =
   ll_can <- llbat(x, mu, kp_can, lam, log = TRUE)
   ll_cur <- llbat(x, mu, kp_cur, lam, log = TRUE)
 
-  logp_kp_can_to_cur <- dgammaprop(kp_cur, kp_can, log = TRUE)
-  logp_kp_cur_to_can <- dgammaprop(kp_can, kp_cur, log = TRUE)
+  logp_kp_can_to_cur <- dgammaprop(kp_cur, kp_can, var_tune, log = TRUE)
+  logp_kp_cur_to_can <- dgammaprop(kp_can, kp_cur, var_tune, log = TRUE)
 
   kp_lograt <- ll_can + kp_logprior_fun(kp_can) + logp_kp_can_to_cur -
     ll_cur - kp_logprior_fun(kp_cur) - logp_kp_cur_to_can
@@ -128,16 +128,16 @@ sample_lam_bat <- function(x, mu, kp, lam_cur, llbat, lam_logprior_fun, lam_bw =
 
 
 sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
-                                  kp_logprior_fun, lam_logprior_fun) {
+                                  kp_logprior_fun, lam_logprior_fun, var_tune = 1) {
 
   # Sample a candidate
-  kp_can  <- stats::rchisq(1, df = kp_cur)
+  kp_can  <- rgammaprop(1, mean = kp_cur, var_tune = var_tune)
   lam_can <- stats::runif(1,
                           max(-1, lam_cur - lam_bw),
                           min(1, lam_cur + lam_bw))
 
-  logp_kp_can_to_cur <- stats::dchisq(kp_cur, kp_can, log = TRUE)
-  logp_kp_cur_to_can <- stats::dchisq(kp_can, kp_cur, log = TRUE)
+  logp_kp_can_to_cur <- dgammaprop(kp_cur, kp_can, var_tune, log = TRUE)
+  logp_kp_cur_to_can <- dgammaprop(kp_can, kp_cur, var_tune, log = TRUE)
   logp_lam_can_to_cur <- stats::dunif(lam_cur,
                                       max(-1, lam_can - lam_bw),
                                       min(1, lam_can + lam_bw),
