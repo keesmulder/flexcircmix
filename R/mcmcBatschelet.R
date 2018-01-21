@@ -62,17 +62,35 @@ sample_mu_bat_2 <- function(x, mu_cur, kp, lam, tlam_fun, mu_logprior_fun) {
   }
 }
 
+# Reparametrized gamma proposal to make tuning parameter and mean interpretable.
+# This is equal to chi square with 'mean' degrees of freedom if var_tune = 1.
+dgammaprop <- function(x, mean = 1, var_tune = 1, log = FALSE) {
+  gamma_var   <- 2 * mean * var_tune
+  gamma_scale <- gamma_var  / mean
+  gamma_shape <- mean / gamma_scale
 
-sample_kp_bat <- function(x, mu, kp_cur, lam, llbat, kp_logprior_fun) {
+  stats::dgamma(x, shape = gamma_shape, scale = gamma_scale, log = log)
+}
+rgammaprop <- function(n = 1, mean = 1, var_tune = 1) {
+  gamma_var   <- 2 * mean * var_tune
+  gamma_scale <- gamma_var  / mean
+  gamma_shape <- mean / gamma_scale
+
+  stats::rgamma(n = n, shape = gamma_shape, scale = gamma_scale)
+}
+
+
+
+sample_kp_bat <- function(x, mu, kp_cur, lam, llbat, kp_logprior_fun, var_tune = 1) {
 
   # Sample a candidate
-  kp_can <- stats::rchisq(1, df = kp_cur)
+  kp_can <- rgammaprop(1, mean = kp_cur, var_tune = 1)
 
   ll_can <- llbat(x, mu, kp_can, lam, log = TRUE)
   ll_cur <- llbat(x, mu, kp_cur, lam, log = TRUE)
 
-  logp_kp_can_to_cur <- stats::dchisq(kp_cur, kp_can, log = TRUE)
-  logp_kp_cur_to_can <- stats::dchisq(kp_can, kp_cur, log = TRUE)
+  logp_kp_can_to_cur <- dgammaprop(kp_cur, kp_can, log = TRUE)
+  logp_kp_cur_to_can <- dgammaprop(kp_can, kp_cur, log = TRUE)
 
   kp_lograt <- ll_can + kp_logprior_fun(kp_can) + logp_kp_can_to_cur -
     ll_cur - kp_logprior_fun(kp_cur) - logp_kp_cur_to_can

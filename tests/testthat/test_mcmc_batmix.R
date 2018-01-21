@@ -22,3 +22,11 @@ test_that("MCMC runs", {
 
 
 
+test_that("Kappa proposals work" {
+
+  expect_equal(dgammaprop(3, 10), dchisq(3, 10))
+  expect_error(rgammaprop(10, 10, 2), NA)
+
+})
+
+
