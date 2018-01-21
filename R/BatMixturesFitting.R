@@ -369,7 +369,6 @@ fitbatmix <- function(x,
                                                 n_comp = n_comp,
                                                 init_pmat = init_pmat,
                                                 fixed_pmat = fixed_pmat,
-
                                                 ...)
 
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
