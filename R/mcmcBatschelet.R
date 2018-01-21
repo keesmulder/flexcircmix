@@ -291,6 +291,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   lam_cur  <- init_pmat[, 3]
   alph_cur <- init_pmat[, 4]
 
+  # Matrix of acceptance totals for kp and lam, which will be divided by the
+  # total later.
+  acc_mat <- matrix(0, nrow = n_comp, ncol = 2)
+  colnames(acc_mat) <- c("kp", "lam")
+  rownames(acc_mat) <- 1:n_comp
+
+
   # Initialize latent group labeling
   z_cur <- integer(n)
 
@@ -353,33 +360,54 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
       # Sample mu
       if (na_fixedpmat[j, 1]) {
-        mu_cur[j]  <- sample_mu_bat_2(x_j, mu_cur[j], kp_cur[j], lam_cur[j], tlam_fun, mu_logprior_fun)
+        mu_cur[j]  <- sample_mu_bat_2(x_j, mu_cur[j], kp_cur[j], lam_cur[j],
+                                      tlam_fun, mu_logprior_fun)
       }
 
       if (joint_kp_lam) {
 
         if (verbose > 2) cat("kl")
 
-        kplam_curj <- sample_kp_and_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_bw = lam_bw,
-                                            kp_logprior_fun, lam_logprior_fun, var_tune = kp_bw)
+        kplam_curj <- sample_kp_and_lam_bat(x_j,
+                                            mu_cur[j], kp_cur[j], lam_cur[j],
+                                            llbat, lam_bw = lam_bw,
+                                            kp_logprior_fun, lam_logprior_fun,
+                                            var_tune = kp_bw)
 
-        kp_cur[j]  <- kplam_curj[1]
-        lam_cur[j] <- kplam_curj[2]
+        # Assign the new values if they are new, and set acceptance count.
+        if (kp_cur[j] != kplam_curj[1])  {
+          kp_cur[j]     <- kplam_curj[1]
+          acc_mat[j, 1] <- acc_mat[j, 1] + 1
+        }
+        if (lam_cur[j] != kplam_curj[2])  {
+          lam_cur[j]    <- kplam_curj[2]
+          acc_mat[j, 2] <- acc_mat[j, 2] + 1
+        }
+
 
       } else {
 
         if (verbose > 2) cat("k")
         # Sample kp
         if (na_fixedpmat[j, 2]) {
-          kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat,
-                                      kp_logprior_fun, var_tune = kp_bw)
+          kp_new <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j],
+                                      llbat, kp_logprior_fun, var_tune = kp_bw)
+          if (kp_cur[j] != kp_new)  {
+            kp_cur[j]     <- kp_new
+            acc_mat[j, 1] <- acc_mat[j, 1] + 1
+          }
         }
 
         if (verbose > 2) cat("l")
         # Sample lam
         if (na_fixedpmat[j, 3]) {
-          lam_cur[j] <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat,
-                                       lam_logprior_fun, lam_bw = lam_bw)
+          lam_new <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j],
+                                       llbat, lam_logprior_fun, lam_bw = lam_bw)
+
+          if (lam_cur[j] != lam_new)  {
+            lam_cur[j]    <- lam_new
+            acc_mat[j, 2] <- acc_mat[j, 2] + 1
+          }
         }
       }
     }
@@ -417,13 +445,23 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     }
 
   }
+
+  # Compute acceptance ratio.
+  acc_mat <- acc_mat / Q
+
   if (verbose) cat("\nFinished.")
 
 
   if (compute_variance) {
-    return(coda::mcmc(cbind(output_matrix, variance_matrix), start = burnin + 1, end = Qbythin, thin = thin))
+    return(list(
+      mcmc_sample = coda::mcmc(cbind(output_matrix, variance_matrix),
+                               start = burnin + 1, end = Qbythin, thin = thin),
+      acceptance_rates = acc_mat))
   } else {
-    return(coda::mcmc(output_matrix, start = burnin + 1, end = Qbythin, thin = thin))
+    return(list(
+      mcmc_sample = coda::mcmc(output_matrix,
+                               start = burnin + 1, end = Qbythin, thin = thin),
+      acceptance_rates = acc_mat))
   }
 }
 

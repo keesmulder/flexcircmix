@@ -365,11 +365,15 @@ fitbatmix <- function(x,
 
   if (method == "bayes") {
 
-    bm_fit$mcmc_sample <- mcmcBatscheletMixture(x, bat_type = bat_type,
-                                                n_comp = n_comp,
-                                                init_pmat = init_pmat,
-                                                fixed_pmat = fixed_pmat,
-                                                ...)
+    mcmc_result <-  mcmcBatscheletMixture(x, bat_type = bat_type,
+                                          n_comp = n_comp,
+                                          init_pmat = init_pmat,
+                                          fixed_pmat = fixed_pmat,
+                                          ...)
+
+    bm_fit$mcmc_sample      <- mcmc_result$mcmc_sample
+    bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
+
 
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
     mcmc_sum <- mcmc_sum[!grepl("mean_res_len", rownames(mcmc_sum)), ]
