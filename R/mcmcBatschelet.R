@@ -218,10 +218,19 @@ lam_beta_log_prior_2_2 <- function(lam) {
 #'   \eqn{\alpha} is given its conjugate Dirichlet prior. The default is
 #'   \code{rep(1, n_comp)}, which is the noninformative uniform prior over the
 #'   \code{n_comp} simplex.
-#' @param joint_kp_lam Logical; Whether
-#' @param verbose Integer up to 4; Determines the amount of printed debug information.
-#' @param lam_bw Numeric; the maximum distance from the current lambda at which uniform proposals are drawn.
-#' @param compute_variance Logical; Whether to add circular variance to the returned mcmc sample.
+#' @param joint_kp_lam Logical; If \code{TRUE}, the parameters \code{kp} and
+#'   \code{lam} are drawn jointly. This can be beneficial if these are strongly
+#'   correlated.
+#' @param verbose Integer up to 4; Determines the amount of printed debug
+#'   information.
+#' @param lam_bw Numeric; the maximum distance from the current lambda at which
+#'   uniform proposals are drawn.
+#' @param kp_bw Numeric; A tuning parameter for kappa proposals. If \code{kp_bw
+#'   == 1}, the chi-square distribution is used. Often, this distribution is too
+#'   wide, so this parameter can be set to \code{0 < kp_bw < 1} to use a gamma
+#'   proposal which has lower variance than the chi-square.
+#' @param compute_variance Logical; Whether to add circular variance to the
+#'   returned mcmc sample.
 #'
 #' @return A numeric matrix of sampled parameter values.
 #' @export
@@ -236,6 +245,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   init_pmat  = matrix(NA, n_comp, 4),
                                   fixed_pmat = matrix(NA, n_comp, 4),
                                   joint_kp_lam = FALSE,
+                                  kp_bw  = 1,
                                   lam_bw = .05,
                                   mu_logprior_fun   = function(mu)   -log(2*pi),
                                   kp_logprior_fun   = function(kp)   1,
@@ -351,7 +361,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         if (verbose > 2) cat("kl")
 
         kplam_curj <- sample_kp_and_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat, lam_bw = lam_bw,
-                                            kp_logprior_fun, lam_logprior_fun)
+                                            kp_logprior_fun, lam_logprior_fun, var_tune = kp_bw)
 
         kp_cur[j]  <- kplam_curj[1]
         lam_cur[j] <- kplam_curj[2]
@@ -362,7 +372,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         # Sample kp
         if (na_fixedpmat[j, 2]) {
           kp_cur[j]  <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j], llbat,
-                                      kp_logprior_fun)
+                                      kp_logprior_fun, var_tune = kp_bw)
         }
 
         if (verbose > 2) cat("l")
