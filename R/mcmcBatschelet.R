@@ -84,13 +84,21 @@ rgammaprop <- function(n = 1, mean = 1, var_tune = 1) {
 sample_kp_bat <- function(x, mu, kp_cur, lam, llbat, kp_logprior_fun, var_tune = 1) {
 
   # Sample a candidate
-  kp_can <- rgammaprop(1, mean = kp_cur, var_tune = 1)
+  if (kp_cur > 0) {
+    kp_can <- rgammaprop(1, mean = kp_cur, var_tune = 1)
+    logp_kp_can_to_cur <- dgammaprop(kp_cur, kp_can, var_tune, log = TRUE)
+    logp_kp_cur_to_can <- dgammaprop(kp_can, kp_cur, var_tune, log = TRUE)
+  } else {
+    # If kp_cur == 0, usual sampling from gamma breaks down, so we retry by
+    # drawing proposals from the distribution with kp_cur == .1.
+    kp_can <- rgammaprop(1, mean = .1, var_tune = 1)
+    logp_kp_can_to_cur <- dgammaprop(.1, kp_can, var_tune, log = TRUE)
+    logp_kp_cur_to_can <- dgammaprop(kp_can, .1, var_tune, log = TRUE)
+  }
 
   ll_can <- llbat(x, mu, kp_can, lam, log = TRUE)
   ll_cur <- llbat(x, mu, kp_cur, lam, log = TRUE)
 
-  logp_kp_can_to_cur <- dgammaprop(kp_cur, kp_can, var_tune, log = TRUE)
-  logp_kp_cur_to_can <- dgammaprop(kp_can, kp_cur, var_tune, log = TRUE)
 
   kp_lograt <- ll_can + kp_logprior_fun(kp_can) + logp_kp_can_to_cur -
     ll_cur - kp_logprior_fun(kp_cur) - logp_kp_cur_to_can
