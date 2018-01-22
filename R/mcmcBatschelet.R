@@ -449,7 +449,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   # Compute acceptance ratio.
   acc_mat <- acc_mat / Q
 
-  if (verbose) cat("\nFinished.")
+  if (verbose) cat("\nFinished.\n")
 
 
   if (compute_variance) {
