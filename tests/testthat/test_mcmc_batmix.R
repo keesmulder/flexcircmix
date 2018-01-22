@@ -34,11 +34,11 @@ test_that("Kappa proposals work", {
 
 
   x <-  rinvbatmix(200)
-  sam_pow_1 <- mcmcBatscheletMixture(x, Q = 10000, n_comp = 3, verbose = 1,
+  sam_pow_1 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 1,
                                      kp_bw = 3, bat_type = 'power')
-  sam_pow_2 <- mcmcBatscheletMixture(x, Q = 10000, n_comp = 3, verbose = 1,
+  sam_pow_2 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 1,
                                      kp_bw = 1, bat_type = 'power')
-  sam_pow_3 <- mcmcBatscheletMixture(x, Q = 10000,  n_comp = 3, verbose = 1,
+  sam_pow_3 <- mcmcBatscheletMixture(x, Q = 1000,  n_comp = 3, verbose = 1,
                                      kp_bw = .2, bat_type = 'power')
 
   cbind(sam_pow_1$acceptance_rates[, 1],

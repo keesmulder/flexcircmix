@@ -443,7 +443,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         variance_matrix[isav, ] <- c(R_bar_cur, circ_var_cur, circ_sd_cur)
       }
     }
-
   }
 
   # Compute acceptance ratio.
