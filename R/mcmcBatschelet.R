@@ -332,7 +332,15 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       alph_cur[k] * dbat_fun(x, mu_cur[k], kp_cur[k], lam_cur[k])
     })
 
-    W <- W / rowSums(W)
+    w_rowsum <- rowSums(W)
+
+    # If some datapoints are numerically equal to zero, assign it equally to
+    # each component. Hopefully, this does not happen again in the next
+    # iteration.
+    W[w_rowsum == 0, ] <- 1/n_comp
+    w_rowsum[w_rowsum == 0] <- 1
+
+    W <- W / w_rowsum
 
     # Randomly sample group assignments from the component probabilities.
     z_cur <- apply(W, 1, function(row_probs) sample(x = 1:n_comp, size = 1, prob = row_probs))
