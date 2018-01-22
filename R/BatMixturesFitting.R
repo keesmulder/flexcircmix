@@ -89,9 +89,15 @@ batmixEM <- function(x,
       pmat_cur[k, 'alph'] * dbat_fun(x, pmat_cur[k, 'mu'], pmat_cur[k, 'kp'], pmat_cur[k, 'lam'])
     })
 
+    w_rowsum <- rowSums(W)
 
-    W <- W / rowSums(W)
+    # If some datapoints are numerically equal to zero, assign it equally to
+    # each component. Hopefully, this does not happen again in the next
+    # iteration.
+    W[w_rowsum == 0, ] <- 1/n_comp
+    w_rowsum[w_rowsum == 0] <- 1
 
+    W <- W / w_rowsum
 
     # Update alphas, the component weights, if they are not fixed.
     for (k in 1:n_comp) {
