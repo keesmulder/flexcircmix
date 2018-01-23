@@ -217,7 +217,7 @@ test_that("Improvements for kappa proposal", {
     kpfun <- function(kp) kpfunkern(kp) / integrate(kpfunkern, 0, kp_max)$value
 
 
-    curve(kpfun, 0, kp_max)
+    curve(kpfun, 0, kp_max, ylim = c(0, 1))
     curve(dchisq(x, kp), 0, kp_max, add = TRUE, col = "tomato")
 
     # Obtain parameters of bessel exponential distribution
@@ -253,9 +253,9 @@ test_that("Improvements for kappa proposal", {
 
     curve(dbesselexp(x, eta, g, log = FALSE), 0, kp_max, add = TRUE, col = "goldenrod")
 
-    curve(flexcircmix:::dgammaprop(x, kp, var_tune = .1), 0, kp_max, add = TRUE, col = "red")
-    curve(flexcircmix:::dgammaprop(x, kp, var_tune = 1), 0, kp_max, add = TRUE, col = "tomato")
-    curve(flexcircmix:::dgammaprop(x, kp, var_tune = 3), 0, kp_max, add = TRUE, col = "pink")
+    curve(flexcircmix:::dgammaprop(x, kp, var_tune = .01), 0, kp_max, add = TRUE, col = "red")
+    curve(flexcircmix:::dgammaprop(x, kp, var_tune = .1), 0, kp_max, add = TRUE, col = "tomato")
+    curve(flexcircmix:::dgammaprop(x, kp, var_tune = 1), 0, kp_max, add = TRUE, col = "pink")
 
 
 
