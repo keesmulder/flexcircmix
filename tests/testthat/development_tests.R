@@ -253,6 +253,11 @@ test_that("Improvements for kappa proposal", {
 
     curve(dbesselexp(x, eta, g, log = FALSE), 0, kp_max, add = TRUE, col = "goldenrod")
 
+    curve(flexcircmix:::dgammaprop(x, kp, var_tune = .1), 0, kp_max, add = TRUE, col = "red")
+    curve(flexcircmix:::dgammaprop(x, kp, var_tune = 1), 0, kp_max, add = TRUE, col = "tomato")
+    curve(flexcircmix:::dgammaprop(x, kp, var_tune = 3), 0, kp_max, add = TRUE, col = "pink")
+
+
 
     invisible(NULL)
   }
