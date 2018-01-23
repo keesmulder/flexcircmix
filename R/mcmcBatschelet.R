@@ -138,8 +138,18 @@ sample_lam_bat <- function(x, mu, kp, lam_cur, llbat, lam_logprior_fun, lam_bw =
 sample_kp_and_lam_bat <- function(x, mu, kp_cur, lam_cur, llbat, lam_bw = .05,
                                   kp_logprior_fun, lam_logprior_fun, var_tune = 1) {
 
-  # Sample a candidate
-  kp_can  <- rgammaprop(1, mean = kp_cur, var_tune = var_tune)
+  if (kp_cur > 0) {
+    kp_can <- rgammaprop(1, mean = kp_cur, var_tune = var_tune)
+    logp_kp_can_to_cur <- dgammaprop(kp_cur, kp_can, var_tune, log = TRUE)
+    logp_kp_cur_to_can <- dgammaprop(kp_can, kp_cur, var_tune, log = TRUE)
+  } else {
+    # If kp_cur == 0, usual sampling from gamma breaks down, so we retry by
+    # drawing proposals from the distribution with kp_cur == .1.
+    kp_can <- rgammaprop(1, mean = .1, var_tune = var_tune)
+    logp_kp_can_to_cur <- dgammaprop(.1, kp_can, var_tune, log = TRUE)
+    logp_kp_cur_to_can <- dgammaprop(kp_can, .1, var_tune, log = TRUE)
+  }
+
   lam_can <- stats::runif(1,
                           max(-1, lam_cur - lam_bw),
                           min(1, lam_cur + lam_bw))
