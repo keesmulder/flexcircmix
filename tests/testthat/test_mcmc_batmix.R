@@ -36,7 +36,7 @@ test_that("Kappa proposals work", {
   expect_error(
     sam_pow_weird <- mcmcBatscheletMixture(x, Q = 10,
                                          init_pmat = weird_init,
-                                         n_comp = 3, verbose = 1,
+                                         n_comp = 3, verbose = 0,
                                          kp_bw = 3, bat_type = 'power'),
     NA
   )
@@ -45,7 +45,7 @@ test_that("Kappa proposals work", {
   expect_error(
     sam_pow_weird <- mcmcBatscheletMixture(x, Q = 10,
                                            init_pmat = weird_init,
-                                           n_comp = 3, verbose = 1,
+                                           n_comp = 3, verbose = 0,
                                            kp_bw = 3, bat_type = 'power'),
     NA
   )
@@ -57,13 +57,13 @@ test_that("Kappa proposals work", {
 
   skip("")
 
-  x <-  rinvbatmix(200)
-  sam_pow_1 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 1,
-                                     kp_bw = 3, bat_type = 'power')
-  sam_pow_2 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 1,
+  x <-  rinvbatmix(50)
+  sam_pow_1 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 4,
                                      kp_bw = 1, bat_type = 'power')
-  sam_pow_3 <- mcmcBatscheletMixture(x, Q = 1000,  n_comp = 3, verbose = 1,
-                                     kp_bw = .02, bat_type = 'power')
+  sam_pow_2 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 4,
+                                     kp_bw = .1, bat_type = 'power')
+  sam_pow_3 <- mcmcBatscheletMixture(x, Q = 1000,  n_comp = 3, verbose = 4,
+                                     kp_bw = .01, bat_type = 'power')
 
   cbind(sam_pow_1$acceptance_rates[, 1],
         sam_pow_2$acceptance_rates[, 1],
