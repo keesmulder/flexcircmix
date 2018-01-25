@@ -343,7 +343,7 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 #'   with \code{NA} for parameters to be estimated, and a numeric for each
 #'   parameter that should be kept fixed to a specific value.
 #' @param probs Numeric vector; The probabilities for which to compute quantiles
-#'   in summarizing bootstrap or mcmc samples. By default, \code{probs = c(.025,
+#'   in summarizing bootstrap or MCMC samples. By default, \code{probs = c(.025,
 #'   .975)}, which corresponds to standard 95\% confidence or credible
 #'   intervals.
 #' @param ... Additional arguments to be passed to the selected \code{method}.
@@ -417,6 +417,20 @@ fitbatmix <- function(x,
 
   # Add the arguments of the call to the output.
   bm_fit$args <- list(...)
+
+  if (bat_type == "power") {
+    ll <- sum(dbatmix_pmat(x, dbat_fun = dpowbat,
+                           pmat = bm_fit$estimates, log = TRUE))
+  } else if (bat_type == "inverse") {
+    ll <- sum(dbatmix_pmat(x, dbat_fun = dinvbat,
+                           pmat = bm_fit$estimates, log = TRUE))
+  } else {stop("Batschelet type should be 'inverse' or 'power'.")}
+
+
+  bm_fit$loglik <- ll
+  bm_fit$ics <- c(loglik = ll, n_param = bm_fit$n_parameters,
+                  aic = -2 * ll + bm_fit$n_parameters,
+                  bic = -2 * ll + log(length(x)) * bm_fit$n_parameters)
 
   rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
   class(bm_fit) <- c("batmixmod", class(bm_fit))
