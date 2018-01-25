@@ -57,13 +57,20 @@ test_that("Kappa proposals work", {
 
   skip("")
 
-  x <-  rinvbatmix(50)
-  sam_pow_1 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 4,
+  parmat <- matrix(c(0, 2, 4,
+                     5, 5, 5,
+                     -.1, 0, .4,
+                     .2, .5, .3), ncol = 4)
+
+  x <-  rinvbatmix(1000, mus = parmat[,1], kps = parmat[,2], lams = parmat[,3], alphs = parmat[,4])
+  verb <- 1
+  Q <- 2000
+  sam_pow_1 <- mcmcBatscheletMixture(x, Q = Q, thin = 1,  n_comp = 3, verbose = verb, init_pmat = parmat,
                                      kp_bw = 1, bat_type = 'power')
-  sam_pow_2 <- mcmcBatscheletMixture(x, Q = 1000, n_comp = 3, verbose = 4,
+  sam_pow_2 <- mcmcBatscheletMixture(x, Q = Q, n_comp = 3, verbose = verb,
                                      kp_bw = .1, bat_type = 'power')
-  sam_pow_3 <- mcmcBatscheletMixture(x, Q = 1000,  n_comp = 3, verbose = 4,
-                                     kp_bw = .01, bat_type = 'power')
+  sam_pow_3 <- mcmcBatscheletMixture(x, Q = Q,  n_comp = 3, verbose = verb,
+                                     kp_bw = .001, bat_type = 'power')
 
   cbind(sam_pow_1$acceptance_rates[, 1],
         sam_pow_2$acceptance_rates[, 1],
@@ -73,9 +80,18 @@ test_that("Kappa proposals work", {
                  sam_pow_2$acceptance_rates[, 1],
                  sam_pow_3$acceptance_rates[, 1]))
 
-  plot.ts(sam_pow_1$mcmc_sample[,4])
-  plot.ts(sam_pow_2$mcmc_sample[,4])
-  plot.ts(sam_pow_3$mcmc_sample[,4])
+  plot_batmix_sample(x, sam_pow_1$mcmc_sample, plot_n = 20,  dens_darkness = 5)
+  plot.ts(sam_pow_1$mcmc_sample[,4:9])
+
+
+  plot_batmix_sample(x, sam_pow_2$mcmc_sample, plot_n = 20,  dens_darkness = 5)
+  plot.ts(sam_pow_2$mcmc_sample[,4:9])
+
+  plot_batmix_sample(x, sam_pow_3$mcmc_sample, plot_n = 20,  dens_darkness = 5)
+  plot.ts(sam_pow_3$mcmc_sample[,4:9])
+  plot.ts(sam_pow_3$mcmc_sample[,16:21])
+
+
 })
 
 

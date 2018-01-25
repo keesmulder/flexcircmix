@@ -267,9 +267,13 @@ test_that("Improvements for kappa proposal", {
   par(mfrow = c(1, 1))
 
 
-  mu <- flexcircmix:::sample_mu_bat_2(x, mu, kp, lam, tlam_fun = flexcircmix:::tpow_lam, mu_logprior_fun = function(mu) 0)
-  kp <- flexcircmix:::sample_kp_bat(x, mu, kp, lam, likpowbat, kp_logprior_fun = function(kp) 0)
-  kp <- flexcircmix:::sample_lam_bat(x, mu, kp, lam, likpowbat, kp_logprior_fun = function(kp) 0)
+  mu <- flexcircmix:::sample_mu_bat_2(x, mu, kp, lam,
+                                      tlam_fun = flexcircmix:::tpow_lam,
+                                      mu_logprior_fun = function(mu) 0)
+  kp <- flexcircmix:::sample_kp_bat(x, mu, kp, lam, likpowbat,
+                                    kp_logprior_fun = function(kp) 0)
+  kp <- flexcircmix:::sample_lam_bat(x, mu, kp, lam, likpowbat,
+                                     kp_logprior_fun = function(kp) 0)
 
   x <- rinvbatmix(n, true_mu, true_kp, true_lam, 1)
   plot(density(x))
