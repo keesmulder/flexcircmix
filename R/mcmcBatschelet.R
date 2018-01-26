@@ -448,7 +448,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
           sprintf("alph: %8s, ", round(alph_cur, 3)), "\n")
     }
 
-    if (i %% 50 == 0 && verbose == 1) cat(i, ", \n")
+    if (i %% 50 == 0 && verbose == 1) cat(i, ", \n", sep = "")
     if (i %% 5 == 0 && verbose > 1) cat("\n")
 
     if (i %% thin == 0 && i >= burnin) {
