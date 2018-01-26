@@ -346,6 +346,9 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 #'   in summarizing bootstrap or MCMC samples. By default, \code{probs = c(.025,
 #'   .975)}, which corresponds to standard 95\% confidence or credible
 #'   intervals.
+#' @param post_est_median Logical; Only relevant for MCMC. Whether to use the
+#'   posterior median as the estimate. If FALSE (the default) we use the mean,
+#'   or mean direction for \code{mu}.
 #' @param ... Additional arguments to be passed to the selected \code{method}.
 #'   In particular, use \code{verbose = TRUE} to print debug statements.
 #'
@@ -363,6 +366,7 @@ fitbatmix <- function(x,
                       init_pmat  = matrix(NA, n_comp, 4),
                       fixed_pmat = matrix(NA, n_comp, 4),
                       probs = c(.025, .975),
+                      post_est_median = TRUE,
                       ...) {
 
   # Construct fit object.
@@ -384,7 +388,8 @@ fitbatmix <- function(x,
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
     mcmc_sum <- mcmc_sum[!grepl("mean_res_len", rownames(mcmc_sum)), ]
 
-    bm_fit$est_vector   <- mcmc_sum[, 2]
+    # If post_est_median == TRUE, we'll use the second column. Otherwise, the first.
+    bm_fit$est_vector   <- mcmc_sum[, 1 + post_est_median]
     bm_fit$estimates    <- matrixize_pvec(bm_fit$est_vector)
     bm_fit$mcmc_summary <- mcmc_sum
 
