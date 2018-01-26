@@ -393,6 +393,8 @@ fitbatmix <- function(x,
     bm_fit$estimates    <- matrixize_pvec(bm_fit$est_vector)
     bm_fit$mcmc_summary <- mcmc_sum
 
+
+
   } else if (method == "EM") {
 
     bm_fit$estimates  <- batmixEM(x, bat_type = bat_type,
@@ -436,6 +438,22 @@ fitbatmix <- function(x,
   bm_fit$ics <- c(loglik = ll, n_param = bm_fit$n_parameters,
                   aic = -2 * ll + bm_fit$n_parameters,
                   bic = -2 * ll + log(length(x)) * bm_fit$n_parameters)
+
+  if (method = "bayes") {
+    deviance_vec <- -2 * bm_fit$llvec
+
+    D_bar <- mean(deviance_vec)
+    D_of_param_bar <- sum(dbatmix_pmat(x,
+                                       dbat_fun = ifelse(bat_type = "power",
+                                                         dpowbat, dinvbat),
+                                       pmat = matrixize_pvec(mcmc_sum[, 1]),
+                                       log = TRUE))
+
+    p_d1  <- D_bar - D_of_param_bar
+    p_d2  <- var(deviance_vec) / 2
+    dic_1 <- D_of_param_bar + 2 * p_d1
+    dic_2 <- D_of_param_bar + 2 * p_d2
+  }
 
   rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
   class(bm_fit) <- c("batmixmod", class(bm_fit))

@@ -19,6 +19,10 @@ test_that("MCMC runs", {
   expect_error(plot_batmix_sample(x = x, param = sam_pow), NA)
 
 
+  expect_error(sam_pow$dic, NA)
+  expect_error(sam_inv$dic, NA)
+
+
 })
 
 
