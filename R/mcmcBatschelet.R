@@ -323,6 +323,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   colnames(output_matrix) <- c(paste0("mu_", 1:n_comp), paste0("kp_", 1:n_comp),
                                paste0("lam_", 1:n_comp), paste0("alph_", 1:n_comp))
 
+  ll_vec <- numeric(Q)
+
 
   if (compute_variance) {
     variance_matrix <-  matrix(NA, nrow = Q, ncol = n_comp*3)
@@ -455,6 +457,10 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       isav <- (i - burnin) / thin
       output_matrix[isav, ] <- c(mu_cur, kp_cur, lam_cur, alph_cur)
 
+      ll_vec[i] <- sum(dbatmix(x = x, dbat_fun = dbat_fun,
+                               mu_cur, kp_cur, lam_cur, alph_cur,
+                               log = TRUE))
+
       if (compute_variance) {
         # Compute mean resultant lengths for each component.
         R_bar_cur <- sapply(1:n_comp, function(i) {
@@ -477,17 +483,15 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   if (verbose) cat("\nFinished.\n")
 
 
-  if (compute_variance) {
-    return(list(
-      mcmc_sample = coda::mcmc(cbind(output_matrix, variance_matrix),
-                               start = burnin + 1, end = Qbythin, thin = thin),
-      acceptance_rates = acc_mat))
-  } else {
-    return(list(
-      mcmc_sample = coda::mcmc(output_matrix,
-                               start = burnin + 1, end = Qbythin, thin = thin),
-      acceptance_rates = acc_mat))
-  }
+  if (compute_variance) output_matrix <- cbind(output_matrix, variance_matrix)
+
+  return(list(
+    mcmc_sample      = coda::mcmc(output_matrix,
+                                  start = burnin + 1,
+                                  end = Qbythin,
+                                  thin = thin),
+    loglik           = ll_vec,
+    acceptance_rates = acc_mat))
 }
 
 
