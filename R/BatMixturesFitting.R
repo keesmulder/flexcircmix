@@ -384,8 +384,8 @@ fitbatmix <- function(x,
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
     mcmc_sum <- mcmc_sum[!grepl("mean_res_len", rownames(mcmc_sum)), ]
 
-    bm_fit$est_vector <- mcmc_sum[, 2]
-    bm_fit$estimates <- matrixize_pvec(bm_fit$est_vector)
+    bm_fit$est_vector   <- mcmc_sum[, 2]
+    bm_fit$estimates    <- matrixize_pvec(bm_fit$est_vector)
     bm_fit$mcmc_summary <- mcmc_sum
 
   } else if (method == "EM") {
