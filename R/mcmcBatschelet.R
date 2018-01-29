@@ -265,11 +265,12 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   joint_kp_lam = FALSE,
                                   kp_bw  = 1,
                                   lam_bw = .05,
-                                  mu_logprior_fun   = function(mu)   -log(2*pi),
-                                  kp_logprior_fun   = function(kp)   1,
-                                  lam_logprior_fun  = function(lam)  -log(2),
-                                  alph_prior_param  = rep(1, n_comp),
-                                  compute_variance  = TRUE,
+                                  mu_logprior_fun  = function(mu)   -log(2*pi),
+                                  kp_logprior_fun  = function(kp)   1,
+                                  lam_logprior_fun = function(lam)  -log(2),
+                                  alph_prior_param = rep(1, n_comp),
+                                  compute_variance = TRUE,
+                                  compute_waic     = TRUE,
                                   verbose = 0) {
 
   # Select Batschelet type
@@ -320,11 +321,17 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   z_cur <- integer(n)
 
   output_matrix <- matrix(NA, nrow = Q, ncol = n_comp*4)
-  colnames(output_matrix) <- c(paste0("mu_", 1:n_comp), paste0("kp_", 1:n_comp),
-                               paste0("lam_", 1:n_comp), paste0("alph_", 1:n_comp))
+  colnames(output_matrix) <- c(paste0("mu_", 1:n_comp),
+                               paste0("kp_", 1:n_comp),
+                               paste0("lam_", 1:n_comp),
+                               paste0("alph_", 1:n_comp))
 
   ll_vec <- numeric(Q)
 
+  # Add WAIC log-likelihood accumulation vector.
+  if (compute_waic) {
+     waic_acc_vec <- numeric(n)
+  }
 
   if (compute_variance) {
     variance_matrix <-  matrix(NA, nrow = Q, ncol = n_comp*3)
@@ -363,11 +370,14 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     W <- W / w_rowsum
 
     # Randomly sample group assignments from the component probabilities.
-    z_cur <- apply(W, 1, function(row_probs) sample(x = 1:n_comp, size = 1, prob = row_probs))
+    z_cur <- apply(W, 1, function(row_probs) sample(x = 1:n_comp, size = 1,
+                                                    prob = row_probs))
 
     # Sample weights alph
     dir_asum <- sapply(1:n_comp, function(j) sum(z_cur == j))
-    alph_cur <- ifelse(na_fixedpmat[, 4], MCMCpack::rdirichlet(1, dir_asum + alph_prior_param), alph_cur)
+    alph_cur <- ifelse(na_fixedpmat[, 4],
+                       MCMCpack::rdirichlet(1, dir_asum + alph_prior_param),
+                       alph_cur)
 
     # After sampling the current group assignments, the parameters for each
     # component only can be sampled separately.
@@ -378,7 +388,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       # Dataset assigned to this component.
       x_j <- x[z_cur == j]
 
-      # Check whether anything is assigned to this components. If not, don't update the parameters.
+      # Check whether anything is assigned to this components. If not, don't
+      # update the parameters.
       if (length(x_j) == 0) {
         if (verbose > 1) cat("---")
         next
@@ -412,7 +423,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
           acc_mat[j, 2] <- acc_mat[j, 2] + 1
         }
 
-
       } else {
 
         if (verbose > 2) cat("k")
@@ -440,7 +450,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       }
     }
 
-
     # Possibly extremely detailed debugging information.
     if (verbose > 3) {
       cat("\n",
@@ -457,16 +466,22 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       isav <- (i - burnin) / thin
       output_matrix[isav, ] <- c(mu_cur, kp_cur, lam_cur, alph_cur)
 
-      ll_vec[i] <- sum(dbatmix(x = x, dbat_fun = dbat_fun,
-                               mu_cur, kp_cur, lam_cur, alph_cur,
-                               log = TRUE))
+
+      # A vector with log-densities for each data point.
+      each_th_ll <- dbatmix(x = x, dbat_fun = dbat_fun,
+                              mu_cur, kp_cur, lam_cur, alph_cur,
+                              log = TRUE)
+      ll_vec[i] <- sum(each_th_ll)
+
+      if (compute_waic) {
+        waic_acc_vec <- waic_acc_vec + each_th_ll
+      }
 
       if (compute_variance) {
         # Compute mean resultant lengths for each component.
         R_bar_cur <- sapply(1:n_comp, function(i) {
           computeMeanResultantLengthBat(kp_cur[i], lam_cur[i], bat_type)
         })
-
         # Compute variances.
         circ_var_cur <- 1 - R_bar_cur
         circ_sd_cur  <- computeCircSD(R_bar_cur)
@@ -480,8 +495,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   # Compute acceptance ratio.
   acc_mat <- acc_mat / Q
 
-  if (verbose) cat("\nFinished.\n")
+  if (compute_waic) {
+    lpd_hat <- sum( log(waic_acc_vec / Q))
 
+  }
+
+
+  if (verbose) cat("\nFinished.\n")
 
   if (compute_variance) output_matrix <- cbind(output_matrix, variance_matrix)
 

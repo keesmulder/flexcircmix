@@ -289,7 +289,8 @@ bm_summary_by_component <- function(bmm, add_ci = TRUE,
   out
 }
 
-#' This function takes a list of bat_mix_mods, and provides a table that compares the fits.
+#' This function takes a list of bat_mix_mods, and provides a table that
+#' compares the fits.
 #'
 #' @param bm_mod_list A list of \code{batmixmod} objects.
 #' @param add_ci Logical; Whether to add confidence intervals.
@@ -439,7 +440,7 @@ fitbatmix <- function(x,
                   aic = -2 * ll + bm_fit$n_parameters,
                   bic = -2 * ll + log(length(x)) * bm_fit$n_parameters)
 
-  if (method = "bayes") {
+  if (method == "bayes") {
     deviance_vec <- -2 * bm_fit$llvec
 
     D_bar <- mean(deviance_vec)
