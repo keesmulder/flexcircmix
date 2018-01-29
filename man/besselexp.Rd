@@ -7,7 +7,7 @@
 \alias{rbesselexp}
 \title{Bessel exponential distribution}
 \usage{
-dbesselexp(kp, eta, g, log = FALSE)
+dbesselexp(kp, eta = 1, g = -0.5, log = FALSE)
 
 dbesselexpkern(kp, eta, g, log = FALSE)
 
@@ -30,14 +30,14 @@ For \code{dbesselexp} and \code{dbesselexpkern}, a scalar. For
   \code{rbesselexp}, a vector of random variates from the distribution.
 }
 \description{
-Function for the Bessel exponential distribution. This is the conditional
+Functions for the Bessel exponential distribution. This is the conditional
 posterior distribution of the concentration parameter \code{kappa} of a von
 Mises distribution with conjugate prior. The random generation algorithm is
 due to Forbes and Mardia (2015).
 }
 \section{Functions}{
 \itemize{
-\item \code{dbesselexp}: Probability density function
+\item \code{dbesselexp}: Probability density function.
 
 \item \code{dbesselexpkern}: Kernel (unnormalized version) of the pdf.
 

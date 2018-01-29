@@ -6,7 +6,7 @@
 \usage{
 fitbatmix(x, method = "bayes", bat_type = "power", n_comp = 4,
   init_pmat = matrix(NA, n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4),
-  probs = c(0.025, 0.975), ...)
+  probs = c(0.025, 0.975), post_est_median = TRUE, ...)
 }
 \arguments{
 \item{x}{A dataset of angles in radians.}
@@ -29,9 +29,13 @@ with \code{NA} for parameters to be estimated, and a numeric for each
 parameter that should be kept fixed to a specific value.}
 
 \item{probs}{Numeric vector; The probabilities for which to compute quantiles
-in summarizing bootstrap or mcmc samples. By default, \code{probs = c(.025,
+in summarizing bootstrap or MCMC samples. By default, \code{probs = c(.025,
 .975)}, which corresponds to standard 95\% confidence or credible
 intervals.}
+
+\item{post_est_median}{Logical; Only relevant for MCMC. Whether to use the
+posterior median as the estimate. If FALSE (the default) we use the mean,
+or mean direction for \code{mu}.}
 
 \item{...}{Additional arguments to be passed to the selected \code{method}.
 In particular, use \code{verbose = TRUE} to print debug statements.}

@@ -2,7 +2,8 @@
 % Please edit documentation in R/BatMixturesFitting.R
 \name{multisummary.batmixmod}
 \alias{multisummary.batmixmod}
-\title{This function takes a list of bat_mix_mods, and provides a table that compares the fits.}
+\title{This function takes a list of bat_mix_mods, and provides a table that
+compares the fits.}
 \usage{
 multisummary.batmixmod(bm_mod_list, add_ci = TRUE, add_circ_sd = TRUE,
   add_circ_var = FALSE)
@@ -20,5 +21,6 @@ multisummary.batmixmod(bm_mod_list, add_ci = TRUE, add_circ_sd = TRUE,
 A data frame with a summary.
 }
 \description{
-This function takes a list of bat_mix_mods, and provides a table that compares the fits.
+This function takes a list of bat_mix_mods, and provides a table that
+compares the fits.
 }
