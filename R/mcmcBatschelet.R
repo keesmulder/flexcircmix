@@ -498,6 +498,15 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   if (compute_waic) {
     lpd_hat <- sum( log(waic_acc_vec / Q))
 
+    # // Obtain the two versions of WAIC as in Gelman's BDA, 3rd ed.
+  # rowvec WAIC_logofmean = log(mean(exp(ll_each_th_curpars), 0));
+  # rowvec WAIC_meanoflog = mean(ll_each_th_curpars, 0);
+  # double p_WAIC1     = 2 * sum(WAIC_logofmean - WAIC_meanoflog);
+#
+#   WAIC_
+#
+#     p_waic <-
+
   }
 
 
