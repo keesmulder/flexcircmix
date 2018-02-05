@@ -497,27 +497,17 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   if (compute_waic) {
 
-
     lppd <- sum(log(colSums(exp(ll_each_th_curpars)))) - n * log(Q)
-
-
-
-
-
-
-
-
+    waic_logofmean <- log(rowMeans(exp(ll_each_th_curpars)))
+    waic_meanoflog <- rowMeans(ll_each_th_curpars)
+    p_waic1 <- 2 * sum(waic_logofmean - waic_meanoflog)
     p_waic2 <- sum(apply(ll_each_th_curpars, 1, var))
 
-    # // Obtain the two versions of WAIC as in Gelman's BDA, 3rd ed.
-  # rowvec WAIC_logofmean = log(mean(exp(ll_each_th_curpars), 0));
-  # rowvec WAIC_meanoflog = mean(ll_each_th_curpars, 0);
-  # double p_WAIC1     = 2 * sum(WAIC_logofmean - WAIC_meanoflog);
-#
-#   WAIC_
-#
-#     p_waic <-
+    waic1 <- -2 * (lppd - p_waic1)
+    waic2 <- -2 * (lppd - p_waic2)
 
+    waic_list <- list(lppd = lppd, p_waic1 = p_waic1, p_waic2 = p_waic2,
+                      waic1 = waic1, waic2 = waic2)
   }
 
 
@@ -531,6 +521,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   end = Qbythin,
                                   thin = thin),
     loglik           = ll_vec,
+    waic_list        = waic_list,
     acceptance_rates = acc_mat))
 }
 
