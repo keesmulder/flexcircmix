@@ -475,14 +475,13 @@ fitbatmix <- function(x,
     bm_fit$ic$dic_2 <- c(p_dic2 = p_d2, dic2 = -2 * (D_of_param_bar - p_d2))
   }
 
-  ic_locs  <- vapply(bm_fit$ic, length, 0) > 1
-  ic_names <- names(bm_fit$ic[ic_locs])
-  ic_mat   <- matrix(unlist(bm_fit$ic[ic_locs]), ncol = 2,
-                     dimnames = list(ic_names, c("Penalty", "Value")),
-                     byrow = TRUE)
+  # Collect the ICs in a matrix.
+  ic_locs       <- vapply(bm_fit$ic, length, 0) > 1
+  ic_names      <- names(bm_fit$ic[ic_locs])
+  bm_fit$ic_mat <- matrix(unlist(bm_fit$ic[ic_locs]), ncol = 2,
+                          dimnames = list(ic_names, c("Penalty", "Value")),
+                          byrow = TRUE)
 
-  bm_fit$ic <- c(list(ic_mat = ic_mat),
-                 bm_fit$ic)
 
   rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
   class(bm_fit) <- c("batmixmod", class(bm_fit))
