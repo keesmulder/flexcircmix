@@ -104,13 +104,12 @@ test_that("Kappa proposals work", {
 
 test_that("IC", {
 
-  x <-  rinvbatmix(100)
+  x <-  rinvbatmix(200, kps = c(10, 10, 10))
 
-  sam_pow <- fitbatmix(x, method = "bayes", Q = 100, bat_type = 'power', compute_waic = TRUE)
+  sam_pow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, bat_type = 'power', compute_waic = TRUE)
 
-  bm_fit <- sam_pow
-
-  round(sam_pow$ic$ic_mat, 2)
+  expect_true(is.list(sam_pow$ic))
+  expect_true(is.matrix(sam_pow$ic$ic_mat))
 
 })
 
