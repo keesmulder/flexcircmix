@@ -332,7 +332,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   # Add WAIC log-likelihood accumulation vector.
   if (compute_waic) {
-     ll_each_th_curpars <- matrix(NA, nrow = Q, ncol = n)
+    ll_each_th_curpars <- matrix(NA, nrow = Q, ncol = n)
   }
 
   if (compute_variance) {
@@ -431,7 +431,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         # Sample kp
         if (na_fixedpmat[j, 2]) {
           kp_new <- sample_kp_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j],
-                                      llbat, kp_logprior_fun, var_tune = kp_bw)
+                                  llbat, kp_logprior_fun, var_tune = kp_bw)
           if (kp_cur[j] != kp_new)  {
             kp_cur[j]     <- kp_new
             acc_mat[j, 1] <- acc_mat[j, 1] + 1
@@ -442,7 +442,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
         # Sample lam
         if (na_fixedpmat[j, 3]) {
           lam_new <- sample_lam_bat(x_j, mu_cur[j], kp_cur[j], lam_cur[j],
-                                       llbat, lam_logprior_fun, lam_bw = lam_bw)
+                                    llbat, lam_logprior_fun, lam_bw = lam_bw)
 
           if (lam_cur[j] != lam_new)  {
             lam_cur[j]    <- lam_new
@@ -471,8 +471,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
       # A vector with log-densities for each data point.
       each_th_ll <- dbatmix(x = x, dbat_fun = dbat_fun,
-                              mu_cur, kp_cur, lam_cur, alph_cur,
-                              log = TRUE)
+                            mu_cur, kp_cur, lam_cur, alph_cur,
+                            log = TRUE)
       ll_vec[i] <- sum(each_th_ll)
 
       if (compute_waic) {
@@ -497,33 +497,33 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   # Compute acceptance ratio.
   acc_mat <- acc_mat / Q
 
-  if (compute_waic) {
-
-    lppd <- sum(log(colSums(exp(ll_each_th_curpars)))) - n * log(Q)
-    waic_logofmean <- log(rowMeans(exp(ll_each_th_curpars)))
-    waic_meanoflog <- rowMeans(ll_each_th_curpars)
-    p_waic1 <- 2 * sum(waic_logofmean - waic_meanoflog)
-    p_waic2 <- sum(apply(ll_each_th_curpars, 1, var))
-
-    waic1 <- -2 * (lppd - p_waic1)
-    waic2 <- -2 * (lppd - p_waic2)
-
-    waic_list <- list(lppd = lppd, p_waic1 = p_waic1, p_waic2 = p_waic2,
-                      waic1 = waic1, waic2 = waic2)
-  }
-
-
   if (verbose) cat("\nFinished.\n")
 
+  # Collect output
   if (compute_variance) output_matrix <- cbind(output_matrix, variance_matrix)
+  out_list <- list(mcmc_sample      = coda::mcmc(output_matrix,
+                                                 start = burnin + 1,
+                                                 end = Qbythin,
+                                                 thin = thin),
+                   loglik           = ll_vec,
+                   acceptance_rates = acc_mat)
 
-  return(list(mcmc_sample      = coda::mcmc(output_matrix,
-                                            start = burnin + 1,
-                                            end = Qbythin,
-                                            thin = thin),
-              loglik           = ll_vec,
-              ic               = waic_list,
-              acceptance_rates = acc_mat))
+
+  if (compute_waic) {
+    lppd           <- sum(log(colSums(exp(ll_each_th_curpars)))) - n * log(Q)
+    waic_logofmean <- log(rowMeans(exp(ll_each_th_curpars)))
+    waic_meanoflog <- rowMeans(ll_each_th_curpars)
+    p_waic1        <- 2 * sum(waic_logofmean - waic_meanoflog)
+    p_waic2        <- sum(apply(ll_each_th_curpars, 1, var))
+    waic1          <- -2 * (lppd - p_waic1)
+    waic2          <- -2 * (lppd - p_waic2)
+
+    out_list$waic_list <- list(lppd = lppd,
+                               p_waic1 = p_waic1, p_waic2 = p_waic2,
+                               waic1 = waic1, waic2 = waic2)
+  }
+
+  return(out_list)
 }
 
 
