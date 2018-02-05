@@ -446,7 +446,7 @@ fitbatmix <- function(x,
 
     D_bar <- mean(deviance_vec)
     D_of_param_bar <- sum(dbatmix_pmat(x,
-                                       dbat_fun = ifelse(bat_type = "power",
+                                       dbat_fun = ifelse(bat_type == "power",
                                                          dpowbat, dinvbat),
                                        pmat = matrixize_pvec(mcmc_sum[, 1]),
                                        log = TRUE))
