@@ -481,7 +481,7 @@ fitbatmix <- function(x,
                      dimnames = list(ic_names, c("Penalty", "Value")),
                      byrow = TRUE)
 
-  bm_fit$ic <- c(ic_mat = ic_mat,
+  bm_fit$ic <- c(list(ic_mat = ic_mat),
                  bm_fit$ic)
 
   rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
