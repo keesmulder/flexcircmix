@@ -469,7 +469,7 @@ fitbatmix <- function(x,
     D_of_param_bar <- sum(dbatmix_pmat(x,
                                        dbat_fun = ifelse(bat_type == "power",
                                                          dpowbat, dinvbat),
-                                       pmat = matrixize_pvec(mcmc_sum[, 1]),
+                                       pmat = bm_fit$estimates,
                                        log = TRUE))
 
     p_d1 <- 2 * (D_of_param_bar - D_bar)
