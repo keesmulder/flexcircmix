@@ -517,14 +517,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   if (compute_variance) output_matrix <- cbind(output_matrix, variance_matrix)
 
-  return(list(
-    mcmc_sample      = coda::mcmc(output_matrix,
-                                  start = burnin + 1,
-                                  end = Qbythin,
-                                  thin = thin),
-    loglik           = ll_vec,
-    waic_list        = waic_list,
-    acceptance_rates = acc_mat))
+  return(list(mcmc_sample      = coda::mcmc(output_matrix,
+                                            start = burnin + 1,
+                                            end = Qbythin,
+                                            thin = thin),
+              loglik           = ll_vec,
+              ic               = waic_list,
+              acceptance_rates = acc_mat))
 }
 
 

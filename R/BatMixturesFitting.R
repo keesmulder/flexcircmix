@@ -435,10 +435,11 @@ fitbatmix <- function(x,
   } else {stop("Batschelet type should be 'inverse' or 'power'.")}
 
 
+  # INFORMATION CRITERIA
   bm_fit$loglik <- ll
-  bm_fit$ics <- c(loglik = ll, n_param = bm_fit$n_parameters,
-                  aic = -2 * ll + bm_fit$n_parameters,
-                  bic = -2 * ll + log(length(x)) * bm_fit$n_parameters)
+  bm_fit$ic <- c(loglik = ll, n_param = bm_fit$n_parameters,
+                 aic = -2 * ll + bm_fit$n_parameters,
+                 bic = -2 * ll + log(length(x)) * bm_fit$n_parameters)
 
   if (method == "bayes") {
     deviance_vec <- -2 * bm_fit$llvec
@@ -452,8 +453,8 @@ fitbatmix <- function(x,
 
     p_d1  <- D_bar - D_of_param_bar
     p_d2  <- var(deviance_vec) / 2
-    bm_fit$ics$dic_1 <- D_of_param_bar + 2 * p_d1
-    bm_fit$ics$dic_2 <- D_of_param_bar + 2 * p_d2
+    bm_fit$ic$dic_1 <- D_of_param_bar + 2 * p_d1
+    bm_fit$ic$dic_2 <- D_of_param_bar + 2 * p_d2
 
 
   }
