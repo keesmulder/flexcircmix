@@ -472,7 +472,6 @@ fitbatmix <- function(x,
                                        pmat = bm_fit$estimates,
                                        log = TRUE))
     D_bar <- mean(mcmc_result$ll_vec)
-
     p_d1 <- 2 * (D_of_param_bar - D_bar)
     p_d2 <- 2 * var(mcmc_result$ll_vec)
 

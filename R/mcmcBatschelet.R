@@ -502,12 +502,39 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   # Collect output
   if (compute_variance) output_matrix <- cbind(output_matrix, variance_matrix)
 
+
+  # The log-posterior function that we have just sampled from.
+  log_posterior <- function(pvec) {
+
+    n_comp <- length(pvec)/4
+
+    mus   <- pvec[1:n_comp]
+    kps   <- pvec[(n_comp + 1):(2*n_comp)]
+    lams  <- pvec[(2*n_comp + 1):(3*n_comp)]
+    alphs <- pvec[(3*n_comp + 1):(4*n_comp)]
+
+    ll_part <- dbatmix(x, dbat_fun = dbat_fun,
+                       mus, kps, lams, alphs,
+                       log = TRUE)
+
+    prior_part <- sum(c(vapply(mus,   mu_logprior_fun),
+                        vapply(kps,   kp_logprior_fun),
+                        vapply(lams,  lam_logprior_fun),
+                        log(MCMCpack::ddirichlet(alphs,
+                                                 alpha = alph_prior_param))))
+    ll_part + prior_part
+  }
+
+
   out_list <- list(mcmc_sample      = coda::mcmc(output_matrix,
                                                  start = burnin + 1,
                                                  end = Qbythin,
                                                  thin = thin),
                    ll_vec           = ll_vec,
-                   acceptance_rates = acc_mat)
+                   log_posterior    = log_posterior,
+                   acceptance_rates = acc_mat,
+                   prior_list       = list(mu_logprior_fun, kp_logprior_fun,
+                                           lam_logprior_fun, alph_prior_param))
 
 
   if (compute_waic) {
