@@ -330,7 +330,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   # Add WAIC log-likelihood accumulation vector.
   if (compute_waic) {
-     waic_acc_mat <- matrix(NA, nrow = Q, ncol = n)
+     ll_each_th_curpars <- matrix(NA, nrow = Q, ncol = n)
   }
 
   if (compute_variance) {
@@ -474,7 +474,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       ll_vec[i] <- sum(each_th_ll)
 
       if (compute_waic) {
-        waic_acc_mat[isav, ] <- each_th_ll
+        ll_each_th_curpars[isav, ] <- each_th_ll
       }
 
       if (compute_variance) {
@@ -498,14 +498,16 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   if (compute_waic) {
 
 
-    lppd <- sum(log(colSums(exp(waic_acc_mat)))) - n * log(Q)
+    lppd <- sum(log(colSums(exp(ll_each_th_curpars)))) - n * log(Q)
 
 
 
 
 
 
-    p_waic2 <- sum(apply(waic_acc_mat, 1, var))
+
+
+    p_waic2 <- sum(apply(ll_each_th_curpars, 1, var))
 
     # // Obtain the two versions of WAIC as in Gelman's BDA, 3rd ed.
   # rowvec WAIC_logofmean = log(mean(exp(ll_each_th_curpars), 0));
