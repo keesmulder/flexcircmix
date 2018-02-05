@@ -428,6 +428,10 @@ fitbatmix <- function(x,
 
   } else stop("Method not found.")
 
+  # Fix estimate names.
+  rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
+
+  # Miscellaneous outputs.
   bm_fit$n_components <- nrow(bm_fit$estimates)
   bm_fit$n_parameters <- sum(is.na(fixed_pmat))
 
@@ -483,7 +487,7 @@ fitbatmix <- function(x,
                           byrow = TRUE)
 
 
-  rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
+
   class(bm_fit) <- c("batmixmod", class(bm_fit))
 
   bm_fit
