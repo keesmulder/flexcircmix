@@ -520,8 +520,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     waic2          <- -2 * (lppd - p_waic2)
 
     out_list$ic <- list(lppd = lppd,
-                        waic_1 = c(p_waic1 = p_waic1, waic1 = waic1),
-                        waic_2 = c(p_waic2 = p_waic2, waic2 = waic2))
+                        waic_1 = c(p_waic1 = 2 * p_waic1, waic1 = waic1),
+                        waic_2 = c(p_waic2 = 2 * p_waic2, waic2 = waic2))
   } else {
     out_list$ic <- list()
   }

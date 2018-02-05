@@ -464,7 +464,6 @@ fitbatmix <- function(x,
   if (method == "bayes") {
 
 
-    D_bar <- mean(mcmc_result$ll_vec)
 
     # Log-likelihood at Bayesian estimates.
     D_of_param_bar <- sum(dbatmix_pmat(x,
@@ -472,12 +471,13 @@ fitbatmix <- function(x,
                                                          dpowbat, dinvbat),
                                        pmat = bm_fit$estimates,
                                        log = TRUE))
+    D_bar <- mean(mcmc_result$ll_vec)
 
     p_d1 <- 2 * (D_of_param_bar - D_bar)
     p_d2 <- 2 * var(mcmc_result$ll_vec)
 
-    bm_fit$ic$dic_1 <- c(p_dic1 = p_d1, dic1 = -2 * (D_of_param_bar - p_d1))
-    bm_fit$ic$dic_2 <- c(p_dic2 = p_d2, dic2 = -2 * (D_of_param_bar - p_d2))
+    bm_fit$ic$dic_1 <- c(p_dic1 = 2 * p_d1, dic1 = -2 * (D_of_param_bar - p_d1))
+    bm_fit$ic$dic_2 <- c(p_dic2 = 2 * p_d2, dic2 = -2 * (D_of_param_bar - p_d2))
   }
 
   # Collect the ICs in a matrix.
