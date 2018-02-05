@@ -473,7 +473,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       each_th_ll <- dbatmix(x = x, dbat_fun = dbat_fun,
                             mu_cur, kp_cur, lam_cur, alph_cur,
                             log = TRUE)
-      ll_vec[i] <- sum(each_th_ll)
+      ll_vec[isav] <- sum(each_th_ll)
 
       if (compute_waic) {
         ll_each_th_curpars[isav, ] <- each_th_ll
