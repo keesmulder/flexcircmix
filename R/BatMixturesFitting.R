@@ -452,8 +452,10 @@ fitbatmix <- function(x,
 
     p_d1  <- D_bar - D_of_param_bar
     p_d2  <- var(deviance_vec) / 2
-    dic_1 <- D_of_param_bar + 2 * p_d1
-    dic_2 <- D_of_param_bar + 2 * p_d2
+    bm_fit$ics$dic_1 <- D_of_param_bar + 2 * p_d1
+    bm_fit$ics$dic_2 <- D_of_param_bar + 2 * p_d2
+
+
   }
 
   rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
