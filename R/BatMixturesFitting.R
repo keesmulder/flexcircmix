@@ -237,6 +237,8 @@ summarize_batmix_param_sample <- function(bm_sam, probs = c(.025, .975)) {
 #' @param bm_mod A \code{batmixmod} object.
 #' @param ... Further arguments to be passed to print methods.
 #'
+#' @export
+#'
 print.batmixmod <- function(bm_mod, ...) {
   cat("Mixture of ", bm_mod$bat_type,
       " Batschelet distributions, using method '",
