@@ -249,6 +249,8 @@ lam_beta_log_prior_2_2 <- function(lam) {
 #'   proposal which has lower variance than the chi-square.
 #' @param compute_variance Logical; Whether to add circular variance to the
 #'   returned mcmc sample.
+#' @param compute_waic Logical; Whether to compute the WAIC. Can be
+#'   computationally demanding if \code{n * Q} is large.
 #'
 #' @return A numeric matrix of sampled parameter values.
 #' @export
@@ -270,7 +272,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                   lam_logprior_fun = function(lam)  -log(2),
                                   alph_prior_param = rep(1, n_comp),
                                   compute_variance = TRUE,
-                                  compute_waic     = TRUE,
+                                  compute_waic     = FALSE,
                                   verbose = 0) {
 
   # Select Batschelet type
