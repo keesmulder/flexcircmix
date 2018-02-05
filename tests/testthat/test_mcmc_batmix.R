@@ -104,22 +104,13 @@ test_that("Kappa proposals work", {
 
 test_that("IC", {
 
-  x <-  rinvbatmix(10)
+  x <-  rinvbatmix(100)
 
-  time_inv <- system.time(sam_inv <- mcmcBatscheletMixture(x, Q = 10,
-                                                           bat_type = 'inverse'))
-  time_pow <- system.time(sam_pow <- mcmcBatscheletMixture(x, Q = 10,
-                                                           bat_type = 'power'))
+  sam_pow <- fitbatmix(x, method = "bayes", Q = 100, bat_type = 'power', compute_waic = TRUE)
 
-  time_inv
-  time_pow
+  bm_fit <- sam_pow
 
-  expect_error(plot_batmix_sample(x = x, param = sam_inv), NA)
-  expect_error(plot_batmix_sample(x = x, param = sam_pow), NA)
-
-
-  expect_error(sam_pow$dic, NA)
-  expect_error(sam_inv$dic, NA)
+  round(sam_pow$ic$ic_mat, 2)
 
 })
 
