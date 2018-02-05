@@ -421,7 +421,8 @@ fitbatmix <- function(x,
                                           fixed_pmat = fixed_pmat,
                                           ...))
 
-    bm_fit$boot_summary <- summarize_batmix_param_sample(bm_fit$boot_sample, probs = probs)
+    bm_fit$boot_summary <- summarize_batmix_param_sample(bm_fit$boot_sample,
+                                                         probs = probs)
 
   } else stop("Method not found.")
 
@@ -442,9 +443,11 @@ fitbatmix <- function(x,
 
   # INFORMATION CRITERIA
   bm_fit$loglik <- ll
-  bm_fit$ic <- c(loglik = ll, n_param = bm_fit$n_parameters,
-                 aic = -2 * ll + bm_fit$n_parameters,
-                 bic = -2 * ll + log(length(x)) * bm_fit$n_parameters)
+
+  bm_fit$ic <- c(list(loglik = ll, n_param = bm_fit$n_parameters,
+                      aic = -2 * ll + bm_fit$n_parameters,
+                      bic = -2 * ll + log(length(x)) * bm_fit$n_parameters),
+                 bm_fit$ic)
 
   if (method == "bayes") {
     deviance_vec <- -2 * bm_fit$llvec
@@ -458,8 +461,8 @@ fitbatmix <- function(x,
 
     p_d1  <- D_bar - D_of_param_bar
     p_d2  <- var(deviance_vec) / 2
-    bm_fit$ic$dic_1 <- D_of_param_bar + 2 * p_d1
-    bm_fit$ic$dic_2 <- D_of_param_bar + 2 * p_d2
+    bm_fit$ic$dic_1 <- c(p_dic1 = p_d1, dic1 = D_of_param_bar + 2 * p_d1)
+    bm_fit$ic$dic_2 <- c(p_dic2 = p_d2, dic2 = D_of_param_bar + 2 * p_d2)
 
 
   }
