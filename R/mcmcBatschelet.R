@@ -501,11 +501,12 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   # Collect output
   if (compute_variance) output_matrix <- cbind(output_matrix, variance_matrix)
+
   out_list <- list(mcmc_sample      = coda::mcmc(output_matrix,
                                                  start = burnin + 1,
                                                  end = Qbythin,
                                                  thin = thin),
-                   loglik           = ll_vec,
+                   ll_vec           = ll_vec,
                    acceptance_rates = acc_mat)
 
 
@@ -518,9 +519,11 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     waic1          <- -2 * (lppd - p_waic1)
     waic2          <- -2 * (lppd - p_waic2)
 
-    out_list$waic_list <- list(lppd = lppd,
-                               p_waic1 = p_waic1, p_waic2 = p_waic2,
-                               waic1 = waic1, waic2 = waic2)
+    out_list$ic <- list(lppd = lppd,
+                        waic_1 = c(p_waic1 = p_waic1, waic1 = waic1),
+                        waic_2 = c(p_waic2 = p_waic2, waic2 = waic2))
+  } else {
+    out_list$ic <- list()
   }
 
   return(out_list)

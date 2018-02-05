@@ -379,6 +379,7 @@ fitbatmix <- function(x,
 
   # Construct fit object.
   bm_fit <- list(method = method, bat_type = bat_type, x = x,
+                 ic = list(),
                  call = match.call())
 
   if (method == "bayes") {
@@ -391,6 +392,7 @@ fitbatmix <- function(x,
 
     bm_fit$mcmc_sample      <- mcmc_result$mcmc_sample
     bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
+    bm_fit$ic               <- mcmc_result$ic
 
 
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
@@ -400,8 +402,6 @@ fitbatmix <- function(x,
     bm_fit$est_vector   <- mcmc_sum[, 1 + post_est_median]
     bm_fit$estimates    <- matrixize_pvec(bm_fit$est_vector)
     bm_fit$mcmc_summary <- mcmc_sum
-
-
 
   } else if (method == "EM") {
 
@@ -454,7 +454,7 @@ fitbatmix <- function(x,
                  bm_fit$ic)
 
   if (method == "bayes") {
-    deviance_vec <- -2 * bm_fit$llvec
+    deviance_vec <- -2 * mcmc_result$ll_vec
 
     D_bar <- mean(deviance_vec)
     D_of_param_bar <- sum(dbatmix_pmat(x,
