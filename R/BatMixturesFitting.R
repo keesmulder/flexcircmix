@@ -449,8 +449,8 @@ fitbatmix <- function(x,
   bm_fit$ic <- c(list(loglik = ll,
                       deviance = -2 * ll,
                       n_param = bm_fit$n_parameters,
-                      aic = deviance + bm_fit$n_parameters,
-                      bic = deviance + log(length(x)) * bm_fit$n_parameters),
+                      aic = -2 * ll + bm_fit$n_parameters,
+                      bic = -2 * ll + log(length(x)) * bm_fit$n_parameters),
                  bm_fit$ic)
 
   if (method == "bayes") {
