@@ -10,7 +10,7 @@ mcmcBatscheletMixture(x, Q = 1000, burnin = 0, thin = 1, n_comp = 4,
   lam_bw = 0.05, mu_logprior_fun = function(mu) -log(2 * pi),
   kp_logprior_fun = function(kp) 1, lam_logprior_fun = function(lam)
   -log(2), alph_prior_param = rep(1, n_comp), compute_variance = TRUE,
-  compute_waic = TRUE, verbose = 0)
+  compute_waic = FALSE, verbose = 0)
 }
 \arguments{
 \item{x}{A numeric vector of angles, in radians}
@@ -76,6 +76,9 @@ uniform prior function.}
 
 \item{compute_variance}{Logical; Whether to add circular variance to the
 returned mcmc sample.}
+
+\item{compute_waic}{Logical; Whether to compute the WAIC. Can be
+computationally demanding if \code{n * Q} is large.}
 
 \item{verbose}{Integer up to 4; Determines the amount of printed debug
 information.}
