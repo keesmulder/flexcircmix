@@ -497,11 +497,9 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   if (compute_waic) {
 
-    double lppd = accu(log(sum(exp(ll_each_th_curpars), 0))) - n * log(Q);
 
     lppd <- sum(log(colSums(exp(waic_acc_mat)))) - n * log(Q)
 
-    waic_acc_vec <-
 
 
 
