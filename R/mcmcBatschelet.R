@@ -512,10 +512,10 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   if (compute_waic) {
     lppd           <- sum(log(colSums(exp(ll_each_th_curpars)))) - n * log(Q)
-    waic_logofmean <- log(rowMeans(exp(ll_each_th_curpars)))
-    waic_meanoflog <- rowMeans(ll_each_th_curpars)
+    waic_logofmean <- log(colMeans(exp(ll_each_th_curpars)))
+    waic_meanoflog <- colMeans(ll_each_th_curpars)
     p_waic1        <- 2 * sum(waic_logofmean - waic_meanoflog)
-    p_waic2        <- sum(apply(ll_each_th_curpars, 1, var))
+    p_waic2        <- sum(apply(ll_each_th_curpars, 2, var))
     waic1          <- -2 * (lppd - p_waic1)
     waic2          <- -2 * (lppd - p_waic2)
 
