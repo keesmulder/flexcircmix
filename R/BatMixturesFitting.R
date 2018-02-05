@@ -449,27 +449,40 @@ fitbatmix <- function(x,
   bm_fit$ic <- c(list(loglik = ll,
                       deviance = -2 * ll,
                       n_param = bm_fit$n_parameters,
-                      aic = 2 * (bm_fit$n_parameters - ll),
-                      bic = log(length(x)) * bm_fit$n_parameters - 2 * ll),
+                      aic = c(p_aic = 2 *  bm_fit$n_parameters,
+                              aic = 2 * (bm_fit$n_parameters - ll)),
+                      bic = c(
+                        p_bic = log(length(x)) * bm_fit$n_parameters,
+                        bic = log(length(x)) * bm_fit$n_parameters - 2 * ll)),
                  bm_fit$ic)
 
   if (method == "bayes") {
-    deviance_vec <- -2 * mcmc_result$ll_vec
 
-    D_bar <- mean(deviance_vec)
+
+    D_bar <- mean(mcmc_result$ll_vec)
+
+    # Log-likelihood at Bayesian estimates.
     D_of_param_bar <- sum(dbatmix_pmat(x,
                                        dbat_fun = ifelse(bat_type == "power",
                                                          dpowbat, dinvbat),
                                        pmat = matrixize_pvec(mcmc_sum[, 1]),
                                        log = TRUE))
 
-    p_d1  <- D_bar - D_of_param_bar
-    p_d2  <- var(deviance_vec) / 2
+    p_d1 <- 2 * (D_of_param_bar - D_bar)
+    p_d2 <- 2 * var(mcmc_result$ll_vec)
+
     bm_fit$ic$dic_1 <- c(p_dic1 = p_d1, dic1 = D_of_param_bar + 2 * p_d1)
     bm_fit$ic$dic_2 <- c(p_dic2 = p_d2, dic2 = D_of_param_bar + 2 * p_d2)
-
-
   }
+
+  ic_locs  <- vapply(bm_fit$ic, length, 0) > 1
+  ic_names <- names(bm_fit$ic[ic_locs])
+  ic_mat   <- matrix(unlist(bm_fit$ic[ic_locs]), ncol = 2,
+                     dimnames = list(ic_names, c("Penalty", "Value")),
+                     byrow = TRUE)
+
+  bm_fit$ic <- c(ic_mat = ic_mat,
+                 bm_fit$ic)
 
   rownames(bm_fit$estimates) <- paste("comp", 1:bm_fit$n_components, sep = "_")
   class(bm_fit) <- c("batmixmod", class(bm_fit))
