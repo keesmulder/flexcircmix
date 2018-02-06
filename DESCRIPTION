@@ -22,7 +22,8 @@ Imports: ggplot2,
     coda,
     pbapply,
     parallel,
-    circglmbayes
+    circglmbayes,
+    bridgesampling
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: testthat, movMF
