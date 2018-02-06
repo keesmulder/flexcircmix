@@ -91,20 +91,18 @@ test_that("Bridge sampling", {
 
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
-  sam_pow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10000, burnin = 1000,
+  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
                        bat_type = 'power', compute_waic = TRUE)
 
-  round(sam_pow$ic_mat, 2)
+
+  expect_true(class(bridge_sampler(bmpow, silent = TRUE)) == "bridge")
+
 
   skip("")
 
-  library(bridgesampling)
 
-  colnames(sam_pow$mcmc_sample)
 
-  sam <- sam_pow$mcmc_sample[, 1:sam_pow$n_parameters]
 
-  bridge_sampler(as.matrix(sam))
 
 
 })
