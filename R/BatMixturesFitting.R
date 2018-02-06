@@ -448,6 +448,9 @@ fitbatmix <- function(x,
                            pmat = bm_fit$estimates, log = TRUE))
   } else {stop("Batschelet type should be 'inverse' or 'power'.")}
 
+  # Parameter-only versions for convenience.
+  bm_fit$param_estimates <- bm_fit$estimates[, 1:4]
+  bm_fit$param_vector    <- bm_fit$est_vector[1:(bm_fit$n_components * 4)]
 
   # INFORMATION CRITERIA
   bm_fit$loglik <- ll
