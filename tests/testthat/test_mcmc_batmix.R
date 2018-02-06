@@ -31,32 +31,9 @@ test_that("MCMC through fitbatmix", {
                        burnin = 500)
 
   expect_true(is.function(bmpow$log_posterior))
+  expect_warning(bmpow$log_posterior(bmpow$est_vector[1:12]))
+  expect_true(is.numeric(bmpow$log_posterior(bmpow$mcmc_sample[1, 1:12])))
 
-  expect_true((bmpow$log_posterior(bmpow$est_vector[1:12])))
-
-  function(pvec) {
-
-    n_comp <- length(pvec)/4
-
-    mus   <- pvec[1:n_comp]
-    kps   <- pvec[(n_comp + 1):(2*n_comp)]
-    lams  <- pvec[(2*n_comp + 1):(3*n_comp)]
-    alphs <- pvec[(3*n_comp + 1):(4*n_comp)]
-    alphs <- alphs / sum(alphs)
-
-    ll_part <- sum(dbatmix(x, dbat_fun = dbat_fun,
-                       mus, kps, lams, alphs,
-                       log = TRUE))
-
-    prior_part <- sum(c(vapply(mus,   mu_logprior_fun, 0),
-                        vapply(kps,   kp_logprior_fun, 0),
-                        vapply(lams,  lam_logprior_fun, 0),
-                        log(MCMCpack::ddirichlet(alphs,
-                                                 alpha = alph_prior_param))))
-
-    ll_part + prior_part
-
-  sam_pow$log_posterior(bmpow$est_vector)
 })
 
 
