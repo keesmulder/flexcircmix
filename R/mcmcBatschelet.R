@@ -517,9 +517,9 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                        mus, kps, lams, alphs,
                        log = TRUE)
 
-    prior_part <- sum(c(vapply(mus,   mu_logprior_fun),
-                        vapply(kps,   kp_logprior_fun),
-                        vapply(lams,  lam_logprior_fun),
+    prior_part <- sum(c(vapply(mus,   mu_logprior_fun, 0),
+                        vapply(kps,   kp_logprior_fun, 0),
+                        vapply(lams,  lam_logprior_fun, 0),
                         log(MCMCpack::ddirichlet(alphs,
                                                  alpha = alph_prior_param))))
     ll_part + prior_part
