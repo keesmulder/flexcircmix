@@ -393,6 +393,7 @@ fitbatmix <- function(x,
     bm_fit$mcmc_sample      <- mcmc_result$mcmc_sample
     bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
     bm_fit$ic               <- mcmc_result$ic
+    bm_fit$log_posterior    <- mcmc_result$log_posterior
 
 
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
