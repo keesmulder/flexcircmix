@@ -504,7 +504,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
 
   # The log-posterior function that we have just sampled from.
-  log_posterior <- function(pvec) {
+  log_posterior <- function(pvec, data = x) {
 
     n_comp <- length(pvec)/4
 
@@ -518,7 +518,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       alphs <- alphs / sum(alphs)
     }
 
-    ll_part <- sum(dbatmix(x, dbat_fun = dbat_fun,
+    ll_part <- sum(dbatmix(data, dbat_fun = dbat_fun,
                            mus, kps, lams, alphs,
                            log = TRUE))
 
