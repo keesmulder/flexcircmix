@@ -15,13 +15,48 @@ test_that("MCMC runs", {
   time_inv
   time_pow
 
-  expect_error(plot_batmix_sample(x = x, param = sam_inv), NA)
-  expect_error(plot_batmix_sample(x = x, param = sam_pow), NA)
-
+  expect_error(plot_batmix_sample(x = x, param = sam_inv$mcmc_sample), NA)
+  expect_error(plot_batmix_sample(x = x, param = sam_pow$mcmc_sample), NA)
 
   expect_error(sam_pow$dic, NA)
   expect_error(sam_inv$dic, NA)
+})
 
+test_that("MCMC through fitbatmix", {
+
+  x <-  rinvbatmix(200, kps = c(10, 10, 10))
+
+  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100,
+                       bat_type = 'power', compute_waic = TRUE,
+                       burnin = 500)
+
+  expect_true(is.function(bmpow$log_posterior))
+
+  expect_true((bmpow$log_posterior(bmpow$est_vector[1:12])))
+
+  function(pvec) {
+
+    n_comp <- length(pvec)/4
+
+    mus   <- pvec[1:n_comp]
+    kps   <- pvec[(n_comp + 1):(2*n_comp)]
+    lams  <- pvec[(2*n_comp + 1):(3*n_comp)]
+    alphs <- pvec[(3*n_comp + 1):(4*n_comp)]
+    alphs <- alphs / sum(alphs)
+
+    ll_part <- sum(dbatmix(x, dbat_fun = dbat_fun,
+                       mus, kps, lams, alphs,
+                       log = TRUE))
+
+    prior_part <- sum(c(vapply(mus,   mu_logprior_fun, 0),
+                        vapply(kps,   kp_logprior_fun, 0),
+                        vapply(lams,  lam_logprior_fun, 0),
+                        log(MCMCpack::ddirichlet(alphs,
+                                                 alpha = alph_prior_param))))
+
+    ll_part + prior_part
+
+  sam_pow$log_posterior(bmpow$est_vector)
 })
 
 
@@ -52,53 +87,7 @@ test_that("Kappa proposals work", {
                                            kp_bw = 3, bat_type = 'power'),
     NA
   )
-
-
-  # curve(flexcircmix:::dgammaprop(x, 10, 1), 0, 20)
-  # curve(flexcircmix:::dgammaprop(x, 10, 2), 0, 20)
-  # curve(flexcircmix:::dgammaprop(x, 10, .1), 0, 20)
-
-  skip("")
-
-  parmat <- matrix(c(0, 2, 4,
-                     5, 5, 5,
-                     -.1, 0, .4,
-                     .2, .5, .3), ncol = 4)
-
-  x <-  rinvbatmix(1000, mus = parmat[,1], kps = parmat[,2], lams = parmat[,3], alphs = parmat[,4])
-  verb <- 1
-  Q <- 2000
-  sam_pow_1 <- mcmcBatscheletMixture(x, Q = Q, thin = 1,  n_comp = 3, verbose = verb, init_pmat = parmat,
-                                     kp_bw = 1, bat_type = 'power')
-  sam_pow_2 <- mcmcBatscheletMixture(x, Q = Q, n_comp = 3, verbose = verb,
-                                     kp_bw = .1, bat_type = 'power')
-  sam_pow_3 <- mcmcBatscheletMixture(x, Q = Q,  n_comp = 3, verbose = verb,
-                                     kp_bw = .001, bat_type = 'power')
-
-  cbind(sam_pow_1$acceptance_rates[, 1],
-        sam_pow_2$acceptance_rates[, 1],
-        sam_pow_3$acceptance_rates[, 1])
-
-  colMeans(cbind(sam_pow_1$acceptance_rates[, 1],
-                 sam_pow_2$acceptance_rates[, 1],
-                 sam_pow_3$acceptance_rates[, 1]))
-
-  plot_batmix_sample(x, sam_pow_1$mcmc_sample, plot_n = 20,  dens_darkness = 5)
-  plot.ts(sam_pow_1$mcmc_sample[,4:9])
-
-
-  plot_batmix_sample(x, sam_pow_2$mcmc_sample, plot_n = 20,  dens_darkness = 5)
-  plot.ts(sam_pow_2$mcmc_sample[,4:9])
-
-  plot_batmix_sample(x, sam_pow_3$mcmc_sample, plot_n = 20,  dens_darkness = 5)
-  plot.ts(sam_pow_3$mcmc_sample[,4:9])
-  plot.ts(sam_pow_3$mcmc_sample[,16:21])
-
-
 })
-
-
-
 
 
 
@@ -106,12 +95,43 @@ test_that("IC", {
 
   x <-  rinvbatmix(200, kps = c(10, 10, 10))
 
-  sam_pow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, bat_type = 'power', compute_waic = TRUE)
+  sam_pow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100,
+                       bat_type = 'power', compute_waic = TRUE,
+                       burnin = 500)
 
   expect_true(is.list(sam_pow$ic))
-  expect_true(is.matrix(sam_pow$ic$ic_mat))
+  expect_true(is.matrix(sam_pow$ic_mat))
+  expect_true(all(!is.na(unlist(sam_pow$ic))))
+})
+
+
+
+
+
+
+
+test_that("Bridge sampling", {
+
+  x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
+
+  sam_pow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10000, burnin = 1000,
+                       bat_type = 'power', compute_waic = TRUE)
+
+  round(sam_pow$ic_mat, 2)
+
+  skip("")
+
+  library(bridgesampling)
+
+  colnames(sam_pow$mcmc_sample)
+
+  sam <- sam_pow$mcmc_sample[, 1:sam_pow$n_parameters]
+
+  bridge_sampler(as.matrix(sam))
+
 
 })
+
 
 
 
