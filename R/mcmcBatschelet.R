@@ -516,6 +516,11 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     ll_part <- dbatmix(x, dbat_fun = dbat_fun,
                        mus, kps, lams, alphs,
                        log = TRUE)
+    if (!identical(sum(alphs), 1)) {
+      warning("Log-posterior adapting weight vector alpha to sum to one.")
+      alphs <- alphs / sum(alphs)
+    }
+
 
     prior_part <- sum(c(vapply(mus,   mu_logprior_fun, 0),
                         vapply(kps,   kp_logprior_fun, 0),
