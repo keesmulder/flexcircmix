@@ -13,7 +13,7 @@
 #' }
 #'
 #'
-#' @method bridge_sampler brmsfit
+#' @method bridge_sampler batmixmod
 #' @importFrom bridgesampling bridge_sampler
 #' @export bridge_sampler
 #' @export
