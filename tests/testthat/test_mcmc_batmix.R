@@ -67,7 +67,6 @@ test_that("Kappa proposals work", {
 })
 
 
-
 test_that("IC", {
 
   x <-  rinvbatmix(200, kps = c(10, 10, 10))
@@ -80,11 +79,6 @@ test_that("IC", {
   expect_true(is.matrix(sam_pow$ic_mat))
   expect_true(all(!is.na(unlist(sam_pow$ic))))
 })
-
-
-
-
-
 
 
 test_that("Bridge sampling", {
