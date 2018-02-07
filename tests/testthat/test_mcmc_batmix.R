@@ -94,17 +94,7 @@ test_that("Bridge sampling", {
   bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
                        bat_type = 'power', compute_waic = TRUE)
 
-
   expect_true(class(bridge_sampler(bmpow, silent = TRUE)) == "bridge")
-
-
-  skip("")
-
-
-
-
-
-
 })
 
 
