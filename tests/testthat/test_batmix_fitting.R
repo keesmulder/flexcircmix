@@ -23,6 +23,8 @@ test_that("EM fitbatmix wrapper works", {
   expect_true(fit_pow$method == "EM")
 
 
+
+
   # Works with a single component
   expect_error(
     fit_pow <- fitbatmix(x, n_comp = 1, verbose = FALSE,
@@ -31,6 +33,14 @@ test_that("EM fitbatmix wrapper works", {
 
 
   expect_equal(ncol(fit_pow$estimates), 6)
+
+
+  x_mis <- x
+  x_mis[20, 24] <- NA
+
+  expect_warning(fitbatmix(x_mis, bat_type = "power",
+                                      optimization_its = 2,
+                                      max_its = 2, method = "EM"))
 })
 
 test_that("Plotting works" , {
