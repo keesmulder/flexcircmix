@@ -378,7 +378,7 @@ fitbatmix <- function(x,
                       ...) {
 
 
-  # Check
+  # Check missings
   if (any(is.na(x))) {
     warning("Removing missing values from x.")
     x <- as.numeric(na.omit(x))
