@@ -50,7 +50,7 @@ bridge_sampler.batmixmod <- function(bm_mod, ...) {
   names(lb) <- colnames(sam)
   names(ub) <- colnames(sam)
 
-  bridgesampling::bridge_sampler(data = x,
+  bridgesampling::bridge_sampler(data = bm_mod$x,
                                  samples = as.matrix(sam),
                                  log_posterior = bm_mod$log_posterior,
                                  lb = lb, ub = ub, ...)
