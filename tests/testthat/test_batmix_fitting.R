@@ -36,7 +36,7 @@ test_that("EM fitbatmix wrapper works", {
 
 
   x_mis <- x
-  x_mis[20, 24] <- NA
+  x_mis[c(20, 24)] <- NA
 
   expect_warning(fitbatmix(x_mis, bat_type = "power",
                                       optimization_its = 2,

@@ -377,6 +377,13 @@ fitbatmix <- function(x,
                       post_est_median = TRUE,
                       ...) {
 
+
+  # Check
+  if (any(is.na(x))) {
+    warning("Removing missing values from x.")
+    x <- as.numeric(na.omit(x))
+  }
+
   # Construct fit object.
   bm_fit <- list(method = method, bat_type = bat_type, x = x,
                  ic = list(),
