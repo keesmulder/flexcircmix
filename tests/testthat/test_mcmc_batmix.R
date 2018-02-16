@@ -83,12 +83,19 @@ test_that("IC", {
 
 test_that("Bridge sampling", {
 
+  set.seed(20)
+
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
   bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
                        bat_type = 'power', compute_waic = TRUE)
 
-  expect_true(class(bridge_sampler(bmpow, silent = TRUE)) == "bridge")
+  bmpow$mcmc_sample[, "lam_2"] <- 0
+  bmpow$mcmc_sample[, "lam_3"] <- 0
+
+  bs <- bridge_sampler(bmpow, silent = FALSE)
+
+  expect_true(class(bs) == "bridge")
 })
 
 
