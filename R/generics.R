@@ -35,7 +35,7 @@ bridge_sampler.batmixmod <- function(bm_mod, ...) {
 
   n_comp <- bm_mod$n_components
 
-  sam <- bm_mod$mcmc_sample[, 1:bm_mod$n_parameters]
+  sam <- bm_mod$mcmc_sample[, 1:(4*n_comp)]
 
   # Force representation of the posterior samples as "gapless" numbers. This is
   # important because the bridge sampler will approximate the posterior with a
