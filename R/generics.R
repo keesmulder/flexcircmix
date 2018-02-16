@@ -44,8 +44,8 @@ bridge_sampler.batmixmod <- function(bm_mod, ...) {
   # 6 - 2*pi as well as 0 - .2.
   sam[, 1:n_comp] <- apply(sam[, 1:n_comp], 2, gapless_circ)
 
-  lb <- rep(c(-pi, 0, -1, 0), each = n_comp)
-  ub <- rep(c(pi, Inf, 1, 1), each = n_comp)
+  lb <- rep(c(-2*pi, 0, -1, 0), each = n_comp)
+  ub <- rep(c(2*pi, Inf, 1, 1), each = n_comp)
 
   names(lb) <- colnames(sam)
   names(ub) <- colnames(sam)
