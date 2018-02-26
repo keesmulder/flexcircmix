@@ -6,7 +6,7 @@
 \usage{
 maxlikbat(x, likfunbat_fun = likfuninvbat, weights, fixed_mu = NA,
   fixed_kp = NA, fixed_lam = NA, init_kp = 1, init_lam = 0,
-  max_its = 20, kp_max = 100)
+  max_its = 20, kp_max = 1000)
 }
 \arguments{
 \item{x}{An set of angles in radians.}
