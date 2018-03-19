@@ -357,6 +357,10 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 #' @param post_est_median Logical; Only relevant for MCMC. Whether to use the
 #'   posterior median as the estimate. If FALSE (the default) we use the mean,
 #'   or mean direction for \code{mu}.
+#' @param chains Integer; Only relevant for MCMC. Number of MCMC chains to perform.
+#' @param mcmc_parallel Logical; Only relevant for MCMC with \code{chains > 1}.
+#'   If \code{mcmc_parallel = TRUE}, multiple MCMC chains will be ran in
+#'   parallel.
 #' @param ... Additional arguments to be passed to the selected \code{method}.
 #'   In particular, use \code{verbose = TRUE} to print debug statements.
 #'
@@ -370,11 +374,13 @@ multisummary.batmixmod <- function(bm_mod_list, add_ci = TRUE,
 fitbatmix <- function(x,
                       method = "bayes",
                       bat_type = "power",
-                      n_comp = 4,
-                      init_pmat  = matrix(NA, n_comp, 4),
-                      fixed_pmat = matrix(NA, n_comp, 4),
+                      n_comp = 4L,
+                      init_pmat  = matrix(NA, n_comp, 4L),
+                      fixed_pmat = matrix(NA, n_comp, 4L),
                       probs = c(.025, .975),
                       post_est_median = TRUE,
+                      chains = 1L,
+                      mcmc_parallel = TRUE,
                       ...) {
 
 
