@@ -397,11 +397,18 @@ fitbatmix <- function(x,
 
   if (method == "bayes") {
 
-    mcmc_result <-  mcmcBatscheletMixture(x, bat_type = bat_type,
-                                          n_comp = n_comp,
-                                          init_pmat = init_pmat,
-                                          fixed_pmat = fixed_pmat,
-                                          ...)
+    if (chains == 1) {
+
+      mcmc_result <-  mcmcBatscheletMixture(x, bat_type = bat_type,
+                                            n_comp = n_comp,
+                                            init_pmat = init_pmat,
+                                            fixed_pmat = fixed_pmat,
+                                            ...)
+    } else {
+
+
+
+    }
 
     bm_fit$mcmc_sample      <- mcmc_result$mcmc_sample
     bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
@@ -409,7 +416,7 @@ fitbatmix <- function(x,
     bm_fit$log_posterior    <- mcmc_result$log_posterior
 
 
-    mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = c(.025, .975))
+    mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = probs)
     mcmc_sum <- mcmc_sum[!grepl("mean_res_len", rownames(mcmc_sum)), ]
 
     # If post_est_median == TRUE, we'll use the second column. Otherwise, the first.
