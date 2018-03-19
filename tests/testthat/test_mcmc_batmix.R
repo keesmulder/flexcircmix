@@ -88,7 +88,7 @@ test_that("Bridge sampling", {
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
   bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
-                       bat_type = 'power', compute_waic = TRUE)
+                       bat_type = 'power', compute_waic = FALSE)
 
   bmpow$mcmc_sample[, "lam_2"] <- 0
   bmpow$mcmc_sample[, "lam_3"] <- 0
