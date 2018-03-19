@@ -410,6 +410,8 @@ fitbatmix <- function(x,
       bm_fit$ic               <- mcmc_result$ic
       bm_fit$log_posterior    <- mcmc_result$log_posterior
 
+      llvec <- mcmc_result$log_posterior
+
     } else {
       # Collect arguments
       dots <- as.list(substitute(list(...)))[-1L]
@@ -429,16 +431,23 @@ fitbatmix <- function(x,
       mcmc_list_result <- pbapply::pbreplicate(chains, {
         do.call(mcmcBatscheletMixture,
                 args = arg_list)
-      }, cl = cl)
+      }, cl = cl, simplify = FALSE)
 
       parallel::stopCluster(cl)
 
-      bm_fit$mcmc_list        <- mcmc.list(lapply(mcmc_list_result, function(x) x$mcmc_sample))
-      bm_fit$mcmc_sample      <- do.call(lapply(mcmc_list_result,   function(x) x$mcmc_sample), rbind)
+      list_of_mcmc_sams <- lapply(mcmc_list_result, function(x) x$mcmc_sample)
 
-      bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
-      bm_fit$ic               <- mcmc_result$ic
-      bm_fit$log_posterior    <- mcmc_result$log_posterior
+      bm_fit$mcmc_list        <- coda::mcmc.list(list_of_mcmc_sams)
+      bm_fit$mcmc_sample      <- coda::mcmc(do.call(rbind, list_of_mcmc_sams))
+
+      # Matrix adder
+      add_mat <- function(x) Reduce("+", x)
+      bm_fit$acceptance_rates <- add_mat(
+          lapply(mcmc_list_result, function(x) x$acceptance_rates)) / chains
+      llvec <- do.call(c, lapply(mcmc_list_result, function(x) x$ll_vec))
+
+      bm_fit$ic               <- mcmc_list_result[[1]]$ic
+      bm_fit$log_posterior    <- mcmc_list_result[[1]]$log_posterior
 
     }
 
@@ -524,9 +533,9 @@ fitbatmix <- function(x,
                                                          dpowbat, dinvbat),
                                        pmat = bm_fit$estimates,
                                        log = TRUE))
-    D_bar <- mean(mcmc_result$ll_vec)
+    D_bar <- mean(llvec)
     p_d1 <- 2 * (D_of_param_bar - D_bar)
-    p_d2 <- 2 * var(mcmc_result$ll_vec)
+    p_d2 <- 2 * var(llvec)
 
     bm_fit$ic$dic_1 <- c(p_dic1 = 2 * p_d1, dic1 = -2 * (D_of_param_bar - p_d1))
     bm_fit$ic$dic_2 <- c(p_dic2 = 2 * p_d2, dic2 = -2 * (D_of_param_bar - p_d2))
