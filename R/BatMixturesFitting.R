@@ -404,16 +404,45 @@ fitbatmix <- function(x,
                                             init_pmat = init_pmat,
                                             fixed_pmat = fixed_pmat,
                                             ...)
+
+      bm_fit$mcmc_sample      <- mcmc_result$mcmc_sample
+      bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
+      bm_fit$ic               <- mcmc_result$ic
+      bm_fit$log_posterior    <- mcmc_result$log_posterior
+
     } else {
+      # Collect arguments
+      dots <- as.list(substitute(list(...)))[-1L]
+      arg_list <- c(list(x, bat_type = bat_type,
+                       n_comp = n_comp,
+                       init_pmat = init_pmat,
+                       fixed_pmat = fixed_pmat), dots)
 
+      # Set up cluster
+      no_cores <- parallel::detectCores() - 1
+      cl <- parallel::makeCluster(no_cores)
+      parallel::clusterEvalQ(cl, library(flexcircmix))
 
+      parallel::clusterExport(cl, envir = environment(),
+                              varlist = c("arg_list"))
+
+      mcmc_list_result <- pbapply::pbreplicate(chains, {
+        do.call(mcmcBatscheletMixture,
+                args = arg_list)
+      }, cl = cl)
+
+      parallel::stopCluster(cl)
+
+      bm_fit$mcmc_list        <- mcmc.list(lapply(mcmc_list_result, function(x) x$mcmc_sample))
+      bm_fit$mcmc_sample      <- do.call(lapply(mcmc_list_result,   function(x) x$mcmc_sample), rbind)
+
+      bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
+      bm_fit$ic               <- mcmc_result$ic
+      bm_fit$log_posterior    <- mcmc_result$log_posterior
 
     }
 
-    bm_fit$mcmc_sample      <- mcmc_result$mcmc_sample
-    bm_fit$acceptance_rates <- mcmc_result$acceptance_rates
-    bm_fit$ic               <- mcmc_result$ic
-    bm_fit$log_posterior    <- mcmc_result$log_posterior
+
 
 
     mcmc_sum <- summarize_batmix_param_sample(bm_fit$mcmc_sample, probs = probs)
