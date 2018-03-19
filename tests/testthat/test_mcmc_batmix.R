@@ -101,5 +101,27 @@ test_that("Bridge sampling", {
 
 
 
+test_that("Multichain", {
+
+  set.seed(20)
+
+  x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
+
+  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+                     bat_type = 'power', compute_waic = FALSE, chains = 6,
+                     mcmc_parallel = TRUE)
+
+  bmpow$mcmc_sample[, "lam_2"] <- 0
+  bmpow$mcmc_sample[, "lam_3"] <- 0
+
+  bs <- bridge_sampler(bmpow, silent = FALSE)
+
+  expect_true(class(bs) == "bridge")
+
+})
+
+
+
+
 
 
