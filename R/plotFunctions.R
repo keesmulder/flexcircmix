@@ -142,7 +142,7 @@ plot_batmixfit <- function(x, params, dbat_fun = dpowbat, bins = 100, res = 400,
   if (missing(x)) {
     p <- ggplot2::ggplot(data.frame(x = c(-pi, pi)))
   } else {
-    p <- ggplot2::ggplot(data.frame(x))
+    p <- ggplot2::ggplot(data.frame(x = force_neg_pi_pi(x)))
   }
 
   p <- p +
