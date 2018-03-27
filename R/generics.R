@@ -1,10 +1,11 @@
 # Helper function to represent circular variables (such as mean directions) as
 # "gapless" numerical representations.
 gapless_circ <- function(th) {
-  md     <- flexcircmix:::meanDir(th)
+  md     <- meanDir(th)
   new_th <- ((th - md + pi) %% (2*pi)) - pi + md
   new_th
 }
+
 
 
 #' Log Marginal Likelihood via Bridge Sampling
