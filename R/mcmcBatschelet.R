@@ -197,6 +197,24 @@ lam_beta_log_prior_2_2 <- function(lam) {
 }
 
 
+logBesselI <- function(x, nu) log(besselI(x, nu, expon.scaled = TRUE)) + x
+
+#' The Jeffreys prior for the von Mises distribution
+#'
+#' @param kp Numeric;
+#'
+#' @return An unnormalized value.
+#' @export
+vm_kp_jeffreys_prior <- function(kp) {
+  logAkp <- logBesselI(kp, 1) - logBesselI(kp, 0)
+  return(
+      exp(0.5 * (log(kp) +
+                   logAkp +
+                   log(0.5 +
+                         exp(logBesselI(kp, 2) - log(2) - logBesselI(kp, 0)) -
+                         exp(logAkp) ^ 2))))
+}
+
 #' MCMC sampling for Batschelet-type distributions.
 #'
 #' @param x A numeric vector of angles, in radians

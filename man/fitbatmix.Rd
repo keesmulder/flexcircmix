@@ -4,9 +4,10 @@
 \alias{fitbatmix}
 \title{Fit a mixture of Batschelet distributions}
 \usage{
-fitbatmix(x, method = "bayes", bat_type = "power", n_comp = 4,
-  init_pmat = matrix(NA, n_comp, 4), fixed_pmat = matrix(NA, n_comp, 4),
-  probs = c(0.025, 0.975), post_est_median = TRUE, ...)
+fitbatmix(x, method = "bayes", bat_type = "power", n_comp = 4L,
+  init_pmat = matrix(NA, n_comp, 4L), fixed_pmat = matrix(NA, n_comp, 4L),
+  probs = c(0.025, 0.975), post_est_median = TRUE, chains = 1L,
+  mcmc_parallel = TRUE, ...)
 }
 \arguments{
 \item{x}{A dataset of angles in radians.}
@@ -36,6 +37,12 @@ intervals.}
 \item{post_est_median}{Logical; Only relevant for MCMC. Whether to use the
 posterior median as the estimate. If FALSE (the default) we use the mean,
 or mean direction for \code{mu}.}
+
+\item{chains}{Integer; Only relevant for MCMC. Number of MCMC chains to perform.}
+
+\item{mcmc_parallel}{Logical; Only relevant for MCMC with \code{chains > 1}.
+If \code{mcmc_parallel = TRUE}, multiple MCMC chains will be ran in
+parallel.}
 
 \item{...}{Additional arguments to be passed to the selected \code{method}.
 In particular, use \code{verbose = TRUE} to print debug statements.}
