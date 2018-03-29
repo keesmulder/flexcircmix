@@ -2,9 +2,12 @@
 % Please edit documentation in R/mcmcBatschelet.R
 \name{vm_kp_jeffreys_prior}
 \alias{vm_kp_jeffreys_prior}
+\alias{vm_kp_jeffreys_logprior}
 \title{The Jeffreys prior for the von Mises distribution}
 \usage{
 vm_kp_jeffreys_prior(kp)
+
+vm_kp_jeffreys_logprior(kp)
 }
 \arguments{
 \item{kp}{Numeric;}

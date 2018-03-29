@@ -215,6 +215,18 @@ vm_kp_jeffreys_prior <- function(kp) {
                          exp(logAkp) ^ 2))))
 }
 
+#' @rdname vm_kp_jeffreys_prior
+#' @export
+vm_kp_jeffreys_logprior <- function(kp) {
+  logAkp <- logBesselI(kp, 1) - logBesselI(kp, 0)
+  return(
+    0.5 * (log(kp) +
+                 logAkp +
+                 log(0.5 +
+                       exp(logBesselI(kp, 2) - log(2) - logBesselI(kp, 0)) -
+                       exp(logAkp) ^ 2)))
+}
+
 #' MCMC sampling for Batschelet-type distributions.
 #'
 #' @param x A numeric vector of angles, in radians
