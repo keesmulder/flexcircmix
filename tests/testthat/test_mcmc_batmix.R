@@ -24,6 +24,8 @@ test_that("MCMC runs", {
 
 test_that("MCMC through fitbatmix", {
 
+  set.seed(30)
+
   x <-  rinvbatmix(200, kps = c(10, 10, 10))
 
   bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100,
