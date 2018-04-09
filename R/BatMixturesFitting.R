@@ -429,8 +429,8 @@ fitbatmix <- function(x,
                               varlist = c("arg_list"))
 
       mcmc_list_result <- pbapply::pbreplicate(chains, {
-        do.call(mcmcBatscheletMixture,
-                args = arg_list)
+        try(do.call(mcmcBatscheletMixture,
+                    args = arg_list))
       }, cl = cl, simplify = FALSE)
 
       parallel::stopCluster(cl)
