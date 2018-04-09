@@ -410,7 +410,7 @@ fitbatmix <- function(x,
       bm_fit$ic               <- mcmc_result$ic
       bm_fit$log_posterior    <- mcmc_result$log_posterior
 
-      llvec <- mcmc_result$log_posterior
+      llvec <- mcmc_result$ll_vec
 
     } else {
       # Collect arguments
