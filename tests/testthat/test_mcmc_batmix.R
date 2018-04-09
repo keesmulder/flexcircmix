@@ -107,8 +107,8 @@ test_that("Multichain", {
 
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
-  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 500, burnin = 10,
-                     bat_type = 'power', compute_waic = FALSE, chains = 36,
+  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+                     bat_type = 'power', compute_waic = FALSE, chains = 6,
                      mcmc_parallel = TRUE)
 
   expect_true(class(bmpow$mcmc_list) == "mcmc.list")
