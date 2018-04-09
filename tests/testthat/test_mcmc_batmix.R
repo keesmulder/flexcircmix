@@ -111,8 +111,8 @@ test_that("Multichain", {
                      bat_type = 'power', compute_waic = FALSE, chains = 36,
                      mcmc_parallel = TRUE)
 
-  bmpow$mcmc_sample[, "lam_2"] <- 0
-  bmpow$mcmc_sample[, "lam_3"] <- 0
+  expect_true(class(bmpow$mcmc_list) == "mcmc.list")
+
 
   # plot(bmpow$mcmc_list)
 
