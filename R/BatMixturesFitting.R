@@ -435,7 +435,17 @@ fitbatmix <- function(x,
 
       parallel::stopCluster(cl)
 
-      list_of_mcmc_sams <- lapply(mcmc_list_result, function(x) x$mcmc_sample)
+      # Collect the chains.
+      list_of_mcmc_sams <- lapply(mcmc_list_result, function(x) {
+        if (class(x$mcmc_sample) == "mcmc") {
+          return(x$mcmc_sample)
+        } else {
+          return(NA)
+        }})
+
+      # remove chains in which an error has occurred.
+      list_of_mcmc_sams <- list_of_mcmc_sams[!is.na(list_of_mcmc_sams)]
+
 
       bm_fit$mcmc_list        <- coda::mcmc.list(list_of_mcmc_sams)
       bm_fit$mcmc_sample      <- coda::mcmc(do.call(rbind, list_of_mcmc_sams))
