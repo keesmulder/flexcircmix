@@ -420,31 +420,40 @@ fitbatmix <- function(x,
                        init_pmat = init_pmat,
                        fixed_pmat = fixed_pmat), dots)
 
-      # Set up cluster
-      no_cores <- parallel::detectCores() - 1
-      cl <- parallel::makeCluster(no_cores)
-      parallel::clusterEvalQ(cl, library(flexcircmix))
+      if (mcmc_parallel) {
 
-      parallel::clusterExport(cl, envir = environment(),
-                              varlist = c("arg_list"))
 
-      mcmc_list_result <- pbapply::pbreplicate(chains, {
-        try(do.call(mcmcBatscheletMixture,
-                    args = arg_list))
-      }, cl = cl, simplify = FALSE)
+        # Set up cluster
+        no_cores <- parallel::detectCores() - 1
+        cl <- parallel::makeCluster(no_cores)
+        parallel::clusterEvalQ(cl, library(flexcircmix))
 
-      parallel::stopCluster(cl)
+        parallel::clusterExport(cl, envir = environment(),
+                                varlist = c("arg_list"))
 
-      # Collect the chains.
-      list_of_mcmc_sams <- lapply(mcmc_list_result, function(x) {
-        if (class(x$mcmc_sample) == "mcmc") {
-          return(x$mcmc_sample)
-        } else {
-          return(NA)
-        }})
+        mcmc_list_result <- pbapply::pbreplicate(chains, {
+          tryCatch(do.call(mcmcBatscheletMixture,
+                      args = arg_list),
+                   error = function(e) NA)
+        }, cl = cl, simplify = FALSE)
+
+        parallel::stopCluster(cl)
+
+      } else {
+
+        mcmc_list_result <- replicate(chains, {
+          tryCatch(do.call(mcmcBatscheletMixture,
+                      args = arg_list),
+              error = function(e) NA)
+        }, simplify = FALSE)
+
+      }
 
       # remove chains in which an error has occurred.
-      list_of_mcmc_sams <- list_of_mcmc_sams[!is.na(list_of_mcmc_sams)]
+      mcmc_list_result <- mcmc_list_result[!is.na(mcmc_list_result)]
+
+      # Collect the chains.
+      list_of_mcmc_sams <- lapply(mcmc_list_result, function(x) x$mcmc_sample)
 
 
       bm_fit$mcmc_list        <- coda::mcmc.list(list_of_mcmc_sams)

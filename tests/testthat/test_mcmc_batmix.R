@@ -107,13 +107,36 @@ test_that("Multichain", {
 
   set.seed(20)
 
+
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
-  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
                      bat_type = 'power', compute_waic = FALSE, chains = 6,
                      mcmc_parallel = TRUE)
 
-  expect_true(class(bmpow$mcmc_list) == "mcmc.list")
+  bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+                     bat_type = 'power', compute_waic = FALSE, chains = 6,
+                     mcmc_parallel = FALSE)
+
+
+  expect_true(class(bmpowpar$mcmc_list) == "mcmc.list")
+  expect_true(class(bmpowseq$mcmc_list) == "mcmc.list")
+
+
+  # Multichain error handling
+  x <-  rep(1, 100)
+
+  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+                        bat_type = 'power', compute_waic = FALSE, chains = 6,
+                        mcmc_parallel = TRUE)
+
+  bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+                        bat_type = 'power', compute_waic = FALSE, chains = 6,
+                        mcmc_parallel = FALSE)
+
+
+  expect_true(class(bmpowpar$mcmc_list) == "mcmc.list")
+  expect_true(class(bmpowseq$mcmc_list) == "mcmc.list")
 
 
   # plot(bmpow$mcmc_list)
