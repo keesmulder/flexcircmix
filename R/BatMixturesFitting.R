@@ -155,7 +155,7 @@ meanDir <- function (th, na.rm = TRUE) {
 #   th:         A numeric vector containing the angles in the sample.
 #   ...:        Arguments to be passed to quantile().
 # Returns:    A vector containing the angles of the desired quantiles.
-circularQuantile <- function (th, ...) {
+circularQuantile <- function(th, ...) {
 
   # The desired rotation before taking the quantile.
   rotation <- meanDir(th)
@@ -201,7 +201,7 @@ summarize_one_mu_vector <- function(mu_vec, probs = c(.025, .975)) {
   c(mean_dir = meanDir(mu_vec),
     circ_median = circularQuantile(mu_vec, .5, na.rm = TRUE),
     circ_se = computeCircSD(R_bar),
-    circularQuantile(mu_vec, probs = probs))
+    circularQuantile(mu_vec, probs = probs, na.rm = TRUE))
 }
 
 summarize_one_lin_param <- function(pm_vec, probs = c(.025, .975)) {
