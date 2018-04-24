@@ -36,6 +36,9 @@ test_that("MCMC through fitbatmix", {
   expect_warning(bmpow$log_posterior(bmpow$est_vector[1:12]))
   expect_true(is.numeric(bmpow$log_posterior(bmpow$mcmc_sample[1, 1:12])))
 
+
+
+
 })
 
 

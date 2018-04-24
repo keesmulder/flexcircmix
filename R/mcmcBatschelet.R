@@ -534,6 +534,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
 
   # The log-posterior function that we have just sampled from.
+
   log_posterior <- function(pvec, data = x) {
 
     n_comp <- length(pvec)/4
@@ -559,6 +560,19 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
                                                  alpha = alph_prior_param))))
     ll_part + prior_part
   }
+
+
+  # Create a new environment for log_posterior so that the
+  log_post_env <- new.env()
+  log_post_env$data             <- data
+  log_post_env$n_comp           <- n_comp
+  log_post_env$dbat_fun         <- dbat_fun
+  log_post_env$mu_logprior_fun  <- mu_logprior_fun
+  log_post_env$kp_logprior_fun  <- kp_logprior_fun
+  log_post_env$lam_logprior_fun <- lam_logprior_fun
+  log_post_env$alph_prior_param <- alph_prior_param
+
+  environment(log_posterior) <- log_post_env
 
 
   out_list <- list(mcmc_sample      = coda::mcmc(output_matrix,
