@@ -37,6 +37,9 @@ test_that("MCMC through fitbatmix", {
   expect_true(is.numeric(bmpow$log_posterior(bmpow$mcmc_sample[1, 1:12])))
 
 
+  #Test that the environmentwas correctlyu simplified
+  expect_false(grepl("ll_", names(environment(bmpow$log_posterior))))
+
 
 
 })
