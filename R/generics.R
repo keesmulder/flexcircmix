@@ -38,13 +38,6 @@ bridge_sampler.batmixmod <- function(bm_mod, ...) {
 
   sam <- bm_mod$mcmc_sample[, 1:(4*n_comp)]
 
-  # Force representation of the posterior samples as "gapless" numbers. This is
-  # important because the bridge sampler will approximate the posterior with a
-  # normal distribution based on the posterior covariance matrix, will will be
-  # too wide if there are gaps, for example a posterior represented in the range
-  # 6 - 2*pi as well as 0 - .2.
-  sam[, 1:n_comp] <- apply(sam[, 1:n_comp], 2, gapless_circ)
-
   lb <- rep(c(-2*pi, 0, -1, 0), each = n_comp)
   ub <- rep(c(2*pi, Inf, 1, 1), each = n_comp)
 
@@ -53,6 +46,7 @@ bridge_sampler.batmixmod <- function(bm_mod, ...) {
 
   bridgesampling::bridge_sampler(data = bm_mod$x,
                                  samples = as.matrix(sam),
+                                 param_types = rep(c("circular", "real", "real", "simplex"), each = n_comp),
                                  log_posterior = bm_mod$log_posterior,
                                  lb = lb, ub = ub, ...)
 }
