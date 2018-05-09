@@ -537,6 +537,13 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
   log_posterior <- function(pvec, data = x) {
 
+    # If there is one value in pvec missing, assume it is one of the alpha
+    # weights because this might happen when bridgesampling for example.
+    if ((length(pvec) %% 4) == 3) {
+      n_comp <- (length(pvec) + 1)/4
+      pvec <- c(pvec, sum(pvec[(3*n_comp + 1):(4*n_comp - 1)]))
+    }
+
     n_comp <- length(pvec)/4
 
     mus   <- pvec[1:n_comp]
