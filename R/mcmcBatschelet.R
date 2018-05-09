@@ -541,7 +541,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
     # weights because this might happen when bridgesampling for example.
     if ((length(pvec) %% 4) == 3) {
       n_comp <- (length(pvec) + 1)/4
-      pvec <- c(pvec, sum(pvec[(3*n_comp + 1):(4*n_comp - 1)]))
+      pvec <- c(pvec, 1 - sum(pvec[(3*n_comp + 1):(4*n_comp - 1)]))
     }
 
     n_comp <- length(pvec)/4
