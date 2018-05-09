@@ -562,7 +562,8 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   }
 
 
-  # Create a new environment for log_posterior so that the
+  # Create a new environment for log_posterior so that the file size of the
+  # resulting object is not too large.
   log_post_env <- new.env()
   log_post_env$data             <- data
   log_post_env$n_comp           <- n_comp
