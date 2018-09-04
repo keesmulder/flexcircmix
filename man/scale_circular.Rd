@@ -4,8 +4,9 @@
 \alias{scale_circular}
 \title{Circular ggplot scales}
 \usage{
-scale_circular(units = "degrees", nticks = 4, digits = 0, limits = c(0,
-  2 * pi), scale_function = ggplot2::scale_x_continuous, ...)
+scale_circular(units = "degrees", nticks = 4, digits = 0,
+  limits = c(0, 2 * pi), scale_function = ggplot2::scale_x_continuous,
+  ...)
 }
 \arguments{
 \item{units}{The units to display on the axis. See `Details` for the options.}

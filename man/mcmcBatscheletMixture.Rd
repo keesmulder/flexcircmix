@@ -4,13 +4,14 @@
 \alias{mcmcBatscheletMixture}
 \title{MCMC sampling for Batschelet-type distributions.}
 \usage{
-mcmcBatscheletMixture(x, Q = 1000, burnin = 0, thin = 1, n_comp = 4,
-  bat_type = "inverse", init_pmat = matrix(NA, n_comp, 4),
-  fixed_pmat = matrix(NA, n_comp, 4), joint_kp_lam = FALSE, kp_bw = 1,
-  lam_bw = 0.05, mu_logprior_fun = function(mu) -log(2 * pi),
-  kp_logprior_fun = function(kp) 1, lam_logprior_fun = function(lam)
-  -log(2), alph_prior_param = rep(1, n_comp), compute_variance = TRUE,
-  compute_waic = FALSE, verbose = 0)
+mcmcBatscheletMixture(x, Q = 1000, burnin = 0, thin = 1,
+  n_comp = 4, bat_type = "inverse", init_pmat = matrix(NA, n_comp,
+  4), fixed_pmat = matrix(NA, n_comp, 4), joint_kp_lam = FALSE,
+  kp_bw = 1, lam_bw = 0.05, mu_logprior_fun = function(mu) -log(2 *
+  pi), kp_logprior_fun = function(kp) 1,
+  lam_logprior_fun = function(lam) -log(2), alph_prior_param = rep(1,
+  n_comp), compute_variance = TRUE, compute_waic = FALSE,
+  verbose = 0)
 }
 \arguments{
 \item{x}{A numeric vector of angles, in radians}

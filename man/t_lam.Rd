@@ -19,8 +19,6 @@ The transformed angle x.
 }
 \description{
 Function used to generate different shapes for the inverse Batschelet distribution.
-
-Inverse Batschelet inverse function
 }
 \section{Functions}{
 \itemize{

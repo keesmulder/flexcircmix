@@ -22,8 +22,6 @@ dvm(x, mu = 0, kp = 1, log = FALSE)
 The probability density of the von Mises distribution at x.
 }
 \description{
-Kernel of the von Mises distribution.
-
 Compute the probability density function of the von Mises distribution.
 }
 \section{Functions}{

@@ -50,3 +50,29 @@ bridge_sampler.batmixmod <- function(bm_mod, ...) {
                                  log_posterior = bm_mod$log_posterior,
                                  lb = lb, ub = ub, ...)
 }
+
+
+#' Extract AIC from Batmixmod
+#'
+#' @param bm_mod A \code{batmixmod} object.
+#' @param ... Ignored.
+#'
+#' @return The numerical value of the AIC.
+#' @export
+#'
+AIC.batmixmod <- function(bm_mod, ...) {
+  bm_mod$ic_mat["aic", 2]
+}
+
+
+#' Extract BIC from Batmixmod
+#'
+#' @param bm_mod A \code{batmixmod} object.
+#' @param ... Ignored.
+#'
+#' @return The numerical value of the BIC.
+#' @export
+#'
+BIC.batmixmod <- function(bm_mod, ...) {
+  bm_mod$ic_mat["bic", 2]
+}

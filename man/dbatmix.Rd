@@ -6,14 +6,15 @@
 \alias{rinvbatmix}
 \title{The Batschelet-type Mixture distribution}
 \usage{
-dbatmix(x, dbat_fun = dinvbat, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
-  lams = c(-0.5, 0, 0.5), alphs = c(0.3, 0.4, 0.3), log = FALSE)
+dbatmix(x, dbat_fun = dinvbat, mus = c(-pi/2, 0, pi/2), kps = c(8, 8,
+  8), lams = c(-0.5, 0, 0.5), alphs = c(0.3, 0.4, 0.3), log = FALSE)
 
-dbatmix_pmat(x, dbat_fun = dinvbat, pmat = cbind(mu = c(-pi/2, 0, pi/2), kp
-  = c(8, 8, 8), lam = c(-0.5, 0, 0.5), alph = c(0.3, 0.4, 0.3)), log = FALSE)
+dbatmix_pmat(x, dbat_fun = dinvbat, pmat = cbind(mu = c(-pi/2, 0,
+  pi/2), kp = c(8, 8, 8), lam = c(-0.5, 0, 0.5), alph = c(0.3, 0.4, 0.3)),
+  log = FALSE)
 
-rinvbatmix(n, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8), lams = c(-0.5, 0,
-  0.5), alphs = c(0.3, 0.4, 0.3))
+rinvbatmix(n, mus = c(-pi/2, 0, pi/2), kps = c(8, 8, 8),
+  lams = c(-0.5, 0, 0.5), alphs = c(0.3, 0.4, 0.3))
 }
 \arguments{
 \item{x}{An angle in radians.}

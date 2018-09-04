@@ -5,8 +5,8 @@
 \title{Fit a mixture of Batschelet distributions}
 \usage{
 fitbatmix(x, method = "bayes", bat_type = "power", n_comp = 4L,
-  init_pmat = matrix(NA, n_comp, 4L), fixed_pmat = matrix(NA, n_comp, 4L),
-  probs = c(0.025, 0.975), post_est_median = TRUE, chains = 1L,
+  init_pmat = matrix(NA, n_comp, 4L), fixed_pmat = matrix(NA, n_comp,
+  4L), probs = c(0.025, 0.975), post_est_median = TRUE, chains = 1L,
   mcmc_parallel = TRUE, ...)
 }
 \arguments{
