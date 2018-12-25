@@ -239,12 +239,12 @@ summarize_batmix_param_sample <- function(bm_sam, probs = c(.025, .975)) {
 #'
 #' @export
 #'
-print.batmixmod <- function(bm_mod, ...) {
-  cat("Mixture of ", bm_mod$bat_type,
+print.batmixmod <- function(x, ...) {
+  cat("Mixture of ", x$bat_type,
       " Batschelet distributions, using method '",
-      bm_mod$method, "'.\n", sep = "")
+      x$method, "'.\n", sep = "")
 
-  print(bm_mod$estimates, ...)
+  print(x2$estimates, ...)
 }
 
 summary.batmixmod <- function(bm_mod) {
@@ -387,7 +387,7 @@ fitbatmix <- function(x,
   # Check missings
   if (any(is.na(x))) {
     warning("Removing missing values from x.")
-    x <- as.numeric(na.omit(x))
+    x <- as.numeric(stats::na.omit(x))
   }
 
   # Construct fit object.
@@ -554,7 +554,7 @@ fitbatmix <- function(x,
                                        log = TRUE))
     D_bar <- mean(llvec)
     p_d1 <- 2 * (D_of_param_bar - D_bar)
-    p_d2 <- 2 * var(llvec)
+    p_d2 <- 2 * stats::var(llvec)
 
     bm_fit$ic$dic_1 <- c(p_dic1 = 2 * p_d1, dic1 = -2 * (D_of_param_bar - p_d1))
     bm_fit$ic$dic_2 <- c(p_dic2 = 2 * p_d2, dic2 = -2 * (D_of_param_bar - p_d2))

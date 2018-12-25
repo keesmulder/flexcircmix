@@ -57,7 +57,9 @@ dvm <- function(x, mu = 0, kp = 1, log = FALSE) {
 #' Mises distribution with conjugate prior. The random generation algorithm is
 #' due to Forbes and Mardia (2015).
 #'
-#' @param kp Numeric;
+#' @param kp Numeric; value of kappa to evaluate.
+#' @param n Integer; number of generated samples.
+#' @param log Logical; Whether to return the log of the result.
 #' @param eta Integer; This is the posterior sample size, which is n + c where c
 #'   is the number of observations contained in the conjugate prior. For
 #'   uninformative, \code{c = 0} and \code{eta = n}.
@@ -87,7 +89,7 @@ NULL
 #' @describeIn besselexp Probability density function.
 #' @export
 dbesselexp <- function(kp, eta = 1, g = -.5, log = FALSE) {
-  nc <- integrate(function(x) dbesselexpkern(x, eta, g, log = log),
+  nc <- stats::integrate(function(x) dbesselexpkern(x, eta, g, log = log),
                   0, Inf)$value
   dbesselexpkern(kp, eta, g) / nc
 }
@@ -96,7 +98,7 @@ dbesselexp <- function(kp, eta = 1, g = -.5, log = FALSE) {
 #' @describeIn besselexp Kernel (unnormalized version) of the pdf.
 #' @export
 dbesselexpkern <- Vectorize(function(kp, eta, g, log = FALSE) {
-  logprob <- - eta * g * kp - eta * logBesselI(kp, 0)
+  logprob <- -eta * g * kp - eta * logBesselI(kp, 0)
   ifelse(log, logprob, exp(logprob))
 }, "kp")
 

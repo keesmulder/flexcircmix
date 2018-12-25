@@ -101,13 +101,13 @@ scale_circular <- function(units = "degrees", nticks = 4,
 }
 
 #' @export
-#' @describeIn scale_circular
+#' @describeIn scale_circular X axis has circular scale.
 scale_x_circular <- function(...) {
   scale_circular(scale_function = ggplot2::scale_x_continuous, ...)
 }
 
 #' @export
-#' @describeIn scale_circular
+#' @describeIn scale_circular Y axis has circular scale.
 scale_y_circular <- function(...) {
   scale_circular(scale_function = ggplot2::scale_y_continuous, ...)
 }

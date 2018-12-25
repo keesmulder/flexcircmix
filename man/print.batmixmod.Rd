@@ -4,12 +4,12 @@
 \alias{print.batmixmod}
 \title{Printing function for \code{batmixmod} objects.}
 \usage{
-\method{print}{batmixmod}(bm_mod, ...)
+\method{print}{batmixmod}(x, ...)
 }
 \arguments{
-\item{bm_mod}{A \code{batmixmod} object.}
-
 \item{...}{Further arguments to be passed to print methods.}
+
+\item{bm_mod}{A \code{batmixmod} object.}
 }
 \description{
 Printing function for \code{batmixmod} objects.

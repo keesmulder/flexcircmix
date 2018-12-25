@@ -25,7 +25,6 @@ gapless_circ <- function(th) {
 #'
 #' @method bridge_sampler batmixmod
 #' @importFrom bridgesampling bridge_sampler
-#' @export bridge_sampler
 #' @export
 #'
 bridge_sampler.batmixmod <- function(samples, ...) {
@@ -61,7 +60,6 @@ bridge_sampler.batmixmod <- function(samples, ...) {
 #'
 #' @method AIC batmixmod
 #' @importFrom stats AIC
-#' @export AIC
 #' @export
 #'
 AIC.batmixmod <- function(object, ...) {
@@ -78,7 +76,6 @@ AIC.batmixmod <- function(object, ...) {
 #' @return The numerical value of the BIC.
 #' @method BIC batmixmod
 #' @importFrom stats BIC
-#' @export BIC
 #' @export
 #'
 BIC.batmixmod <- function(object, ...) {

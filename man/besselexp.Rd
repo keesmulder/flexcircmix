@@ -14,7 +14,7 @@ dbesselexpkern(kp, eta, g, log = FALSE)
 rbesselexp(n, eta, g)
 }
 \arguments{
-\item{kp}{Numeric;}
+\item{kp}{Numeric; value of kappa to evaluate.}
 
 \item{eta}{Integer; This is the posterior sample size, which is n + c where c
 is the number of observations contained in the conjugate prior. For
@@ -24,6 +24,10 @@ uninformative, \code{c = 0} and \code{eta = n}.}
 is the posterior mean resultant length, and \code{theta_bar} is the
 posterior mean, while \code{mu} is the current value of the mean. Note that
 this parameter is called \eqn{\beta_0} in Forbes and Mardia (2015).}
+
+\item{log}{Logical; Whether to return the log of the result.}
+
+\item{n}{Integer; number of generated samples.}
 }
 \value{
 For \code{dbesselexp} and \code{dbesselexpkern}, a scalar. For
