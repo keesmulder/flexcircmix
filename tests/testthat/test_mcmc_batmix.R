@@ -90,13 +90,13 @@ test_that("Bridge sampling", {
 
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
-  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
+  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 2,
                        bat_type = 'power', compute_waic = FALSE)
 
   bmpow$mcmc_sample[, "lam_2"] <- 0
   bmpow$mcmc_sample[, "lam_3"] <- 0
 
-  bs <- bridge_sampler(bmpow, silent = FALSE)
+  bs <- bridge_sampler(bmpow, silent = TRUE)
   #
   expect_true(class(bs) == "bridge")
 })
