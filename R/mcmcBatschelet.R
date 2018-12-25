@@ -282,6 +282,8 @@ vm_kp_jeffreys_logprior <- function(kp) {
 #' @param compute_waic Logical; Whether to compute the WAIC. Can be
 #'   computationally demanding if \code{n * Q} is large.
 #'
+#' @importFrom stats var
+#'
 #' @return A numeric matrix of sampled parameter values.
 #' @export
 #'
@@ -534,7 +536,6 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
 
 
   # The log-posterior function that we have just sampled from.
-
   log_posterior <- function(pvec, data = x) {
 
     # If there is one value in pvec missing, assume it is one of the alpha
@@ -556,7 +557,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
       alphs <- alphs / sum(alphs)
     }
 
-    ll_part <- sum(dbatmix(data, dbat_fun = dbat_fun,
+    ll_part <- sum(dbatmix(x, dbat_fun = dbat_fun,
                            mus, kps, lams, alphs,
                            log = TRUE))
 
@@ -572,7 +573,7 @@ mcmcBatscheletMixture <- function(x, Q = 1000,
   # Create a new environment for log_posterior so that the file size of the
   # resulting object is not too large.
   log_post_env <- new.env()
-  log_post_env$data             <- data
+  log_post_env$data             <- x
   log_post_env$n_comp           <- n_comp
   log_post_env$dbat_fun         <- dbat_fun
   log_post_env$mu_logprior_fun  <- mu_logprior_fun

@@ -1,7 +1,7 @@
 Package: flexcircmix
 Type: Package
 Title: Fit Mixtures Of Flexible Circular Distributions
-Version: 0.2.0.9000
+Version: 1.0.0
 Author: Kees Mulder
 Maintainer: Kees Mulder <keestimmulder@gmail.com>
 URL: https://github.com/keesmulder/flexcircmix

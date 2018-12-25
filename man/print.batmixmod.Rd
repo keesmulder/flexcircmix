@@ -7,9 +7,9 @@
 \method{print}{batmixmod}(x, ...)
 }
 \arguments{
-\item{...}{Further arguments to be passed to print methods.}
+\item{x}{A \code{batmixmod} object.}
 
-\item{bm_mod}{A \code{batmixmod} object.}
+\item{...}{Further arguments to be passed to print methods.}
 }
 \description{
 Printing function for \code{batmixmod} objects.

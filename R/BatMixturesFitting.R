@@ -234,7 +234,7 @@ summarize_batmix_param_sample <- function(bm_sam, probs = c(.025, .975)) {
 
 #' Printing function for \code{batmixmod} objects.
 #'
-#' @param bm_mod A \code{batmixmod} object.
+#' @param x A \code{batmixmod} object.
 #' @param ... Further arguments to be passed to print methods.
 #'
 #' @export
@@ -244,7 +244,7 @@ print.batmixmod <- function(x, ...) {
       " Batschelet distributions, using method '",
       x$method, "'.\n", sep = "")
 
-  print(x2$estimates, ...)
+  print(x$estimates, ...)
 }
 
 summary.batmixmod <- function(bm_mod) {

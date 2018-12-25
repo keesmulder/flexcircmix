@@ -110,41 +110,38 @@ test_that("Multichain parallel", {
 
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
-  skip_on_cran()
-
-  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
-                     bat_type = 'power', compute_waic = FALSE, chains = 6,
-                     mcmc_parallel = TRUE)
-
   bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                      bat_type = 'power', compute_waic = FALSE, chains = 6,
                      mcmc_parallel = FALSE)
 
-
-  expect_true(class(bmpowpar$mcmc_list) == "mcmc.list")
   expect_true(class(bmpowseq$mcmc_list) == "mcmc.list")
-
 
   # Multichain error handling
   x <-  rep(1, 100)
-
-  expect_warning({
-  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
-                        bat_type = 'power', compute_waic = FALSE, chains = 6,
-                        mcmc_parallel = TRUE)
-  })
 
   expect_warning({
   bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                         bat_type = 'power', compute_waic = FALSE, chains = 6,
                         mcmc_parallel = FALSE)
   })
-
-
-  expect_true(class(bmpowpar$mcmc_list) == "mcmc.list")
   expect_true(class(bmpowseq$mcmc_list) == "mcmc.list")
 
 
+  skip("Parallel tests")
+
+  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
+                        bat_type = 'power', compute_waic = FALSE, chains = 6,
+                        mcmc_parallel = TRUE)
+
+  expect_true(class(bmpowpar$mcmc_list) == "mcmc.list")
+
+  expect_warning({
+    bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
+                          bat_type = 'power', compute_waic = FALSE, chains = 6,
+                          mcmc_parallel = TRUE)
+  })
+
+  expect_true(class(bmpowpar$mcmc_list) == "mcmc.list")
 })
 
 
