@@ -15,14 +15,14 @@
 #' prints compass directions (North, South, East, West). Both of these assume
 #' the circular data starts on the right and moves counterclockwise. If not,
 #' appropriate transformations must first be taken, or the labels will be
-#' non-sensical.
+#' nonsensical.
 #'
 #' Two additional labels are \code{"texpi"} and \code{"texnegpi"}, which print
 #' nice labels for TeX to interpret starting at 0 and \code{-pi} respectively.
 #' This is useful if TikZ is used.
 #'
 #' @param units The units to display on the axis. See `Details` for the options.
-#' @param nticks The number of ticks to display. Only relevant for continous
+#' @param nticks The number of ticks to display. Only relevant for continuous
 #'   scales.
 #' @param digits Numeric; The number of digits for continuous scales.
 #' @param limits Numeric vector; The limits of the plot. Must two numbers that

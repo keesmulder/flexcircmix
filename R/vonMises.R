@@ -4,7 +4,7 @@
 #'
 #' @inheritParams base::besselI
 #'
-#' @return The logarithm of the bessel funciton
+#' @return The logarithm of the bessel function
 #'
 logBesselI <- function(x, nu) {
   x + log(besselI(x, nu, expon.scaled = TRUE))

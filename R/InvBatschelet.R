@@ -1,6 +1,6 @@
 #' Compute a partial normalizing constant of a vM-based inverse Batschelet distribution
 #'
-#' The value givin is only the additional part of the inverse Batschelet. The von Mises normalizing
+#' The value given is only the additional part of the inverse Batschelet. The von Mises normalizing
 #' constant must still be added.
 #'
 #' @inheritParams dinvbat

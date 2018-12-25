@@ -7,7 +7,7 @@
 #'   value of kp.
 #' @param fixed_lam  If NA, lam will be estimated. Else, a numeric giving the
 #'   fixed value of lam.
-#' @param weights A vector of length \code{length(x)}, which gives importace
+#' @param weights A vector of length \code{length(x)}, which gives importance
 #'   weights to be used for x.
 #' @param max_its Used only if neither \code{fixed_kp} nor \code{fixed_lam} is
 #'   provided. The maximum number of iterations for the Nelder-Mead

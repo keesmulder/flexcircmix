@@ -13,7 +13,7 @@ logBesselI(x, nu)
     corresponding Bessel function.}
 }
 \value{
-The logarithm of the bessel funciton
+The logarithm of the bessel function
 }
 \description{
 This can be more numerically stable than taking the log directly.

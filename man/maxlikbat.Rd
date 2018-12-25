@@ -15,7 +15,7 @@ maxlikbat(x, likfunbat_fun = likfuninvbat, weights, fixed_mu = NA,
 likelihood function to maximize over. Either \code{likfuninvbat} (the
 default) or \code{likfunpowbat}.}
 
-\item{weights}{A vector of length \code{length(x)}, which gives importace
+\item{weights}{A vector of length \code{length(x)}, which gives importance
 weights to be used for x.}
 
 \item{fixed_mu}{If NA, the \code{mu} will be estimated as the mean direction.

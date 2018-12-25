@@ -15,6 +15,6 @@ K_kplam(kp, lam)
 Numeric.
 }
 \description{
-The value givin is only the additional part of the inverse Batschelet. The von Mises normalizing
+The value given is only the additional part of the inverse Batschelet. The von Mises normalizing
 constant must still be added.
 }

@@ -1,6 +1,6 @@
 Package: flexcircmix
 Type: Package
-Title: Fit Mixtures Of Flexible Circular Distributions
+Title: Fit Mixtures of Flexible Circular Distributions
 Version: 1.0.0
 Author: Kees Mulder
 Maintainer: Kees Mulder <keestimmulder@gmail.com>
@@ -25,5 +25,5 @@ Imports: ggplot2,
     circglmbayes,
     bridgesampling
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Suggests: testthat, movMF
