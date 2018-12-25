@@ -20,8 +20,8 @@ gapless_circ <- function(th) {
 #'   which contains the MCMC sample required for bridge sampling.
 #' @param ... Additional arguments to be passed to \code{bridge_sampler.matrix}.
 #'
-#' @seealso \code{ \link[brms:bayes_factor]{bayes_factor},
-#'   \link[brms:post_prob]{post_prob} }
+#' @seealso \code{ \link[brms:bayes_factor.brmsfit]{bayes_factor},
+#'   \link[brms:post_prob.brmsfit]{post_prob} }
 #'
 #' @method bridge_sampler batmixmod
 #' @importFrom bridgesampling bridge_sampler

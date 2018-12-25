@@ -21,6 +21,6 @@ More details are provided under
 \code{\link[bridgesampling:bridge_sampler]{bridge_sampler}}.
 }
 \seealso{
-\code{ \link[brms:bayes_factor]{bayes_factor},
-  \link[brms:post_prob]{post_prob} }
+\code{ \link[brms:bayes_factor.brmsfit]{bayes_factor},
+  \link[brms:post_prob.brmsfit]{post_prob} }
 }
