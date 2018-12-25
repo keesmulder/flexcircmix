@@ -37,8 +37,6 @@ test_that("MCMC through fitbatmix", {
   #Test that the environment was correctly simplified
   expect_false(any(grepl("ll_", names(environment(bmpow$log_posterior)))))
 
-
-
 })
 
 
@@ -98,18 +96,17 @@ test_that("Bridge sampling", {
   bmpow$mcmc_sample[, "lam_2"] <- 0
   bmpow$mcmc_sample[, "lam_3"] <- 0
 
-  # bs <- bridge_sampler(bmpow, silent = FALSE)
+  bs <- bridge_sampler(bmpow, silent = FALSE)
   #
-  # expect_true(class(bs) == "bridge")
+  expect_true(class(bs) == "bridge")
 })
 
 
 
 
-test_that("Multichain", {
+test_that("Multichain parallel", {
 
   set.seed(20)
-
 
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
@@ -129,24 +126,22 @@ test_that("Multichain", {
   # Multichain error handling
   x <-  rep(1, 100)
 
+  expect_warning({
   bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                         bat_type = 'power', compute_waic = FALSE, chains = 6,
                         mcmc_parallel = TRUE)
+  })
 
+  expect_warning({
   bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                         bat_type = 'power', compute_waic = FALSE, chains = 6,
                         mcmc_parallel = FALSE)
+  })
 
 
   expect_true(class(bmpowpar$mcmc_list) == "mcmc.list")
   expect_true(class(bmpowseq$mcmc_list) == "mcmc.list")
 
-
-  # plot(bmpow$mcmc_list)
-
-  # bs <- bridge_sampler(bmpow, silent = FALSE)
-  #
-  # expect_true(class(bs) == "bridge")
 
 })
 
