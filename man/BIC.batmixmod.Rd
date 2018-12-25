@@ -4,10 +4,10 @@
 \alias{BIC.batmixmod}
 \title{Extract BIC from Batmixmod}
 \usage{
-\method{BIC}{batmixmod}(bm_mod, ...)
+\method{BIC}{batmixmod}(object, ...)
 }
 \arguments{
-\item{bm_mod}{A \code{batmixmod} object.}
+\item{object}{A \code{batmixmod} object.}
 
 \item{...}{Ignored.}
 }

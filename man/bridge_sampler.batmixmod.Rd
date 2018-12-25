@@ -4,20 +4,23 @@
 \alias{bridge_sampler.batmixmod}
 \title{Log Marginal Likelihood via Bridge Sampling}
 \usage{
-\method{bridge_sampler}{batmixmod}(bm_mod, ...)
+\method{bridge_sampler}{batmixmod}(samples, ...)
 }
 \arguments{
-\item{bm_mod}{A \code{batmixmod} object.}
+\item{samples}{A \code{batmixmod} object (from \code{\link{fitbatmix}}),
+which contains the MCMC sample required for bridge sampling.}
 
-\item{...}{Additional arguments to be passed to \code{bridge_sampler.matrix}}
+\item{...}{Additional arguments to be passed to \code{bridge_sampler.matrix}.}
 }
 \description{
+Obtain the log of the Marginal Likelihood through Bridge sampling. This is
+useful to perform any Bayesian hypothesis test between any set of models.
+}
+\details{
 More details are provided under
-  \code{\link[bridgesampling:bridge_sampler]{bridge_sampler}}.
+\code{\link[bridgesampling:bridge_sampler]{bridge_sampler}}.
 }
 \seealso{
-\code{
-  \link[brms:bayes_factor]{bayes_factor},
-  \link[brms:post_prob]{post_prob}
-}
+\code{ \link[brms:bayes_factor]{bayes_factor},
+  \link[brms:post_prob]{post_prob} }
 }

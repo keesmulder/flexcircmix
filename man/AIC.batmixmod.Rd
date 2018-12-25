@@ -4,10 +4,10 @@
 \alias{AIC.batmixmod}
 \title{Extract AIC from Batmixmod}
 \usage{
-\method{AIC}{batmixmod}(bm_mod, ...)
+\method{AIC}{batmixmod}(object, ...)
 }
 \arguments{
-\item{bm_mod}{A \code{batmixmod} object.}
+\item{object}{A \code{batmixmod} object.}
 
 \item{...}{Ignored.}
 }
