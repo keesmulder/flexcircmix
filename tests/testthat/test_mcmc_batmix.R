@@ -12,9 +12,6 @@ test_that("MCMC runs", {
   time_pow <- system.time(sam_pow <- mcmcBatscheletMixture(x, Q = 10,
                                                            bat_type = 'power'))
 
-  time_inv
-  time_pow
-
   expect_error(plot_batmix_sample(x = x, param = sam_inv$mcmc_sample), NA)
   expect_error(plot_batmix_sample(x = x, param = sam_pow$mcmc_sample), NA)
 
@@ -28,7 +25,7 @@ test_that("MCMC through fitbatmix", {
 
   x <-  rinvbatmix(200, kps = c(10, 10, 10))
 
-  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100,
+  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10,
                        bat_type = 'power', compute_waic = TRUE,
                        burnin = 500)
 
@@ -37,8 +34,8 @@ test_that("MCMC through fitbatmix", {
   expect_true(is.numeric(bmpow$log_posterior(bmpow$mcmc_sample[1, 1:12])))
 
 
-  #Test that the environmentwas correctlyu simplified
-  expect_false(grepl("ll_", names(environment(bmpow$log_posterior))))
+  #Test that the environment was correctly simplified
+  expect_false(any(grepl("ll_", names(environment(bmpow$log_posterior)))))
 
 
 
@@ -79,7 +76,7 @@ test_that("IC", {
 
   x <-  rinvbatmix(200, kps = c(10, 10, 10))
 
-  sam_pow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100,
+  sam_pow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10,
                        bat_type = 'power', compute_waic = TRUE,
                        burnin = 500)
 
@@ -95,7 +92,7 @@ test_that("Bridge sampling", {
 
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
-  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+  bmpow <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                        bat_type = 'power', compute_waic = FALSE)
 
   bmpow$mcmc_sample[, "lam_2"] <- 0
@@ -116,11 +113,11 @@ test_that("Multichain", {
 
   x <-  rinvbatmix(200, kps = 2 * c(10, 10, 10))
 
-  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                      bat_type = 'power', compute_waic = FALSE, chains = 6,
                      mcmc_parallel = TRUE)
 
-  bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+  bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                      bat_type = 'power', compute_waic = FALSE, chains = 6,
                      mcmc_parallel = FALSE)
 
@@ -132,11 +129,11 @@ test_that("Multichain", {
   # Multichain error handling
   x <-  rep(1, 100)
 
-  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+  bmpowpar <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                         bat_type = 'power', compute_waic = FALSE, chains = 6,
                         mcmc_parallel = TRUE)
 
-  bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 100, burnin = 10,
+  bmpowseq <- fitbatmix(x, n_comp = 3, method = "bayes", Q = 10, burnin = 2,
                         bat_type = 'power', compute_waic = FALSE, chains = 6,
                         mcmc_parallel = FALSE)
 
