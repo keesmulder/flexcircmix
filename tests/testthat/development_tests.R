@@ -73,7 +73,7 @@ test_that("Bootrap paralellization works", {
 
 test_that("Can compute sensible functions of parameters", {
 
-  skip("Skip all devepment tests.")
+  skip("Skip all development tests.")
 
   kp <- 4
   lam <- 0

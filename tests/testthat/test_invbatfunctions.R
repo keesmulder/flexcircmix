@@ -29,7 +29,6 @@ test_that("Random generation works", {
   expect_true(is.numeric(rinvbat(10, 0, 3, -.9)))
   expect_true(is.numeric(rinvbat(10, 0, 3, 1)))
 
-
 })
 
 test_that("Likelihood functions work", {
